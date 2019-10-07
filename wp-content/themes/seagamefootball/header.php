@@ -10,49 +10,84 @@
  */
 
 ?>
+<?php $Url = get_template_directory_uri(); ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
-<head>
-	<meta charset="<?php bloginfo( 'charset' ); ?>">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="profile" href="https://gmpg.org/xfn/11">
 
-	<?php wp_head(); ?>
+<head>
+    <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+
+    <?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>
-<div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'seagamefootball' ); ?></a>
+    <header id="header">
+        <!-- Top Header -->
+        <div id="top-header">
+            <div class="container">
+                <div class="header-links">
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Advertisement</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#"><i class="fa fa-sign-in"></i> Login</a></li>
+                    </ul>
+                </div>
+                <div class="header-social">
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Top Header -->
 
-	<header id="masthead" class="site-header">
-		<div class="site-branding">
-			<?php
-			the_custom_logo();
-			if ( is_front_page() && is_home() ) :
-				?>
-				<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-				<?php
-			else :
-				?>
-				<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-				<?php
-			endif;
-			$seagamefootball_description = get_bloginfo( 'description', 'display' );
-			if ( $seagamefootball_description || is_customize_preview() ) :
-				?>
-				<p class="site-description"><?php echo $seagamefootball_description; /* WPCS: xss ok. */ ?></p>
-			<?php endif; ?>
-		</div><!-- .site-branding -->
+        <!-- Center Header -->
+        <div id="center-header">
+            <div class="container">
+                <div class="header-logo">
+                    <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo.png" alt=""></a>
+                </div>
+                <div class="header-ads">
+                    <img class="center-block" src="<?php echo $Url ?>/img/ad-2.jpg" alt="">
+                </div>
+            </div>
+        </div>
+        <!-- /Center Header -->
 
-		<nav id="site-navigation" class="main-navigation">
-			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'seagamefootball' ); ?></button>
-			<?php
-			wp_nav_menu( array(
-				'theme_location' => 'menu-1',
-				'menu_id'        => 'primary-menu',
-			) );
-			?>
-		</nav><!-- #site-navigation -->
-	</header><!-- #masthead -->
-
-	<div id="content" class="site-content">
+        <!-- Nav Header -->
+        <div id="nav-header">
+            <div class="container">
+                <nav id="main-nav">
+                    <div class="nav-logo">
+                        <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo-alt.png" alt=""></a>
+                    </div>
+                    <ul class="main-nav nav navbar-nav">
+                        <li class="active"><a href="#">Trang Chủ</a></li>
+                        <li><a href="#">Tin Tức</a></li>
+                        <li><a href="#">Lịch Thi Đấu</a></li>
+                        <li><a href="#">Kết Quả</a></li>
+                        <li><a href="#">Xếp Hạng</a></li>
+                        <li><a href="#">Video</a></li>
+                    </ul>
+                </nav>
+                <div class="button-nav">
+                    <button class="search-collapse-btn"><i class="fa fa-search"></i></button>
+                    <button class="nav-collapse-btn"><i class="fa fa-bars"></i></button>
+                    <div class="search-form">
+                        <form>
+                            <input class="input" type="text" name="search" placeholder="Search">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Nav Header -->
+    </header>

@@ -6,6 +6,45 @@
  *
  * @package SeaGameFootball
  */
+add_action( 'wp_enqueue_scripts', 'seagamefootball_theme_register_js');
+function seagamefootball_theme_register_js(){
+	$js_Url = get_template_directory_uri() . '/js';
+
+	wp_register_script( 'seagamefootball_theme_j', $js_Url . '/jquery.min.js', array(), '1.0');
+	wp_enqueue_script('seagamefootball_theme_j');
+    
+    wp_register_script( 'seagamefootball_theme_bt', $js_Url . '/bootstrap.min.js', array(), '1.0');
+	wp_enqueue_script('seagamefootball_theme_bt');
+	
+	wp_register_script( 'seagamefootball_theme_o', $js_Url . '/owl.carousel.min.js', array(), '1.0');
+	wp_enqueue_script('seagamefootball_theme_o');
+
+	wp_register_script( 'seagamefootball_theme_m', $js_Url . '/main.js', array(), '1.0');
+	wp_enqueue_script('seagamefootball_theme_m');
+
+	
+
+}
+add_action( 'wp_enqueue_scripts', 'seagamefootball_theme_register_style');
+function seagamefootball_theme_register_style(){
+	$css_Url = get_template_directory_uri() . '/css';
+
+	wp_register_style( 'seagamefootball_theme_bt', $css_Url . '/bootstrap.min.css', array(), '1.0');
+	wp_enqueue_style('seagamefootball_theme_bt');
+	
+	wp_register_style( 'seagamefootball_theme_fa', $css_Url . '/font-awesome.min.css', array(), '1.0');
+	wp_enqueue_style('seagamefootball_theme_fa');
+
+	wp_register_style( 'seagamefootball_theme_owl', $css_Url . '/owl.carousel.css', array(), '1.0');
+	wp_enqueue_style('seagamefootball_theme_owl');
+
+	wp_register_style( 'seagamefootball_theme_owlt', $css_Url . '/owl.theme.default.css', array(), '1.0');
+	wp_enqueue_style('seagamefootball_theme_owlt');
+
+	wp_register_style( 'seagamefootball_theme_style', $css_Url . '/style.css', array(), '1.0');
+	wp_enqueue_style('seagamefootball_theme_style');
+
+}
 
 if ( ! function_exists( 'seagamefootball_setup' ) ) :
 	/**
