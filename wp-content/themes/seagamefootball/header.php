@@ -71,10 +71,11 @@
                     </div>
                     <ul class="main-nav nav navbar-nav">
                         <li class="active"><a href="#">Trang Chủ</a></li>
-                        <li><a href="#">Tin Tức</a></li>
-                        <li><a href="#">Lịch Thi Đấu</a></li>
-                        <li><a href="#">Kết Quả</a></li>
-                        <li><a href="#">Xếp Hạng</a></li>
+                        <li><a href="<?php echo get_site_url() ?>/news">Tin Tức</a></li>
+                        <li><a href="<?php echo get_site_url() ?>/tournament">Lịch Thi Đấu</a></li>
+                        <li><a href="<?php echo get_site_url() ?>/tournament/teams">Đội bóng</a></li>
+                        <li><a href="<?php echo get_site_url() ?>/tournament/groups">Xếp Hạng</a></li>
+                        <li><a href="<?php echo get_site_url() ?>/tournament/stadiums">Sân vận động</a></li>
                         <li><a href="#">Video</a></li>
                     </ul>
                 </nav>
