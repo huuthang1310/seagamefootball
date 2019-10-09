@@ -32,7 +32,7 @@
                 <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo.png" alt=""></a>
             </div>
             <div class="header-ads">
-                <img class="center-block" src="<?php echo $Url ?>/img/ad-2.jpg" alt="">
+                <img class="center-block" src="<?php echo $Url ?>/img/banner1.png" alt="">
             </div>
         </div>
     </div>
