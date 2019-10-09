@@ -12,6 +12,12 @@ function seagamefootball_theme_register_js(){
 
 	wp_register_script( 'seagamefootball_theme_j', $js_Url . '/jquery.min.js', array(), '1.0');
 	wp_enqueue_script('seagamefootball_theme_j');
+
+	wp_register_script( 'seagamefootball_theme_jp', $js_Url . '/pool.min.js', array(), '1.0');
+	wp_enqueue_script('seagamefootball_theme_jp');
+
+	wp_register_script( 'seagamefootball_theme_jps', $js_Url . '/jquery-migrate.min.js', array(), '1.0');
+	wp_enqueue_script('seagamefootball_theme_jps');
     
     wp_register_script( 'seagamefootball_theme_bt', $js_Url . '/bootstrap.min.js', array(), '1.0');
 	wp_enqueue_script('seagamefootball_theme_bt');
