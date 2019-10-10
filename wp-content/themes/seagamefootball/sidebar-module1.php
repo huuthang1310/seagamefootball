@@ -29,10 +29,10 @@
     <div id="center-header">
         <div class="container">
             <div class="header-logo">
-                <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo.png" alt=""></a>
+                <a href="#" class="logo"><img src="<?php echo $Url ?>/img/lg.jpg" alt=""></a>
             </div>
             <div class="header-ads">
-                <img class="center-block" src="<?php echo $Url ?>/img/ad-2.jpg" alt="">
+                <img class="center-block" src="<?php echo $Url ?>/img/banner1.png" alt="">
             </div>
         </div>
     </div>
@@ -46,13 +46,13 @@
                     <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo-alt.png" alt=""></a>
                 </div>
                 <ul class="main-nav nav navbar-nav">
-                    <li class="active"><a href="#">Trang Chủ</a></li>
+                    <li class="active"><a href="<?php echo get_site_url() ?>">Trang Chủ</a></li>
                     <li><a href="<?php echo get_site_url() ?>/news">Tin Tức</a></li>
                     <li><a href="<?php echo get_site_url() ?>/tournament">Lịch Thi Đấu</a></li>
                     <li><a href="<?php echo get_site_url() ?>/tournament/teams">Đội bóng</a></li>
                     <li><a href="<?php echo get_site_url() ?>/tournament/groups">Xếp Hạng</a></li>
                     <li><a href="<?php echo get_site_url() ?>/tournament/stadiums">Sân vận động</a></li>
-                    <li><a href="#">Video</a></li>
+                    <li><a href="<?php echo get_site_url() ?>/video">Video</a></li>
                 </ul>
             </nav>
             <div class="button-nav">

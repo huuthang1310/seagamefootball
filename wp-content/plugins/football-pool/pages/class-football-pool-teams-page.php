@@ -26,7 +26,7 @@ class Football_Pool_Teams_Page {
 										<th>%s:</th>
 										<td><a href="%s">%s</a></td>
 									</tr>'
-								, __( 'plays in', 'football-pool' )
+								, __( 'Bảng Đấu', 'football-pool' )
 								, esc_url( add_query_arg( array( 'group' => $team->group_id ), Football_Pool::get_page_link('groups') ) )
 								, Football_Pool_Utils::xssafe( $team->group_name )
 						);
@@ -36,7 +36,7 @@ class Football_Pool_Teams_Page {
 				$stadiums = $team->get_stadiums();
 				if ( is_array( $stadiums ) && count( $stadiums ) > 0 ) {
 					$output .= sprintf( '<tr><th>%s:</th><td><ol class="football-pool stadium-list">'
-										, __( 'venues', 'football-pool' )
+										, __( 'Sân Vận Động', 'football-pool' )
 								);
 					$stadium_page = Football_Pool::get_page_link( 'stadiums' );
 					while ( $stadium = array_shift( $stadiums ) ) {
@@ -49,7 +49,7 @@ class Football_Pool_Teams_Page {
 				}
 			}
 			
-			$output .= sprintf( '<tr><th valign="top">%s:</th>', __( 'photo', 'football-pool' ) );
+			$output .= sprintf( '<tr><th valign="top">%s:</th>', __( 'Hình ảnh đội bóng', 'football-pool' ) );
 			$output .= sprintf( '<td>%s</td></tr>', $team->HTML_thumb() );
 			$output .= '</table>';
 			
@@ -57,7 +57,7 @@ class Football_Pool_Teams_Page {
 			$plays = $team->get_plays();
 			if ( count( $plays ) > 0 ) {
 				$matches = new Football_Pool_Matches;
-				$output .= sprintf( '<h4>%s</h4>', __( 'matches', 'football-pool' ) );
+				$output .= sprintf( '<h4>%s</h4>', __( 'Các trận đấu', 'football-pool' ) );
 				$output .= $matches->print_matches( $plays, 'page team-page' );
 			}
 			
