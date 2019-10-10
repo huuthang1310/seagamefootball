@@ -677,26 +677,9 @@ if($post_query->have_posts()){
                       
                     </div>
                 </article>
-           
+
             <?php } ?>
       
-                <!-- /ARTICLE -->
-
-             
-                <!-- /ARTICLE -->
-
-                <!-- ARTICLE -->
-              
-
-                <!-- ARTICLE -->
-             
-                <!-- /ARTICLE -->
-
-                <!-- pagination -->
-                
-           
-<?php next_posts_link( '&larr; Older posts', $wp_query ->max_num_pages); ?>
-<?php previous_posts_link( 'Newer posts &rarr;' ); ?>
                  <?php } ?>
                 <!-- /pagination -->
             </div>
