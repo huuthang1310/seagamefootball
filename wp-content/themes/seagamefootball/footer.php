@@ -212,8 +212,10 @@
 <!-- Back to top -->
 <div id="back-to-top"></div>
 </div><!-- #page -->
-
-<?php wp_footer(); ?>
+<script src="<?php echo $Url ?>/js/jquery.min.js"></script>
+<script src="<?php echo $Url ?>/js/bootstrap.min.js"></script>
+<script src="<?php echo $Url ?>/js/owl.carousel.min.js"></script>
+<script src="<?php echo $Url ?>/js/main.js"></script>
 
 </body>
 

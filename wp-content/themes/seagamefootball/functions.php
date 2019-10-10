@@ -6,31 +6,31 @@
  *
  * @package SeaGameFootball
  */
-add_action( 'wp_enqueue_scripts', 'seagamefootball_theme_register_js');
-function seagamefootball_theme_register_js(){
-	$js_Url = get_template_directory_uri() . '/js';
+// add_action( 'wp_enqueue_scripts', 'seagamefootball_theme_register_js');
+// function seagamefootball_theme_register_js(){
+// 	$js_Url = get_template_directory_uri() . '/js';
 
-	wp_register_script( 'seagamefootball_theme_j', $js_Url . '/jquery.min.js', array(), '1.0');
-	wp_enqueue_script('seagamefootball_theme_j');
+// 	wp_register_script( 'seagamefootball_theme_j', $js_Url . '/jquery.min.js', array(), '1.0');
+// 	wp_enqueue_script('seagamefootball_theme_j');
 
-	wp_register_script( 'seagamefootball_theme_jp', $js_Url . '/pool.min.js', array(), '1.0');
-	wp_enqueue_script('seagamefootball_theme_jp');
+// 	wp_register_script( 'seagamefootball_theme_jp', $js_Url . '/pool.min.js', array(), '1.0');
+// 	wp_enqueue_script('seagamefootball_theme_jp');
 
-	wp_register_script( 'seagamefootball_theme_jps', $js_Url . '/jquery-migrate.min.js', array(), '1.0');
-	wp_enqueue_script('seagamefootball_theme_jps');
+// 	wp_register_script( 'seagamefootball_theme_jps', $js_Url . '/jquery-migrate.min.js', array(), '1.0');
+// 	wp_enqueue_script('seagamefootball_theme_jps');
     
-    wp_register_script( 'seagamefootball_theme_bt', $js_Url . '/bootstrap.min.js', array(), '1.0');
-	wp_enqueue_script('seagamefootball_theme_bt');
+//     wp_register_script( 'seagamefootball_theme_bt', $js_Url . '/bootstrap.min.js', array(), '1.0');
+// 	wp_enqueue_script('seagamefootball_theme_bt');
 	
-	wp_register_script( 'seagamefootball_theme_o', $js_Url . '/owl.carousel.min.js', array(), '1.0');
-	wp_enqueue_script('seagamefootball_theme_o');
+// 	wp_register_script( 'seagamefootball_theme_o', $js_Url . '/owl.carousel.min.js', array(), '1.0');
+// 	wp_enqueue_script('seagamefootball_theme_o');
 
-	wp_register_script( 'seagamefootball_theme_m', $js_Url . '/main.js', array(), '1.0');
-	wp_enqueue_script('seagamefootball_theme_m');
+// 	wp_register_script( 'seagamefootball_theme_m', $js_Url . '/main.js', array(), '1.0');
+// 	wp_enqueue_script('seagamefootball_theme_m');
 
 	
 
-}
+// }
 add_action( 'wp_enqueue_scripts', 'seagamefootball_theme_register_style');
 function seagamefootball_theme_register_style(){
 	$css_Url = get_template_directory_uri() . '/css';
