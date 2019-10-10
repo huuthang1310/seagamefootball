@@ -1,3 +1,4 @@
+<?php /* Template Name: home */ ?>
 <?php
 /**
  * The main template file
@@ -647,11 +648,10 @@ if($post_query->have_posts()){
                 <!-- /section title -->
 
                 <!-- ARTICLE -->
-                <?php $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+                <?php $currentPage = get_query_var('paged');
                 $args = array(
-'post_type' => 'post',
- 'paged'          => $paged,
-'posts_per_page' => 2
+'post_type' => 'post'
+
 ); 
 $post_query = new WP_Query($args);
 if($post_query->have_posts()){
@@ -678,33 +678,9 @@ if($post_query->have_posts()){
                     </div>
                 </article>
            
-            <?php } ?>
-      
-                <!-- /ARTICLE -->
-
-             
-                <!-- /ARTICLE -->
-
-                <!-- ARTICLE -->
-              
-
-                <!-- ARTICLE -->
-             
-                <!-- /ARTICLE -->
-
-                <!-- pagination -->
-                
-           
-<?php next_posts_link( '&larr; Older posts', $wp_query ->max_num_pages); ?>
-<?php previous_posts_link( 'Newer posts &rarr;' ); ?>
-                 <?php } ?>
-                <!-- /pagination -->
+            <?php }  }?>
             </div>
-            <!-- /Main Column -->
-
-            <!-- Aside Column -->
-          
-            <!-- /Aside Column -->
+            
         </div>
         <!-- /ROW -->
     </div>
