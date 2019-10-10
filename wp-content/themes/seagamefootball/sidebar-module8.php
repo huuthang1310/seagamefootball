@@ -47,9 +47,7 @@
 
 	                    <!-- comment -->
 	                    <div class="media">
-	                        <div class="media-left">
-	                            <img src="img/av-2.jpg" alt="">
-	                        </div>
+	                    
 	
 	                    </div>
 	                    <!-- /comment -->
@@ -70,7 +68,7 @@
 	            <div class="col-md-4">
 	                <!-- Ad widget -->
 	                <div class="widget center-block hidden-xs">
-	                    <img class="center-block" src="/img/ad-1.jpg" alt="">
+	                    <img class="center-block" src="/seagamefootball/wp-content/themes/seagamefootball/img//ad-1.jpg" alt="">
 	                </div>
 	                <!-- /Ad widget -->
 
@@ -116,7 +114,7 @@
 	                        <article class="article">
 	                            <div class="article-img">
 	                                <a href="#">
-	                                    <img src="/img/img-md-3.jpg" alt="">
+	                                    <img src="/seagamefootball/wp-content/themes/seagamefootball/img/img-md-3.jpg" alt="">
 	                                </a>
 	                                <ul class="article-info">
 	                                    <li class="article-type"><i class="fa fa-file-text"></i></li>
@@ -136,7 +134,7 @@
 	                        <article class="article">
 	                            <div class="article-img">
 	                                <a href="#">
-	                                    <img src="/img/img-md-4.jpg" alt="">
+	                                    <img src="/seagamefootball/wp-content/themes/seagamefootball/img/img-md-4.jpg" alt="">
 	                                </a>
 	                                <ul class="article-info">
 	                                    <li class="article-type"><i class="fa fa-file-text"></i></li>
@@ -158,7 +156,7 @@
 	                    <article class="article widget-article">
 	                        <div class="article-img">
 	                            <a href="#">
-	                                <img src="/img/img-widget-1.jpg" alt="">
+	                                <img src="/seagamefootball/wp-content/themes/seagamefootball/img/img-widget-1.jpg" alt="">
 	                            </a>
 	                        </div>
 	                        <div class="article-body">
@@ -175,7 +173,7 @@
 	                    <article class="article widget-article">
 	                        <div class="article-img">
 	                            <a href="#">
-	                                <img src="/img/img-widget-2.jpg" alt="">
+	                                <img src="/seagamefootball/wp-content/themes/seagamefootball/img/img-widget-2.jpg" alt="">
 	                            </a>
 	                        </div>
 	                        <div class="article-body">
@@ -192,7 +190,7 @@
 	                    <article class="article widget-article">
 	                        <div class="article-img">
 	                            <a href="#">
-	                                <img src="/img/img-widget-3.jpg" alt="">
+	                                <img src="/seagamefootball/wp-content/themes/seagamefootball/img//img-widget-3.jpg" alt="">
 	                            </a>
 	                        </div>
 	                        <div class="article-body">
