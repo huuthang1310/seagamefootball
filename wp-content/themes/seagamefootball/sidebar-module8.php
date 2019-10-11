@@ -5,7 +5,6 @@
 	            <div class="col-md-8">                
 	<div class="entry-content">
 <div class="widget-tags">
-
 	                </div>
 	                </div>
 	            </div>
@@ -26,14 +25,11 @@
 	                        </li>
 	                        <li><a href="#" class="twitter"><i class="fa fa-twitter"></i><br><span>Twitter</span></a></li>
 	                        <li><a href="#" class="google"><i class="fa fa-google"></i><br><span>Google+</span></a></li>
-	                        <li><a href="#" class="instagram"><i class="fa fa-instagram"></i><br><span>Instagram</span></a>
-	                        </li>
+	                        <li><a href="#" class="instagram"><i class="fa fa-instagram"></i><br><span>Instagram</span></a> </li>
 	                        <li><a href="#" class="youtube"><i class="fa fa-youtube"></i><br><span>Youtube</span></a></li>
 	                        <li><a href="#" class="rss"><i class="fa fa-rss"></i><br><span>RSS</span></a></li>
 	                    </ul>
 	                </div>
-	                <!-- /social widget -->
-
 	                <!-- subscribe widget -->
 	                <div class="widget subscribe-widget">
 	                    <div class="widget-title">
@@ -44,11 +40,6 @@
 	                        <button class="input-btn">Subscribe</button>
 	                    </form>
 	                </div>
-	                <!-- /subscribe widget -->
-
-	                <!-- article widget -->
-
-	                <!-- /article widget -->
 	            </div>
 	            <!-- /Aside Column -->
 	        </div>
