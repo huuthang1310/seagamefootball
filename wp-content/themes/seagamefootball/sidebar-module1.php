@@ -41,7 +41,7 @@
                 <div class="search-form">
                    <?php echo '<form class="form-inline" role="search" method="get" id="searchform" action="' . home_url('/') . '" >
     <input class="form-control" type="text" value="' . get_search_query() . '" placeholder="Tìm kiếm..." name="s" id="s" />
-    <button type="submit" id="searchsubmit"  class="btn btn-primary"><i class="fa fa-search"></i></button>
+    <button type="submit" id="searchsubmit"  class="btn btn-primary">Tìm Kiếm</button>
     </form>' ?>
                 </div>
             </div>
