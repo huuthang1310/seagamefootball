@@ -19,6 +19,11 @@
     <link rel="profile" href="https://gmpg.org/xfn/11">
 
     <?php wp_head(); ?>
+    <style>
+        html {
+    margin-top: unset !important;
+}
+    </style>
 </head>
 
 <body <?php body_class(); ?>>
