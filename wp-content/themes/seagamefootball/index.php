@@ -44,7 +44,6 @@
             <?php } 
                 } ?>
                            
-      
         <!-- /ARTICLE -->
     </div>
     <div class="section">

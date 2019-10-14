@@ -19,7 +19,7 @@ get_header();
 				<h1 class="page-title">
 					<?php
 					/* translators: %s: search query. */
-					printf( esc_html__( 'Search Results for: %s', 'seagamefootball' ), '<span>' . get_search_query() . '</span>' );
+					printf( esc_html__( 'Kết quả của từ: %s', 'seagamefootball' ), '<span>' . get_search_query() . '</span>' );
 					?>
 				</h1>
 			</header><!-- .page-header -->
@@ -38,8 +38,6 @@ get_header();
 
 			endwhile;
 
-			the_posts_navigation();
-
 		else :
 
 			get_template_part( 'template-parts/content', 'none' );
@@ -51,5 +49,5 @@ get_header();
 	</section><!-- #primary -->
 
 <?php
-get_sidebar();
+
 get_footer();
