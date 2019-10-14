@@ -39,9 +39,10 @@
                 <button class="search-collapse-btn"><i class="fa fa-search"></i></button>
                 <button class="nav-collapse-btn"><i class="fa fa-bars"></i></button>
                 <div class="search-form">
-                    <form>
-                        <input class="input" type="text" name="search" placeholder="Search">
-                    </form>
+                   <?php echo '<form class="form-inline" role="search" method="get" id="searchform" action="' . home_url('/') . '" >
+    <input class="form-control" type="text" value="' . get_search_query() . '" placeholder="Nhập từ khóa..." name="s" id="s" />
+    <button type="submit" id="searchsubmit"  class="btn btn-primary">Tìm Kiếm</button>
+    </form>' ?>
                 </div>
             </div>
         </div>

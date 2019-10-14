@@ -35,6 +35,29 @@ Table OF Contents
 	typography
 \*----------------------------*/
 
+.wpcf7-form-control-wrap .wpcf7-textarea {
+    width: 100%;
+}
+
+.wpcf7-form-control-wrap input {
+    width: 100%;
+}
+
+.contactbox .contactor {
+    background: #fff;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .5);
+    display: block;
+    margin: -210px -320px;
+    padding: 10px 20px;
+    height: 420px;
+    width: 640px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
 body {
     font-family: 'Lato', sans-serif;
     color: #2C2C2C;
@@ -1176,10 +1199,6 @@ textarea.input {
 
 #footer {
     background-color: #07090C;
-}
-
-#footer p {
-    color: #DDD;
 }
 
 #footer a {
