@@ -449,5 +449,4 @@ if($post_query->have_posts()){
     <!-- /CONTAINER -->
 </div>
 <?php
-//<?php
 get_footer();
