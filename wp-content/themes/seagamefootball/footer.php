@@ -26,8 +26,7 @@
                     <div class="footer-widget about-widget">
                         <div class="footer-logo">
                             <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo-alt.png" alt=""></a>
-                            <p>Populo tritani laboramus ex mei, no eum iuvaret ceteros euripidis, ne alia sadipscing
-                                mei. Te inciderint cotidieque pro, ei iisque docendi qui.</p>
+                            <p>Website cung cấp tin tức bóng đá, lịch thi đấu, xếp hạng, và thông tin liên quan Seagame.</p>
                         </div>
                     </div>
                     <!-- /footer about -->
@@ -41,24 +40,13 @@
                             <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
                             <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
                             <li><a href="#" class="google"><i class="fa fa-google"></i></a></li>
-                            <li><a href="#" class="instagram"><i class="fa fa-instagram"></i></a></li>
+                
                             <li><a href="#" class="youtube"><i class="fa fa-youtube"></i></a></li>
-                            <li><a href="#" class="rss"><i class="fa fa-rss"></i></a></li>
+                            
                         </ul>
                     </div>
                     <!-- /footer social -->
 
-                    <!-- footer subscribe -->
-                    <div class="footer-widget subscribe-widget">
-                        <div class="widget-title">
-                            <h2 class="title">Subscribe to Newslatter</h2>
-                        </div>
-                        <form>
-                            <input class="input" type="email" placeholder="Enter Your Email">
-                            <button class="input-btn">Subscribe</button>
-                        </form>
-                    </div>
-                    <!-- /footer subscribe -->
                 </div>
                 <!-- /Column 1 -->
 
@@ -67,59 +55,47 @@
                     <!-- footer article -->
                     <div class="footer-widget">
                         <div class="widget-title">
-                            <h2 class="title">Featured Posts</h2>
+                            <h2 class="title">Bình Luận Nhiều Nhất</h2>
                         </div>
 
                         <!-- ARTICLE -->
+                         <?php
+                            
+$queryObject = new  Wp_Query( array(
+    'post_type' => 'post',
+     'orderby' => 'comment_count'
+    ));?>
+
+                        <?php if ( $queryObject->have_posts() ) :
+    $k = 0;
+  
+    while ( $queryObject->have_posts() ) :
+        $queryObject->the_post(); 
+
+        if ( $k <= 3  ) : ?>
                         <article class="article widget-article">
                             <div class="article-img">
                                 <a href="#">
-                                    <img src="<?php echo $Url ?>/img/img-widget-1.jpg" alt="">
+                                    <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                                 </a>
                             </div>
                             <div class="article-body">
-                                <h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
+                                <h4 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
                                 <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                                    <li><i class="fa fa-comments"></i> 33</li>
+                                    <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
+                                <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
                                 </ul>
                             </div>
                         </article>
+                         <?php endif; ?>
+                        <?php $k++;?>
+                        <?php endwhile;?>
+                        <?php endif;?>
                         <!-- /ARTICLE -->
 
-                        <!-- ARTICLE -->
-                        <article class="article widget-article">
-                            <div class="article-img">
-                                <a href="#">
-                                    <img src="<?php echo $Url ?>/img/img-widget-2.jpg" alt="">
-                                </a>
-                            </div>
-                            <div class="article-body">
-                                <h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                                    <li><i class="fa fa-comments"></i> 33</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <!-- /ARTICLE -->
+           
 
-                        <!-- ARTICLE -->
-                        <article class="article widget-article">
-                            <div class="article-img">
-                                <a href="#">
-                                    <img src="<?php echo $Url ?>/img/img-widget-3.jpg" alt="">
-                                </a>
-                            </div>
-                            <div class="article-body">
-                                <h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                                    <li><i class="fa fa-comments"></i> 33</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <!-- /ARTICLE -->
+                   
                     </div>
                     <!-- /footer article -->
                 </div>
@@ -130,37 +106,31 @@
                     <!-- footer galery -->
                     <div class="footer-widget galery-widget">
                         <div class="widget-title">
-                            <h2 class="title">Flickr Photos</h2>
+                            <h2 class="title">Những Hình Ảnh Mới</h2>
                         </div>
                         <ul>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-3.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-4.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-5.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-6.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-7.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-8.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-9.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="<?php echo $Url ?>/img/img-widget-10.jpg" alt=""></a></li>
+                                <?php
+                            
+$queryObject = new  Wp_Query( array(
+    'post_type' => 'post'
+    
+    ));?>
+
+                        <?php if ( $queryObject->have_posts() ) :
+    $k = 0;
+  
+    while ( $queryObject->have_posts() ) :
+        $queryObject->the_post(); 
+
+        if ( $k <= 7  ) : ?>
+                            <li><a href="<?php the_permalink(); ?>"><img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>"></a></li>
+                             <?php endif; ?>
+                        <?php $k++;?>
+                        <?php endwhile;?>
+                        <?php endif;?>
                         </ul>
                     </div>
                     <!-- /footer galery -->
-
-                    <!-- footer tweets -->
-                    <div class="footer-widget tweets-widget">
-                        <div class="widget-title">
-                            <h2 class="title">Recent Tweets</h2>
-                        </div>
-                        <ul>
-                            <li class="tweet">
-                                <i class="fa fa-twitter"></i>
-                                <div class="tweet-body">
-                                    <p><a href="#">@magnews</a> Populo tritani laboramus ex mei, no eum iuvaret ceteros
-                                        euripidis <a href="#">https://t.co/DwsTbsmxTP</a></p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /footer tweets -->
                 </div>
                 <!-- /Column 3 -->
             </div>
@@ -171,41 +141,7 @@
     <!-- /Top Footer -->
 
     <!-- Bottom Footer -->
-    <div id="bottom-footer" class="section">
-        <!-- CONTAINER -->
-        <div class="container">
-            <!-- ROW -->
-            <div class="row">
-                <!-- footer links -->
-                <div class="col-md-6 col-md-push-6">
-                    <ul class="footer-links">
-                        <li><a href="#">About us</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Advertisement</a></li>
-                        <li><a href="#">Privacy</a></li>
-                    </ul>
-                </div>
-                <!-- /footer links -->
-
-                <!-- footer copyright -->
-                <div class="col-md-6 col-md-pull-6">
-                    <div class="footer-copyright">
-                        <span>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            Copyright &copy;<script>
-                            document.write(new Date().getFullYear());
-                            </script> All rights reserved | This template is made with <i class="fa fa-heart-o"
-                                aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></span>
-                    </div>
-                </div>
-                <!-- /footer copyright -->
-            </div>
-            <!-- /ROW -->
-        </div>
-        <!-- /CONTAINER -->
-    </div>
-    <!-- /Bottom Footer -->
+   
 </footer>
 <!-- /FOOTER -->
 
