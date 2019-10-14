@@ -72,7 +72,7 @@
                         <!-- Column 1 -->
                         <div class="col-md-3 col-sm-6">
                             <!-- ARTICLE -->
-                            <ar  ticle class="article">
+                            <article  ticle class="article">
                                 <div class="article-img">
                                     <a href="#">
                                         <img src="<?php echo $Url ?>/img/img-md-1.jpg" alt="">

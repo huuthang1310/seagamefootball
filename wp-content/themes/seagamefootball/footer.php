@@ -216,6 +216,7 @@
 <script src="<?php echo $Url ?>/js/bootstrap.min.js"></script>
 <script src="<?php echo $Url ?>/js/owl.carousel.min.js"></script>
 <script src="<?php echo $Url ?>/js/main.js"></script>
+<script src="https://www.googletagservices.com/activeview/js/current/osd_listener.js?cache=r20110914"></script>
 
 </body>
 

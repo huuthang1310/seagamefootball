@@ -28,16 +28,10 @@
 
                 <!-- ARTICLE POST -->
                 <article class="article article-post" id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-                    <div class="article-share">
-                        <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-                        <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-                        <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
-                    </div>
-
-                    
+                
                     <div class="article-body">
                         <ul class="article-info">
-                            <li class="article-category"><a href="#">News</a></li>
+                            <li class="article-category"><a href="#">Tin Tức</a></li>
                             <li class="article-type"><i class="fa fa-file-text"></i></li>
                         </ul>
                         <h1 class="article-title"><?php the_title( ) ?></h1>
@@ -93,21 +87,6 @@
                 <!-- /Ad widget -->
 
                 <!-- social widget -->
-                <div class="widget social-widget">
-                    <div class="widget-title">
-                        <h2 class="title">Stay Connected</h2>
-                    </div>
-                    <ul>
-                        <li><a href="#" class="facebook"><i class="fa fa-facebook"></i><br><span>Facebook</span></a>
-                        </li>
-                        <li><a href="#" class="twitter"><i class="fa fa-twitter"></i><br><span>Twitter</span></a></li>
-                        <li><a href="#" class="google"><i class="fa fa-google"></i><br><span>Google+</span></a></li>
-                        <li><a href="#" class="instagram"><i class="fa fa-instagram"></i><br><span>Instagram</span></a>
-                        </li>
-                        <li><a href="#" class="youtube"><i class="fa fa-youtube"></i><br><span>Youtube</span></a></li>
-                        <li><a href="#" class="rss"><i class="fa fa-rss"></i><br><span>RSS</span></a></li>
-                    </ul>
-                </div>
                 <!-- /social widget -->
 
                 <!-- subscribe widget -->
