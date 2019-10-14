@@ -40,7 +40,6 @@
                         <ul>
                             <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
                             <li><a href="#" class="google"><i class="fa fa-google"></i></a></li>
-
                             <li><a href="#" class="youtube"><i class="fa fa-youtube"></i></a></li>
 
                         </ul>
@@ -152,9 +151,8 @@ $queryObject = new  Wp_Query( array(
                 <!-- footer links -->
                 <div class="col-md-6 col-md-push-6">
                     <ul class="footer-links">
-                        <li><a data-toggle="modal" href="#myModal">Thông Tin</a></li>
-                        <li><a href="#">Góp Ý</a></li>
-                        <li><a href="#">Đặt Quảng Cáo</a></li>
+                        <li><a data-toggle="modal" href="#myModal1">Thông Tin</a></li>
+                        <li><a data-toggle="modal" href="#myModal2">Góp Ý</a></li>
                     </ul>
                 </div>
                 <!-- /footer links -->
@@ -180,7 +178,7 @@ $queryObject = new  Wp_Query( array(
 
 
     <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
+    <div id="myModal1" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -217,6 +215,28 @@ $queryObject = new  Wp_Query( array(
                     </div>
 
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="myModal2" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Góp Ý Của Đọc Giả</h4>
+                </div>
+                
+                <div class="modal-body">
+                   <?php echo do_shortcode('[contact-form-7 id="85" title="Untitled"]') ?>
+                </div>
+               
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>

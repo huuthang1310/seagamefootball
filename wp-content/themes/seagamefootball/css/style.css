@@ -35,6 +35,14 @@ Table OF Contents
 	typography
 \*----------------------------*/
 
+.wpcf7-form-control-wrap .wpcf7-textarea {
+    width: 100%;
+}
+
+.wpcf7-form-control-wrap input {
+    width: 100%;
+}
+
 .contactbox .contactor {
     background: #fff;
     border-radius: 3px;
