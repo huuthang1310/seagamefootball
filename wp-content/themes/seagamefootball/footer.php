@@ -75,7 +75,7 @@ $queryObject = new  Wp_Query( array(
         if ( $k <= 3  ) : ?>
                         <article class="article widget-article">
                             <div class="article-img">
-                                <a href="#">
+                              <a href="<?php the_permalink(); ?>">
                                     <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                                 </a>
                             </div>
