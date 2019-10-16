@@ -32,13 +32,13 @@ if ( post_password_required() ) {
 			if ( '1' === $seagamefootball_comment_count ) {
 				printf(
 					/* translators: 1: title. */
-					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'seagamefootball' ),
+					esc_html__( 'Có 1 bình luận về &ldquo;%1$s&rdquo;', 'seagamefootball' ),
 					'<span>' . get_the_title() . '</span>'
 				);
 			} else {
 				printf( // WPCS: XSS OK.
 					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $seagamefootball_comment_count, 'comments title', 'seagamefootball' ) ),
+					esc_html( _nx( '%1$s bình luận về &ldquo;%2$s&rdquo;', 'Có %1$s bình luận về &ldquo;%2$s&rdquo;', $seagamefootball_comment_count, 'comments title', 'seagamefootball' ) ),
 					number_format_i18n( $seagamefootball_comment_count ),
 					'<span>' . get_the_title() . '</span>'
 				);
@@ -63,7 +63,7 @@ if ( post_password_required() ) {
 		// If comments are closed and there are comments, let's leave a little note, shall we?
 		if ( ! comments_open() ) :
 			?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'seagamefootball' ); ?></p>
+			<p class="no-comments"><?php esc_html_e( 'Phần bình luận đã bị đóng.', 'seagamefootball' ); ?></p>
 			<?php
 		endif;
 
