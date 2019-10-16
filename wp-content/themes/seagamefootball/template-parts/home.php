@@ -105,7 +105,7 @@ $queryObject = new  Wp_Query( array(
                                         <h4 class="article-title"><a
                                                 href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
                                         <ul class="article-meta">
-                                            <?php echo $rest = substr(get_the_excerpt(), 0, 120 ); ?>
+                                            <?php echo $rest = substr(get_the_excerpt(), 0, 100 ); ?>
                                             <span class="small">... <a href="<?php the_permalink(); ?>"><b>Xem
                                                         thêm</b></a><i class="text-muted"></i></span>
                                         </ul>
@@ -134,7 +134,7 @@ $queryObject = new  Wp_Query( array(
     while ( $queryObject->have_posts() ) :
         $queryObject->the_post(); 
         if ( $n > 3  ) : ?>
-                            <div class="col-md-4 col-sm-6">
+                            <div class="col-md-6 col-sm-6">
                                 <!-- ARTICLE -->
                                 <article class="article widget-article">
                                     <div class="article-img">
@@ -146,14 +146,9 @@ $queryObject = new  Wp_Query( array(
                                     <div class="article-body">
                                         <h4 class="article-title"><a
                                                 href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-                                        <ul class="article-meta">
-                                            <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
-                                            <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
-                                        </ul>
                                     </div>
                                 </article>
                                 <!-- /ARTICLE -->
-
 
                             </div>
                             <?php endif; ?>
@@ -216,10 +211,7 @@ $queryObject = new  Wp_Query( array(
                             <div class="article-body">
                                 <h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h3>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
-                                    <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
-                                </ul>
+                                
 
                             </div>
                         </article>
@@ -246,12 +238,9 @@ $queryObject = new  Wp_Query( array(
                             <div class="article-body">
                                 <h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h3>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
-                                    <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
-                                </ul>
-                                <?php echo $rest = substr(get_the_excerpt(), 0, 120 ); ?>
-                                <span class="small">... <a href="<?php the_permalink(); ?>"><b>Xem thêm</b></a><i
+                                
+                                <br><p><?php echo $rest = substr(get_the_excerpt(), 0, 120 ); ?></p>
+                                <span class="small"><a href="<?php the_permalink(); ?>"><b>Xem thêm</b></a><i
                                         class="text-muted"></i></span>
                             </div>
                         </article>
@@ -294,10 +283,7 @@ $queryObject = new  Wp_Query( array(
                             <div class="article-body">
                                 <h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h3>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
-                                    <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
-                                </ul>
+                               
 
                             </div>
                         </article>
@@ -324,12 +310,9 @@ $queryObject = new  Wp_Query( array(
                             <div class="article-body">
                                 <h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h3>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
-                                    <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
-                                </ul>
-                                <?php echo $rest = substr(get_the_excerpt(), 0, 120 ); ?>
-                                <span class="small">... <a href="<?php the_permalink(); ?>"><b>Xem thêm</b></a><i
+                                
+                                <br><p><?php echo $rest = substr(get_the_excerpt(), 0, 120 ); ?></p>
+                                <span class="small"><a href="<?php the_permalink(); ?>"><b>Xem thêm</b></a><i
                                         class="text-muted"></i></span>
                             </div>
                         </article>
@@ -358,7 +341,7 @@ $queryObject = new  Wp_Query( array(
             <div class="col-md-4">
                 <!-- Ad widget -->
                 <div class="widget center-block hidden-xs">
-                    <img class="center-block" src="<?php echo $Url ?>/img/ad-1.jpg" alt="">
+                    <img class="center-block" src="<?php echo $Url ?>/img/300x250.gif" alt="">
                 </div>
                 <!-- /Ad widget -->
 
@@ -368,7 +351,6 @@ $queryObject = new  Wp_Query( array(
 
                 <!-- subscribe widget -->
                 <div class="widget subscribe-widget">
-                   
                     <?php echo do_shortcode( '[email-subscribers-form id="1"]' ) ?>
                 </div>
                 <!-- /subscribe widget -->
@@ -384,7 +366,7 @@ $queryObject = new  Wp_Query( array(
     <!-- /CONTAINER -->
 </div>
 <div class="visible-lg visible-md">
-    <img class="center-block" src="<?php echo $Url ?>/img/ad-3.jpg" alt="">
+    <img class="center-block ad ad2" src="<?php echo $Url ?>/img/970x250.gif" alt="">
 </div>
 <div class="section">
     <!-- CONTAINER -->
