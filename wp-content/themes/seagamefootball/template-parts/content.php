@@ -91,13 +91,7 @@
 
                 <!-- subscribe widget -->
                 <div class="widget subscribe-widget">
-                    <div class="widget-title">
-                        <h2 class="title">Subscribe to Newslatter</h2>
-                    </div>
-                    <form>
-                        <input class="input" type="email" placeholder="Enter Your Email">
-                        <button class="input-btn">Subscribe</button>
-                    </form>
+                   <?php echo do_shortcode( '[email-subscribers-form id="1"]' ) ?>
                 </div>
                 <!-- /subscribe widget -->
 

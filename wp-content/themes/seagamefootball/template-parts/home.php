@@ -368,6 +368,7 @@ $queryObject = new  Wp_Query( array(
 
                 <!-- subscribe widget -->
                 <div class="widget subscribe-widget">
+                   
                     <?php echo do_shortcode( '[email-subscribers-form id="1"]' ) ?>
                 </div>
                 <!-- /subscribe widget -->
