@@ -284,7 +284,7 @@ class Walker_Comment extends Walker {
 			<?php
 				/* translators: %s: comment author link */
 				printf(
-					__( '%s <span class="says">says:</span>' ),
+					__( '%s <span class="says">đã bình luận:</span>' ),
 					sprintf( '<cite class="fn">%s</cite>', get_comment_author_link( $comment ) )
 				);
 			?>
@@ -373,7 +373,7 @@ class Walker_Comment extends Walker {
 						<?php
 							/* translators: %s: comment author link */
 							printf(
-								__( '%s <span class="says">says:</span>' ),
+								__( '%s <span class="says">đã bình luận:</span>' ),
 								sprintf( '<b class="fn">%s</b>', get_comment_author_link( $comment ) )
 							);
 						?>

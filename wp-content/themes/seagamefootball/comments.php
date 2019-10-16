@@ -32,7 +32,7 @@ if ( post_password_required() ) {
 			if ( '1' === $seagamefootball_comment_count ) {
 				printf(
 					/* translators: 1: title. */
-					esc_html__( 'Có 1 bình luận về &ldquo;%1$s&rdquo;', 'seagamefootball' ),
+					esc_html__( 'Có 1 bình luận: ', 'seagamefootball' ),
 					'<span>' . get_the_title() . '</span>'
 				);
 			} else {
