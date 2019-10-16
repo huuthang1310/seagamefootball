@@ -35,6 +35,10 @@ Table OF Contents
 	typography
 \*----------------------------*/
 
+#comments {
+    display: inline-block;
+}
+
 .ad {
     height: 100px;
 }
