@@ -12,7 +12,7 @@
 
             </div>
             <div class="header-ads">
-                <img class="center-block" src="<?php echo $Url ?>/img/banner1.png" alt="">
+                <img class="center-block ad" src="<?php echo $Url ?>/img/fffff.gif" alt="">
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
         <div class="container">
             <nav id="main-nav">
                 <div class="nav-logo">
-                    <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo-alt.png" alt=""></a>
+                    <a href="#" class="logo"><img src="<?php echo $Url ?>/img/fffff.gif" alt=""></a>
                 </div>
                 <ul class="main-nav nav navbar-nav">
                     <li class=""><a href="<?php echo get_site_url() ?>">Trang Chủ</a></li>

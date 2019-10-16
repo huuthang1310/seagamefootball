@@ -35,6 +35,14 @@ Table OF Contents
 	typography
 \*----------------------------*/
 
+.ad {
+    height: 100px;
+}
+
+.ad2 {
+    width: 60%;
+}
+
 .wpcf7-form-control-wrap .wpcf7-textarea {
     width: 100%;
 }
@@ -642,7 +650,6 @@ textarea.input {
 }
 
 .article .article-title {
-    
     margin-top: 0px;
 }
 
@@ -1451,23 +1458,26 @@ textarea.input {
 .es-field-wrap label {
     width: 100%;
     text-align: center;
- font-size: 15px;
+    font-size: 15px;
     text-transform: uppercase;
     color: #DDD;
 }
+
 .es-field-wrap input {
     background: #FFF;
     border: none;
-width: 100%;
+    width: 100%;
     height: 40px;
     padding: 0px 15px;
     font-size: 12px;
 }
-.es_subscription_form{
+
+.es_subscription_form {
     text-align: center;
 }
-.es_textbox_button{
-        display: block;
+
+.es_textbox_button {
+    display: block;
     width: 100%;
     padding: 12px 30px;
     color: #FFF;
@@ -1478,3 +1488,5 @@ width: 100%;
     font-size: 12.5px;
     font-weight: 400;
 }
+
+;
