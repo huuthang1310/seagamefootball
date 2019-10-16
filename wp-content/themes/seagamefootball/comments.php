@@ -38,7 +38,7 @@ if ( post_password_required() ) {
 			} else {
 				printf( // WPCS: XSS OK.
 					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s bình luận về &ldquo;%2$s&rdquo;', 'Có %1$s bình luận về &ldquo;%2$s&rdquo;', $seagamefootball_comment_count, 'comments title', 'seagamefootball' ) ),
+					esc_html( _nx( '%1$s bình luận về &ldquo;%2$s&rdquo;', 'Có %1$s bình luận:', $seagamefootball_comment_count, 'comments title', 'seagamefootball' ) ),
 					number_format_i18n( $seagamefootball_comment_count ),
 					'<span>' . get_the_title() . '</span>'
 				);
