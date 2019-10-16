@@ -59,7 +59,8 @@ Table OF Contents
 }
 
 body {
-    font-family: 'Lato', sans-serif;
+    font-family: "Open Sans", Helvetica, Arial, Verdana, sans-serif !important;
+    line-height: 1.6em;
     color: #2C2C2C;
     font-size: 15px;
     font-weight: 300;
@@ -641,7 +642,7 @@ textarea.input {
 }
 
 .article .article-title {
-    text-transform: uppercase;
+    
     margin-top: 0px;
 }
 

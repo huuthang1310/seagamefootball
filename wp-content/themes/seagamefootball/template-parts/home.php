@@ -103,12 +103,14 @@ $queryObject = new  Wp_Query( array(
                                     </div>
                                     <div class="article-body">
                                         <h4 class="article-title"><a
-                                                href="<?php the_permalink(); ?>"></a><?php the_title(); ?></a></h4>
+                                                href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
                                         <ul class="article-meta">
-                                            <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
-                                            <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
+                                            <?php echo $rest = substr(get_the_excerpt(), 0, 120 ); ?>
+                                            <span class="small">... <a href="<?php the_permalink(); ?>"><b>Xem
+                                                        thêm</b></a><i class="text-muted"></i></span>
                                         </ul>
-                                        
+
+
                                     </div>
                                 </article>
                                 <!-- /ARTICLE -->
@@ -148,7 +150,6 @@ $queryObject = new  Wp_Query( array(
                                             <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
                                             <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
                                         </ul>
-
                                     </div>
                                 </article>
                                 <!-- /ARTICLE -->
@@ -219,7 +220,7 @@ $queryObject = new  Wp_Query( array(
                                     <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
                                     <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
                                 </ul>
-                                
+
                             </div>
                         </article>
                         <?php endif; ?>
@@ -297,7 +298,7 @@ $queryObject = new  Wp_Query( array(
                                     <li><i class="fa fa-clock-o"></i> <?php the_time('F jS, Y'); ?></li>
                                     <li><i class="fa fa-comments"></i> <?php echo get_comments_number();?></li>
                                 </ul>
-                                
+
                             </div>
                         </article>
                         <?php endif; ?>
@@ -362,7 +363,7 @@ $queryObject = new  Wp_Query( array(
                 <!-- /Ad widget -->
 
                 <!-- social widget -->
-                
+
                 <!-- /social widget -->
 
                 <!-- subscribe widget -->
