@@ -1630,10 +1630,10 @@ function get_comment_reply_link( $args = array(), $comment = null, $post = null 
 	$defaults = array(
 		'add_below'     => 'comment',
 		'respond_id'    => 'respond',
-		'reply_text'    => __( 'Reply' ),
+		'reply_text'    => __( 'Trả lời' ),
 		/* translators: Comment reply button text. %s: Comment author name */
-		'reply_to_text' => __( 'Reply to %s' ),
-		'login_text'    => __( 'Log in to Reply' ),
+		'reply_to_text' => __( 'Trả lời bình luận của %s' ),
+		'login_text'    => __( 'Đăng nhập để bình luận' ),
 		'max_depth'     => 0,
 		'depth'         => 0,
 		'before'        => '',
@@ -1766,8 +1766,8 @@ function get_post_reply_link( $args = array(), $post = null ) {
 	$defaults = array(
 		'add_below'  => 'post',
 		'respond_id' => 'respond',
-		'reply_text' => __( 'Leave a Comment' ),
-		'login_text' => __( 'Log in to leave a Comment' ),
+		'reply_text' => __( 'Để lại bình luận' ),
+		'login_text' => __( 'Đăng nhập để bình luận' ),
 		'before'     => '',
 		'after'      => '',
 	);
@@ -1840,7 +1840,7 @@ function post_reply_link( $args = array(), $post = null ) {
  */
 function get_cancel_comment_reply_link( $text = '' ) {
 	if ( empty( $text ) ) {
-		$text = __( 'Click here to cancel reply.' );
+		$text = __( 'Click vào đây để hủy bình luận.' );
 	}
 
 	$style = isset( $_GET['replytocom'] ) ? '' : ' style="display:none;"';
@@ -2389,7 +2389,7 @@ function comment_form( $args = array(), $post_id = null ) {
 			do_action( 'comment_form_must_log_in_after' );
 		else :
 			?>
-			<form action="<?php echo esc_url( $args['action'] ); ?>" method="post" id="<?php echo esc_attr( $args['id_form'] ); ?>" class="<?php echo esc_attr( $args['class_form'] ); ?>"<?php echo $html5 ? ' novalidate' : ''; ?>>
+			<form action="<?php echo esc_url( $args['action'] ); ?>" method="post" id="<?php echo esc_attr( $args['id_form'] ); ?>" class="<?php echo esc_attr( $args['class_form'] ); ?>"<?php echo $html5 ? ' validate' : ''; ?>>
 				<?php
 				/**
 				 * Fires at the top of the comment form, inside the form tag.
