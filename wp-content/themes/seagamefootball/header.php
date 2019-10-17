@@ -27,4 +27,4 @@
 </head>
 
 <body <?php body_class(); ?>>
-    <?php get_sidebar( 'module1' ) ?>
+<?php get_template_part( 'module/module-1', 'header' ); ?>
