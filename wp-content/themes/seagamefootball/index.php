@@ -1,12 +1,4 @@
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-  .then(reg => {
-    console.log('Registered service worker');
-  }).catch(err => {
-    console.log('Register service worker failed', err);
-  });
-}
-</script>
+
 <?php
 /**
  * The main template file
