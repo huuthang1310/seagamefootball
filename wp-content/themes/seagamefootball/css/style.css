@@ -69,15 +69,18 @@ Table OF Contents
     top: 50%;
     left: 50%;
 }
+.group-ranking td.team, .group-ranking th.team a{
+    width: 45%;
+    font-weight: 600;
+}
 
 body {
     font-family: "Open Sans", Helvetica, Arial, Verdana, sans-serif !important;
     line-height: 1.6em;
-    color: #2C2C2C;
+    color: #0a0a0a;
     font-size: 15px;
     font-weight: 300;
 }
-
 .flag img {
     width: 100px !important;
 }
@@ -113,11 +116,62 @@ h5 {
     font-size: 15px;
 }
 
+
 a {
     font-weight: 400;
     color: #07090c;
 }
-
+table.matchinfo td a {
+    font-size: 1.35em;
+    font-weight: 700;
+    color: #07090c;
+}
+table.matchinfo td a:hover {
+    font-size: 1.35em;
+    color: #EF233C;
+    text-decoration: none;
+    outline: none;
+    
+}
+table.matchinfo .matchtype {
+    color: #fff;
+    background-color: #000;
+    font-weight: bold;
+    font-size: 1.5em;
+    line-height: 1.8em;
+    vertical-align: middle;
+    text-align: center;
+}
+table.matchinfo .matchdate {
+    color: #fff;
+    background-color: #ccc;
+    font-weight: bold;
+    font-size: 1.3em;
+    line-height: 1.8em;
+    vertical-align: middle;
+}
+table.matchinfo td.home {
+    text-align: right;
+    padding-right: 1.5em;
+}
+table.matchinfo td.away {
+    text-align: left;
+    padding-left: 1.5em;
+}
+table.matchinfo td.time {
+    text-align: left;
+    font-size: .9em;
+    padding-left: 1em;
+}
+ol.team-list, ol.stadium-list a{
+    font-size: 1.35em;
+    font-weight: 700!important;
+    color: #07090c;
+}
+.group-ranking th.team, .group-ranking td.team, .group-ranking th.goals, .group-ranking td.goals {
+    background-color: #e1dfdf;
+    font-size: 0.9em;
+}
 a:hover,
 a:focus {
     color: #EF233C;
@@ -223,6 +277,7 @@ textarea.input {
 .header-social ul li a {
     display: block;
     width: 30px;
+  
     height: 30px;
     line-height: 30px;
     color: #222;
@@ -1493,4 +1548,4 @@ textarea.input {
     font-weight: 400;
 }
 
-;
+; 
