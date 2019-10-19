@@ -19,7 +19,7 @@ const RUNTIME = 'my-runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-    'http://localhost:82/seagamefootball/'
+    'http://localhost/seagamefootball/'
 
 ];
 
