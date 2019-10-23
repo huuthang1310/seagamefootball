@@ -47,7 +47,7 @@ function seagamefootball_theme_register_style(){
 	wp_register_style( 'seagamefootball_theme_owlt', $css_Url . '/owl.theme.default.css', array(), '1.0');
 	wp_enqueue_style('seagamefootball_theme_owlt');
 
-	wp_register_style( 'seagamefootball_theme_style', $css_Url . '/style.css', array(), '1.45');
+	wp_register_style( 'seagamefootball_theme_style', $css_Url . '/style.css', array(), '1.46');
 	wp_enqueue_style('seagamefootball_theme_style');
 
 }

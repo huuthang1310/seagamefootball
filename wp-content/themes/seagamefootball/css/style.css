@@ -1393,14 +1393,14 @@ textarea.input {
 
 .owl-theme.center-owl-nav .owl-nav [class*='owl-'] {
     position: absolute;
-    top: 50%;
+    top: 35%;
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     border: none;
     background: #222;
     color: #FFF;
-    padding: 15px;
+    padding: 0px;
     width: 45px;
     height: 45px;
     line-height: 45px;
