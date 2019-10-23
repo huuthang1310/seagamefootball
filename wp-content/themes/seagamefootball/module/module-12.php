@@ -24,7 +24,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <img style="width : 70px;" class="img-responsive"
-                                            src="<?php echo $Url ?>/img/Logo-Cao-dang1.jpg">
+                                            data-src="<?php echo $Url ?>/img/Logo-Cao-dang1.jpg">
                                     </div>
                                     <div class="col-md-8">
                                         <p>Trường Cao Đẳng Công Nghệ Thủ Đức</p>

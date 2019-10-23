@@ -19,7 +19,7 @@ $queryObject = new  Wp_Query( array(
         $queryObject->the_post(); 
 
         if ( $k <= 7  ) : ?>
-            <li><a href="<?php the_permalink(); ?>"><img src="<?php echo get_the_post_thumbnail_url(); ?>"
+            <li><a href="<?php the_permalink(); ?>"><img data-src="<?php echo get_the_post_thumbnail_url(); ?>"
                         alt="<?php the_title(); ?>"></a></li>
             <?php endif; ?>
             <?php $k++;?>

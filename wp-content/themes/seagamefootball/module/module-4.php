@@ -33,7 +33,7 @@ $queryObject = new  Wp_Query( array(
                         <article class="article">
                             <div class="article-img">
                                 <a href="<?php the_permalink();?>">
-                                    <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+                                    <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                                 </a>
                                 <ul class="article-info">
                                     <li class="article-type"><i class="fa fa-camera"></i></li>
@@ -62,7 +62,7 @@ $queryObject = new  Wp_Query( array(
                         <article class="article widget-article">
                             <div class="article-img">
                                 <a href="<?php the_permalink();?>">
-                                    <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+                                    <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
 
                                 </a>
                             </div>

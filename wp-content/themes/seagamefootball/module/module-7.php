@@ -1,6 +1,6 @@
 <?php $Url = get_template_directory_uri(); ?>
 <div class="visible-lg visible-md">
-    <img class="center-block ad ad2" src="<?php echo $Url ?>/img/970x250.gif" alt="">
+    <img class="center-block ad ad2" data-src="<?php echo $Url ?>/img/970x250.gif" alt="">
 </div>
 <div class="section">
     <!-- CONTAINER -->
@@ -33,7 +33,7 @@ if($post_query->have_posts()){
                     <article class="article thumb-article" style="min-height: 210px;
     max-height: 210px;">
                         <div class="article-img">
-                            <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+                            <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                         </div>
                         <div class="article-body">
                             <ul class="article-info">

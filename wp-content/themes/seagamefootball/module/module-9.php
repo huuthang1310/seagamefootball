@@ -23,7 +23,7 @@ $queryObject = new  Wp_Query( array(
         <article class="article widget-article">
             <div class="article-img">
                 <a href="#">
-                    <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+                    <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                 </a>
             </div>
             <div class="article-body">

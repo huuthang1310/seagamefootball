@@ -51,6 +51,7 @@
 <div id="back-to-top"></div>
 </div><!-- #page -->
 <script src="<?php echo $Url ?>/js/jquery.min.js"></script>
+<script src="<?php echo $Url ?>/js/lazyload.min.js"></script>
 <script src="<?php echo $Url ?>/js/bootstrap.min.js"></script>
 <script src="<?php echo $Url ?>/js/owl.carousel.min.js"></script>
 <script src="<?php echo $Url ?>/js/main.js"></script>
