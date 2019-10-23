@@ -36,7 +36,7 @@ $queryObject = new  Wp_Query( array(
 
         if ( $i <= 3  ) : ?>
                             <!-- Column 1 -->
-                            <div class="col-md-3 col-sm-6">
+                            <div class="col-md-3 col-sm-3 col-lg-3">
                                 <!-- ARTICLE -->
                                 <article class="article">
                                     <div class="article-img">
