@@ -69,7 +69,9 @@ Table OF Contents
     top: 50%;
     left: 50%;
 }
-.group-ranking td.team, .group-ranking th.team a{
+
+.group-ranking td.team,
+.group-ranking th.team a {
     width: 45%;
     font-weight: 600;
 }
@@ -81,6 +83,7 @@ body {
     font-size: 15px;
     font-weight: 300;
 }
+
 .flag img {
     width: 100px !important;
 }
@@ -116,23 +119,24 @@ h5 {
     font-size: 15px;
 }
 
-
 a {
     font-weight: 400;
     color: #07090c;
 }
+
 table.matchinfo td a {
     font-size: 1.35em;
     font-weight: 700;
     color: #07090c;
 }
+
 table.matchinfo td a:hover {
     font-size: 1.35em;
     color: #EF233C;
     text-decoration: none;
     outline: none;
-    
 }
+
 table.matchinfo .matchtype {
     color: #fff;
     background-color: #000;
@@ -142,6 +146,7 @@ table.matchinfo .matchtype {
     vertical-align: middle;
     text-align: center;
 }
+
 table.matchinfo .matchdate {
     color: #fff;
     background-color: #ccc;
@@ -150,28 +155,38 @@ table.matchinfo .matchdate {
     line-height: 1.8em;
     vertical-align: middle;
 }
+
 table.matchinfo td.home {
     text-align: right;
     padding-right: 1.5em;
 }
+
 table.matchinfo td.away {
     text-align: left;
     padding-left: 1.5em;
 }
+
 table.matchinfo td.time {
     text-align: left;
     font-size: .9em;
     padding-left: 1em;
 }
-ol.team-list, ol.stadium-list a{
+
+ol.team-list,
+ol.stadium-list a {
     font-size: 1.35em;
     font-weight: 700!important;
     color: #07090c;
 }
-.group-ranking th.team, .group-ranking td.team, .group-ranking th.goals, .group-ranking td.goals {
+
+.group-ranking th.team,
+.group-ranking td.team,
+.group-ranking th.goals,
+.group-ranking td.goals {
     background-color: #e1dfdf;
     font-size: 0.9em;
 }
+
 a:hover,
 a:focus {
     color: #EF233C;
@@ -277,7 +292,6 @@ textarea.input {
 .header-social ul li a {
     display: block;
     width: 30px;
-  
     height: 30px;
     line-height: 30px;
     color: #222;
@@ -678,8 +692,8 @@ textarea.input {
     margin-bottom: 15px;
 }
 
-.article .article-info li {
-    display: inline-block;
+.article .article-info {
+    display: flex;
     margin-right: -2px;
 }
 
@@ -1386,7 +1400,7 @@ textarea.input {
     border: none;
     background: #222;
     color: #FFF;
-    padding: 0px;
+    padding: 15px;
     width: 45px;
     height: 45px;
     line-height: 45px;
@@ -1547,5 +1561,3 @@ textarea.input {
     font-size: 12.5px;
     font-weight: 400;
 }
-
-; 
