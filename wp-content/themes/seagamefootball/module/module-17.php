@@ -28,7 +28,7 @@ $queryObject = new  Wp_Query( array(
                 <article class="article row-article">
                     <div class="article-img">
                         <a href="#">
-                            <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="">
+                            <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="">
                         </a>
                     </div>
                     <div class="article-body">

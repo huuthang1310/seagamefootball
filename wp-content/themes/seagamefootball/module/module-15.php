@@ -2,7 +2,7 @@
 <div class="col-md-4">
     <!-- Ad widget -->
     <div class="widget center-block hidden-xs">
-        <img class="center-block" src="<?php echo $Url ?>/img/300x250.gif" alt="">
+        <img class="center-block" data-data-src="<?php echo $Url ?>/img/300x250.gif" alt="">
     </div>
     <!-- /Ad widget -->
 
@@ -41,7 +41,7 @@ $queryObject = new  Wp_Query( array(
             <article class="article">
                 <div class="article-img">
                     <a href="#">
-                        <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+                        <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                     </a>
                     <ul class="article-info">
                         <li class="article-type"><i class="fa fa-file-text"></i></li>
@@ -91,7 +91,7 @@ $queryObject = new  Wp_Query( array(
                 <article class="article thumb-article" style="min-height: 210px;
     max-height: 210px;">
                     <div class="article-img">
-                        <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+                        <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                     </div>
                     <div class="article-body">
                         <ul class="article-info">

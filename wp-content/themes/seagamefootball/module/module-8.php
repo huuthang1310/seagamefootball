@@ -3,7 +3,7 @@
     <!-- footer about -->
     <div class="footer-widget about-widget">
         <div class="footer-logo">
-            <a href="#" class="logo"><img src="<?php echo $Url ?>/img/logo-alt.png" alt=""></a>
+            <a href="#" class="logo"><img data-src="<?php echo $Url ?>/img/logo-alt.png" alt=""></a>
             <p>Website cung cấp tin tức bóng đá, lịch thi đấu, xếp hạng, và thông tin liên quan Seagame.
             </p>
         </div>

@@ -14,7 +14,7 @@ if($post_query->have_posts()){
         if ( $x <= 3  ) : ?>
     <article class="article thumb-article">
         <div class="article-img">
-            <img style="height: 505px" src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+            <img style="height: 505px" data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
         </div>
         <div class="article-body">
             <ul class="article-info">
