@@ -39,6 +39,100 @@ Table OF Contents
     display: inline-block;
 }
 
+.group-ranking td.team,
+.group-ranking th.team a {
+    width: 45%;
+    font-weight: 600;
+}
+
+table.matchinfo td a {
+    font-size: 1.35em;
+    font-weight: 700;
+    color: #07090c;
+}
+
+table.matchinfo td a:hover {
+    font-size: 1.35em;
+    color: #EF233C;
+    text-decoration: none;
+    outline: none;
+}
+
+table.matchinfo .matchtype {
+    color: #fff;
+    background-color: #000;
+    font-weight: bold;
+    font-size: 1.5em;
+    line-height: 1.8em;
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.matchinfo .matchdate {
+    color: #fff;
+    background-color: #ccc;
+    font-weight: bold;
+    font-size: 1.3em;
+    line-height: 1.8em;
+    vertical-align: middle;
+}
+
+table.matchinfo td.home {
+    text-align: right;
+    padding-right: 1.5em;
+}
+
+table.matchinfo td.away {
+    text-align: left;
+    padding-left: 1.5em;
+}
+
+table.matchinfo td.time {
+    text-align: left;
+    font-size: .9em;
+    padding-left: 1em;
+}
+
+ol.team-list,
+ol.stadium-list a {
+    font-size: 1.35em;
+    font-weight: 700!important;
+    color: #07090c;
+}
+
+.group-ranking th.team,
+.group-ranking td.team,
+.group-ranking th.goals,
+.group-ranking td.goals {
+    background-color: #e1dfdf;
+    font-size: 0.9em;
+}
+
+a:hover,
+a:focus {
+    color: #EF233C;
+}
+
+.header-social ul li a {
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #222;
+}
+
+.footer-logo p {
+    color: white;
+}
+
+.article-title a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
 .ad {
     height: 100px;
 }
@@ -1393,7 +1487,7 @@ textarea.input {
 
 .owl-theme.center-owl-nav .owl-nav [class*='owl-'] {
     position: absolute;
-    top: 35%;
+    top: 50%;
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
@@ -1406,6 +1500,11 @@ textarea.input {
     line-height: 45px;
     border-radius: 0;
     margin: 0;
+}
+
+#owl-carousel-1 .fa-angle-left,
+.fa-angle-right {
+    padding: 15px;
 }
 
 .owl-theme.center-owl-nav .owl-prev {
