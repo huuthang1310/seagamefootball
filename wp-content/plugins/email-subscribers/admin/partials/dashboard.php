@@ -77,8 +77,8 @@ $current_user_email =  $current_user->user_email;
 			</div>
 			<div class="es-right">
 				<div class="es-quick-stats" >
-					<?php $sub_count = ES_DB_Contacts::count_active_subscribers_by_list_id(); 
-						$total_forms = ES_DB_Forms::count_forms();
+					<?php $sub_count = ES()->contacts_db->count_active_contacts_by_list_id();
+						$total_forms = ES()->forms_db->count_forms();
 						$total_lists = ES()->lists_db->count_lists();
 						$total_campaigns = ES()->campaigns_db->get_total_campaigns();
 					?>

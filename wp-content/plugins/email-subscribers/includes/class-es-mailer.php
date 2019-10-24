@@ -30,38 +30,40 @@ class ES_Mailer {
 
 		$emails = array_map( "temp_fun", $mails );
 
-		$emails_name_map = ES_DB_Contacts::get_subscribers_email_name_map( $emails );
+		$emails_name_map = ES()->contacts_db->get_contacts_email_name_map( $emails );
 
 		foreach ( $mails as $mail ) {
-			$email      = $mail['email'];
-			$id         = $mail['contact_id'];
-			$guid       = $mail['mailing_queue_hash'];
-			$email_name = ! empty( $emails_name_map[ $email ] ) ? $emails_name_map[ $email ]['name'] : '';
-			$first_name = ! empty( $emails_name_map[ $email ] ) ? $emails_name_map[ $email ]['first_name'] : '';
-			$last_name  = ! empty( $emails_name_map[ $email ] ) ? $emails_name_map[ $email ]['last_name'] : '';
+			$email       = $mail['email'];
+			$id          = $mail['contact_id'];
+			$guid        = $mail['mailing_queue_hash'];
+			$campaign_id = $mail['campaign_id'];
+			$message_id  = $mail['mailing_queue_id'];
+			$email_name  = ! empty( $emails_name_map[ $email ] ) ? $emails_name_map[ $email ]['name'] : '';
+			$first_name  = ! empty( $emails_name_map[ $email ] ) ? $emails_name_map[ $email ]['first_name'] : '';
+			$last_name   = ! empty( $emails_name_map[ $email ] ) ? $emails_name_map[ $email ]['last_name'] : '';
 
 			$keywords = array(
 				'name'        => $email_name,
 				'first_name'  => $first_name,
 				'last_name'   => $last_name,
 				'email'       => $email,
-				'guid'        => $guid,
+				'hash'        => $guid,
 				'dbid'        => $id,
 				'message_id'  => $notification['id'],
 				'campaign_id' => $notification['campaign_id']
 			);
 
+
 			// Preparing email body
 			$body = self::prepare_email_template( $content, $keywords );
-			//add links
 
 			$send = self::send( $email, $subject, $body );
 
-			if ( $send ) {
-				ES_DB_Sending_Queue::update_sent_status( $mail['id'], 'Sent' );
-			}
-
+			ES_DB_Sending_Queue::update_sent_status( $mail['id'], 'Sent' );
 			ES_Common::update_total_email_sent_count();
+
+			// Track Message Sent
+			do_action( 'ig_es_message_sent', $id, $campaign_id, $message_id );
 		}
 
 	}
@@ -122,7 +124,7 @@ class ES_Mailer {
 	public static function prepare_welcome_email( $data ) {
 
 		$blog_name      = get_option( 'blogname' );
-		$total_contacts = ES_DB_Contacts::count_active_subscribers_by_list_id();
+		$total_contacts = ES()->contacts_db->count_active_contacts_by_list_id();
 		$content        = stripslashes( get_option( 'ig_es_welcome_email_content', '' ) );
 
 		$name       = isset( $data['name'] ) ? $data['name'] : '';
@@ -131,7 +133,7 @@ class ES_Mailer {
 		$email      = isset( $data['email'] ) ? $data['email'] : '';
 		$list_name  = isset( $data['list_name'] ) ? $data['list_name'] : '';
 		$db_id      = isset( $data['db_id'] ) ? $data['db_id'] : '';
-		$guid       = ES_DB_Contacts::get_contact_hash_by_id( $db_id );
+		$guid       = ES()->contacts_db->get_contact_hash_by_id( $db_id );
 		// $guid  = isset( $data['guid'] ) ? $data['guid'] : '';
 		$guid = ! empty( $guid ) ? $guid : '';
 
@@ -164,12 +166,12 @@ class ES_Mailer {
 	public static function prepare_double_optin_email( $data ) {
 
 		$blog_name      = get_option( 'blogname' );
-		$total_contacts = ES_DB_Contacts::count_active_subscribers_by_list_id();
+		$total_contacts = ES()->contacts_db->count_active_contacts_by_list_id();
 		$content        = stripslashes( get_option( 'ig_es_confirmation_mail_content', '' ) );
 
 
 		$db_id = isset( $data['db_id'] ) ? $data['db_id'] : '';
-		$guid  = ES_DB_Contacts::get_contact_hash_by_id( $db_id );
+		$guid  = ES()->contacts_db->get_contact_hash_by_id( $db_id );
 		// $guid  = isset( $data['guid'] ) ? $data['guid'] : '';
 		$guid       = ! empty( $guid ) ? $guid : '';
 		$email      = isset( $data['email'] ) ? $data['email'] : '';
@@ -210,7 +212,7 @@ class ES_Mailer {
 		$hash       = isset( $keywords['hash'] ) ? $keywords['hash'] : '';
 
 		if ( empty( $hash ) ) {
-			$hash = ES_DB_Contacts::get_contact_hash_by_id( $contact_id );
+			$hash = ES()->contacts_db->get_contact_hash_by_id( $contact_id );
 		}
 
 		$template_content = str_replace( "{{NAME}}", $name, $template_content );
@@ -225,23 +227,35 @@ class ES_Mailer {
 		$template_content = wpautop( $template_content );
 
 		$template_content = do_shortcode( shortcode_unautop( $template_content ) );
+
+		$campaign_id = ! empty( $keywords['campaign_id'] ) ? $keywords['campaign_id'] : 0;
+		$message_id  = ! empty( $keywords['message_id'] ) ? $keywords['message_id'] : 0;
+
+
 		$data['content']  = $template_content;
 		$data['tmpl_id']  = $template_id;
 		$data             = apply_filters( 'es_after_process_template_body', $data );
 		$template_content = $data['content'];
 
-
 		$link_data = array(
-			'action'      => 'unsubscribe',
-			'message_id'  => ! empty( $keywords['message_id'] ) ? $keywords['message_id'] : 0,
-			'campaign_id' => ! empty( $keywords['campaign_id'] ) ? $keywords['campaign_id'] : 0,
+			'message_id'  => $message_id,
+			'campaign_id' => $campaign_id,
 			'contact_id'  => $contact_id,
 			'email'       => $email,
 			'guid'        => $hash
 		);
 
-		$unsubscribe_link = self::prepare_link( $link_data );
-		$unsubtext        = self::get_unsubscribe_text( $unsubscribe_link );
+		$is_track_clicks = false;
+		$is_track_clicks = apply_filters( 'ig_es_track_clicks', $is_track_clicks, $contact_id, $campaign_id );
+		if ( $is_track_clicks ) {
+			$link_data['action'] = 'click';
+			$template_content    = self::replace_links( $template_content, $link_data );
+		}
+
+
+		$link_data['action'] = 'unsubscribe';
+		$unsubscribe_link    = self::prepare_link( $link_data );
+		$unsubtext           = self::get_unsubscribe_text( $unsubscribe_link );
 
 		$is_track_email_opens = get_option( 'ig_es_track_email_opens', 'yes' );
 
@@ -274,7 +288,7 @@ class ES_Mailer {
 	 */
 	public static function prepare_link( $data = array() ) {
 		/**
-		 * We are getting different data like action, message_id, campaign_id contact_id, guid, email etc in $data
+		 * We are getting different data like action, message_id, campaign_id, contact_id, guid, email etc in $data
 		 */
 		$action = ! empty( $data['action'] ) ? $data['action'] : '';
 
@@ -386,7 +400,7 @@ class ES_Mailer {
 
 	public static function send( $to_email, $subject, $email_template ) {
 
-		$response = array('status' => 'ERROR');
+		$response       = array( 'status' => 'ERROR' );
 		$subject        = html_entity_decode( $subject, ENT_QUOTES, get_bloginfo( 'charset' ) );
 		$get_email_type = get_option( 'ig_es_email_type', true );
 		$site_title     = get_bloginfo();
@@ -430,7 +444,7 @@ class ES_Mailer {
 
 		} else {
 			$result = mail( $to_email, $subject, $email_template, $headers );
-			if($result) {
+			if ( $result ) {
 				$response['status'] = 'SUCCESS';
 			}
 		}
@@ -462,4 +476,73 @@ class ES_Mailer {
 		}
 
 	}
+
+	/**
+	 * Replace links with tracking link
+	 *
+	 * @param $content
+	 * @param $data
+	 *
+	 * @return string|string[]|null
+	 *
+	 * @since 4.2.4
+	 */
+	public static function replace_links( $content, $data ) {
+
+		// get all links from the basecontent
+		preg_match_all( '# href=(\'|")?(https?[^\'"]+)(\'|")?#', $content, $links );
+		$links = $links[2];
+
+		if ( empty( $links ) ) {
+			return $content;
+		}
+
+		$inserted_links = array();
+
+		$campaign_id = ! empty( $data['campaign_id'] ) ? $data['campaign_id'] : 0;
+		$message_id  = ! empty( $data['message_id'] ) ? $data['message_id'] : 0;
+
+		foreach ( $links as $link ) {
+
+			if ( ! isset( $inserted_links[ $link ] ) ) {
+				$index = 0;
+			} else {
+				$index = $inserted_links[ $link ] + 1;
+			}
+
+			$inserted_links[ $link ] = $index;
+			$result                  = ES()->links_db->get_link_by_campaign_id( $link, $campaign_id, $message_id, $index );
+
+			if ( is_array( $result ) && count( $result ) > 0 ) {
+				$hash = $result[0]['hash'];
+			} else {
+
+				$hash = ES_Common::generate_hash( 12 );
+
+				$link_data = array(
+					'link'        => $link,
+					'message_id'  => $message_id,
+					'campaign_id' => $campaign_id,
+					'hash'        => $hash,
+					'i'           => $index
+				);
+
+				$insert = ES()->links_db->insert( $link_data );
+			}
+
+			$data['link_hash'] = $hash;
+
+			$new_link = self::prepare_link( $data );
+
+			$link     = ' href="' . $link . '"';
+			$new_link = ' href="' . $new_link . '"';
+
+			if ( ( $pos = strpos( $content, $link ) ) !== false ) {
+				$content = preg_replace( '/' . preg_quote( $link, '/' ) . '/', $new_link, $content, 1 );
+			}
+		}
+
+		return $content;
+	}
+
 }

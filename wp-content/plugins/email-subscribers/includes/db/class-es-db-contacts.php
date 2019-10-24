@@ -1,17 +1,55 @@
 <?php
-
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class ES_DB_Contacts {
+class ES_DB_Contacts extends ES_DB {
+	/**
+	 * @since 4.2.4
+	 * @var $table_name
+	 *
+	 */
+	public $table_name;
+	/**
+	 * @since 4.2.4
+	 * @var $version
+	 *
+	 */
+	public $version;
+	/**
+	 * @since 4.2.4
+	 * @var $primary_key
+	 *
+	 */
+	public $primary_key;
 
+	/**
+	 * ES_DB_Contacts constructor.
+	 *
+	 * @since 4.2.4
+	 */
 	public function __construct() {
+		global $wpdb;
+
+		parent::__construct();
+
+		$this->table_name = $wpdb->prefix . 'ig_contacts';
+
+		$this->primary_key = 'id';
+
+		$this->version = '1.0';
 
 	}
 
-	public static function get_columns() {
+	/**
+	 * Get columns
+	 *
+	 * @return array
+	 *
+	 * @since 4.0.0
+	 */
+	public function get_columns() {
 		return array(
 			'id'             => '%d',
 			'wp_user_id'     => '%d',
@@ -38,9 +76,9 @@ class ES_DB_Contacts {
 	/**
 	 * Get default column values
 	 *
-	 * @since   2.1
+	 * @since   4.0.0
 	 */
-	public static function get_column_defaults() {
+	public function get_column_defaults() {
 		return array(
 			'wp_user_id'     => 0,
 			'first_name'     => '',
@@ -63,17 +101,29 @@ class ES_DB_Contacts {
 		);
 	}
 
-
-	public static function get_subscribers_by_id( $id ) {
-
-		global $wpdb;
-		$sql        = "SELECT * FROM " . IG_CONTACTS_TABLE . " WHERE id = $id ";
-		$subscriber = $wpdb->get_row( $sql, ARRAY_A );
-
-		return $subscriber;
+	/**
+	 * Get by id
+	 *
+	 * @param $id
+	 *
+	 * @return array|object|void|null
+	 *
+	 * @since 4.0.0
+	 */
+	public function get_by_id( $id ) {
+		return $this->get( $id );
 	}
 
-	public static function get_subscribers_email_name_map( $emails = array() ) {
+	/**
+	 * Get contact email name map
+	 *
+	 * @param array $emails
+	 *
+	 * @return array
+	 *
+	 * @since 4.2.2
+	 */
+	public function get_contacts_email_name_map( $emails = array() ) {
 
 		global $wpdb;
 
@@ -85,12 +135,15 @@ class ES_DB_Contacts {
 
 			$emails = array_map( "temp", $emails );
 
-			$emails_str  = implode( ', ', $emails );
-			$subscribers = $wpdb->get_results( "SELECT email, first_name, last_name FROM " . IG_CONTACTS_TABLE . " WHERE email IN ( " . $emails_str . ")", ARRAY_A );
+			$ig_contacts_table = IG_CONTACTS_TABLE;
+
+			$emails_str  = $this->array_to_str( $emails );
+			$subscribers = $wpdb->get_results( "SELECT email, first_name, last_name FROM $ig_contacts_table WHERE email IN ( " . $emails_str . ")", ARRAY_A );
 
 			if ( count( $subscribers ) > 0 ) {
 				foreach ( $subscribers as $subscriber ) {
-					$name                                              = ES_Common::prepare_name_from_first_name_last_name( $subscriber['first_name'], $subscriber['last_name'] );
+					$name = ES_Common::prepare_name_from_first_name_last_name( $subscriber['first_name'], $subscriber['last_name'] );
+
 					$subscriber_email_name_map[ $subscriber['email'] ] = array(
 						'name'       => $name,
 						'first_name' => $subscriber['first_name'],
@@ -104,58 +157,76 @@ class ES_DB_Contacts {
 
 	}
 
-	public static function get_contact_hash_by_id( $id ) {
-		global $wpdb;
+	/**
+	 * Get contact hash by contact id
+	 *
+	 * @param $id
+	 *
+	 * @return array|string|null
+	 *
+	 * @since 4.0.0
+	 */
+	public function get_contact_hash_by_id( $id ) {
 
 		if ( ! empty( $id ) ) {
-
-			$ig_contacts_table = IG_CONTACTS_TABLE;
-			$query             = "SELECT hash FROM {$ig_contacts_table} WHERE id = %d";
-			$sql               = $wpdb->prepare( $query, $id );
-			$contact_hash      = $wpdb->get_col( $sql );
-
-			if ( ! empty( $contact_hash ) ) {
-				return $contact_hash[0];
-			}
+			return $this->get_column( 'hash', $id );
 		}
 
 		return '';
-	}
-
-	public static function is_contact_exists( $id = '', $email = '' ) {
-		global $wpdb;
-
-		$query         = "SELECT * FROM " . IG_CONTACTS_TABLE . " WHERE id = %d AND email = %s";
-		$sql           = $wpdb->prepare( $query, $id, $email );
-		$contact_count = $wpdb->get_results( $sql, ARRAY_A );
-
-		return $contact_count;
-	}
-
-	public static function search_subscriber( $id = '', $email = '' ) {
-		global $wpdb;
-		$sql = "SELECT * FROM " . IG_CONTACTS_TABLE . " WHERE id = $id ";
-		if ( ! empty( $email ) ) {
-			$sql .= "AND `email` LIKE '%{$email}%'";
-		}
-
-		$subscriber = $wpdb->get_row( $sql, ARRAY_A );
-
-		return $subscriber;
 
 	}
 
 	/**
+	 * Is contacts exists based on id & email?
+	 *
+	 * @param string $id
+	 * @param string $email
+	 *
+	 * @return bool
+	 *
+	 * @since 4.0.0
+	 *
+	 * @modify 4.2.4
 	 */
-	public static function get_active_subscribers_by_list_id( $list_id ) {
+	public function is_contact_exists( $id = '', $email = '' ) {
+		global $wpdb;
+
+		if ( ! empty( $id ) && ! empty( $email ) ) {
+
+			$where = $wpdb->prepare( 'id = %d AND email = %s', $id, $email );
+			$count = $this->count( $where );
+
+			if ( $count ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get active contacts by list_id
+	 *
+	 * @param $list_id
+	 *
+	 * @return array|object|null
+	 *
+	 * @since 4.2.4
+	 *
+	 */
+	public function get_active_contacts_by_list_id( $list_id ) {
+
+		if ( empty( $list_id ) ) {
+			return array();
+		}
 
 		global $wpdb;
 
-		$query       = "SELECT * FROM " . IG_CONTACTS_TABLE . " WHERE id IN ( SELECT contact_id FROM " . IG_LISTS_CONTACTS_TABLE . " WHERE list_id = %d AND status IN ( 'subscribed', 'confirmed' )  )";
-		$sql         = $wpdb->prepare( $query, $list_id );
-		$subscribers = $wpdb->get_results( $sql, ARRAY_A );
+		$ig_lists_contacts_table = IG_LISTS_CONTACTS_TABLE;
 
-		return $subscribers;
+		$where = $wpdb->prepare( "id IN (SELECT contact_id FROM $ig_lists_contacts_table WHERE list_id = %d AND status IN ('subscribed', 'confirmed'))", $list_id );
+
+		return $this->get_by_conditions( $where );
 
 	}
 
@@ -167,29 +238,40 @@ class ES_DB_Contacts {
 	 * @return array|object|null
 	 *
 	 * @since 4.2.1
+	 *
+	 * @modify 4.2.4
 	 */
-	public static function get_contacts_by_ids( $ids ) {
+	public function get_contacts_by_ids( $ids ) {
 
-		global $wpdb;
+		if ( ! is_array( $ids ) && ! count( $ids ) > 0 ) {
+			return array();
+		}
 
-		$contacts_table = IG_CONTACTS_TABLE;
+		$ids_str = $this->array_to_str( $ids );
 
-		$ids_str = "'" . implode( ", '", $ids ) . "'";
+		$where = "id IN ($ids_str)";
 
-		$query       = "SELECT * FROM $contacts_table WHERE id IN ($ids_str)";
-		$subscribers = $wpdb->get_results( $query, ARRAY_A );
-
-		return $subscribers;
-
+		return $this->get_by_conditions( $where );
 	}
 
-	public static function count_active_subscribers_by_list_id( $list_id = '' ) {
+	/**
+	 * Count Active Contacts by list id
+	 *
+	 * @param string $list_id
+	 *
+	 * @return string|null
+	 *
+	 * @since 4.2.4
+	 */
+	public function count_active_contacts_by_list_id( $list_id = '' ) {
 
 		global $wpdb;
 
-		$query = "SELECT count(distinct(contact_id)) as total_subscribers FROM " . IG_LISTS_CONTACTS_TABLE . " WHERE status = 'subscribed'";
+		$ig_lists_contacts_table = IG_LISTS_CONTACTS_TABLE;
 
-		if ( $list_id ) {
+		$query = $wpdb->prepare( "SELECT count(distinct(contact_id)) as total_subscribers FROM $ig_lists_contacts_table WHERE status = %s", 'subscribed' );
+
+		if ( ! empty( $list_id ) ) {
 			$query .= ' AND list_id = %d';
 			$query = $wpdb->prepare( $query, $list_id );
 		}
@@ -200,47 +282,56 @@ class ES_DB_Contacts {
 
 	}
 
-	public static function get_active_subscribers_count() {
+	/**
+	 * Delete Contacts by ids
+	 *
+	 * @param $ids
+	 *
+	 * @return bool|int
+	 *
+	 * @since 4.2.4
+	 */
+	public function delete_contacts_by_ids( $ids ) {
 		global $wpdb;
 
-		$query              = "SELECT COUNT(email) FROM " . IG_CONTACTS_TABLE . " WHERE unsubscribed = 0 OR unsubscribed IS NULL";
-		$active_subscribers = $wpdb->get_var( $query );
+		$ids = array_map( 'absint', $ids );
 
-		return $active_subscribers;
+		$ids = $this->array_to_str( $ids );
+
+		$where = "id IN ($ids)";
+		$this->delete_by_condition( $where );
+
+		$ig_lists_contacts_table = IG_LISTS_CONTACTS_TABLE;
+
+		$query = "DELETE FROM $ig_lists_contacts_table WHERE contact_id IN ($ids)";
+
+		return $wpdb->query( $query );
 	}
 
-	public static function add_subscriber( $data ) {
+	/**
+	 * Update Contact Lists
+	 *
+	 * @param $ids
+	 * @param $list_id
+	 *
+	 * @return bool
+	 *
+	 * @since 4.0.0
+	 */
+	public function update_contacts_list( $ids, $list_id ) {
 		global $wpdb;
 
-		$data   = wp_parse_args( $data, self::get_column_defaults() );
-		$insert = $wpdb->insert( IG_CONTACTS_TABLE, $data );
+		$ids = array_map( 'absint', $ids );
 
-		if ( $insert ) {
-			return $wpdb->insert_id;
-		}
+		$ids_str = $this->array_to_str( $ids );
 
-		return false;
-	}
+		$ig_lists_contacts_table = IG_LISTS_CONTACTS_TABLE;
 
-	public static function delete_subscribers( $ids ) {
-		global $wpdb;
-		$ids   = implode( ',', array_map( 'absint', $ids ) );
-		$query = "DELETE FROM " . IG_CONTACTS_TABLE . " WHERE id IN ($ids)";
-		$wpdb->query( $query );
-		$query_2 = "DELETE FROM " . IG_LISTS_CONTACTS_TABLE . " WHERE contact_id IN ($ids)";
-
-		return $wpdb->query( $query_2 );
-	}
-
-	public static function update_contacts_list( $ids, $list_id ) {
-		global $wpdb;
-
-		$ids_str = implode( ',', array_map( 'absint', $ids ) );
 		//delete all list contact entry
-		$del_query = "DELETE FROM " . IG_LISTS_CONTACTS_TABLE . " WHERE contact_id IN ($ids_str) ";
-		$wpdb->query( $del_query );
+		$query = "DELETE FROM $ig_lists_contacts_table WHERE contact_id IN ($ids_str) ";
+		$wpdb->query( $query );
 
-		$values            = array();
+		$values            = $place_holders = array();
 		$optin_type_option = get_option( 'ig_es_optin_type', true );
 		$optin_type        = 1;
 		if ( in_array( $optin_type_option, array( 'double_opt_in', 'double_optin' ) ) ) {
@@ -252,8 +343,9 @@ class ES_DB_Contacts {
 			array_push( $values, $list_id, $contact_id, 'subscribed', $optin_type, $subscribed_at, $subscribed_ip );
 			$place_holders[] = "( %d, %d, %s, %s, %s, %s )"; /* In my case, i know they will always be integers */
 		}
-		$query = "INSERT INTO " . IG_LISTS_CONTACTS_TABLE . " (`list_id`, `contact_id`, `status`, `optin_type`, `subscribed_at`, `subscribed_ip` ) VALUES ";
-		$query .= implode( ', ', $place_holders );
+
+		$query = "INSERT INTO $ig_lists_contacts_table (`list_id`, `contact_id`, `status`, `optin_type`, `subscribed_at`, `subscribed_ip` ) VALUES ";
+		$query .= $this->array_to_str($place_holders);
 		$sql   = $wpdb->prepare( "$query ", $values );
 		if ( $wpdb->query( $sql ) ) {
 			return true;
@@ -262,16 +354,30 @@ class ES_DB_Contacts {
 		}
 	}
 
-	public static function add_contacts_to_list( $ids, $list_id ) {
+	/**
+	 * Add contacts to list
+	 *
+	 * @param $ids
+	 * @param $list_id
+	 *
+	 * @return bool
+	 *
+	 * @since 4.0.0
+	 */
+	public function add_contacts_to_list( $ids, $list_id ) {
 		global $wpdb;
 
-		$ids_str = implode( ',', array_map( 'absint', $ids ) );
+		$ids = array_map( 'absint', $ids );
 
-		$delete_list_contact = "DELETE FROM " . IG_LISTS_CONTACTS_TABLE . " WHERE contact_id IN ($ids_str) AND list_id = %s";
+		$ids_str = $this->array_to_str( $ids );
+
+		$ig_lists_contacts_table = IG_LISTS_CONTACTS_TABLE;
+
+		$delete_list_contact = "DELETE FROM $ig_lists_contacts_table WHERE contact_id IN ($ids_str) AND list_id = %s";
 		$del_query           = $wpdb->prepare( $delete_list_contact, array( $list_id ) );
 		$wpdb->query( $del_query );
 
-		$values            = array();
+		$values            = $place_holders = array();
 		$optin_type_option = get_option( 'ig_es_optin_type', true );
 		$optin_type        = 1;
 		if ( in_array( $optin_type_option, array( 'double_opt_in', 'double_optin' ) ) ) {
@@ -284,7 +390,7 @@ class ES_DB_Contacts {
 			$place_holders[] = "( %d, %d, %s, %s, %s, %s )"; /* In my case, i know they will always be integers */
 		}
 		$query = "INSERT INTO " . IG_LISTS_CONTACTS_TABLE . " (`list_id`, `contact_id`, `status`, `optin_type`, `subscribed_at`, `subscribed_ip` ) VALUES ";
-		$query .= implode( ', ', $place_holders );
+		$query .= $this->array_to_str( $place_holders );
 		$sql   = $wpdb->prepare( "$query ", $values );
 		if ( $wpdb->query( $sql ) ) {
 			return true;
@@ -293,49 +399,60 @@ class ES_DB_Contacts {
 		}
 	}
 
-	public static function edit_subscriber_status_global( $ids, $unsubscribed ) {
+	/**
+	 * Edit global status of contact
+	 *
+	 * @param $ids
+	 * @param $unsubscribed
+	 *
+	 * @return bool|int
+	 *
+	 * @since 4.2.4
+	 */
+	public function edit_contact_global_status( $ids, $unsubscribed ) {
 		global $wpdb;
 
-		$contacts_table = IG_CONTACTS_TABLE;
-		$ids            = implode( ',', array_map( 'absint', $ids ) );
+		$ig_contacts_table = IG_CONTACTS_TABLE;
 
-		$sql   = "UPDATE {$contacts_table} SET unsubscribed = %d WHERE id IN ($ids)";
+		$ids = array_map( 'absint', $ids );
+
+		$ids = $this->array_to_str( $ids );
+
+		$sql   = "UPDATE $ig_contacts_table SET unsubscribed = %d WHERE id IN ($ids)";
 		$query = $wpdb->prepare( $sql, array( $unsubscribed ) );
 
 		return $wpdb->query( $query );
 
 	}
 
-
 	/**
-	 * Returns the count of records in the database.
+	 * Is Contact exists in list?
 	 *
-	 * @return null|string
+	 * @param $email
+	 * @param $list_id
+	 *
+	 * @return array
 	 */
-	public static function get_total_subscribers() {
+	public function is_contact_exist_in_list( $email, $list_id ) {
 		global $wpdb;
 
-		$sql = "SELECT COUNT(*) FROM " . IG_CONTACTS_TABLE;
+		$contact_id = $this->get_column_by( 'id', 'email', $email );
 
-		return $wpdb->get_var( $sql );
-	}
-
-	public static function is_subscriber_exist_in_list( $email, $list_id ) {
-		global $wpdb;
-
-		$query      = "SELECT id as contact_id FROM " . IG_CONTACTS_TABLE . " WHERE email = %s";
-		$sql        = $wpdb->prepare( $query, $email );
-		$contact_id = $wpdb->get_var( $sql );
-		$data       = array();
+		$data = array();
 		if ( ! empty( $contact_id ) ) {
+			$data['contact_id'] = $contact_id;
 
 			if ( ! is_array( $list_id ) ) {
 				$list_id = array( $list_id );
 			}
 
-			$list_query         = "SELECT count(*) as count FROM " . IG_LISTS_CONTACTS_TABLE . " WHERE list_id IN (%s) AND contact_id = %s";
-			$list_sql           = $wpdb->prepare( $list_query, implode( ', ', $list_id ), $contact_id );
-			$data['contact_id'] = $contact_id;
+			$ig_lists_contacts_table = IG_LISTS_CONTACTS_TABLE;
+
+			$list_ids_str = $this->array_to_str( $list_id );
+
+			$list_query = "SELECT count(*) as count FROM $ig_lists_contacts_table WHERE list_id IN ($list_ids_str) AND contact_id = %s";
+			$list_sql   = $wpdb->prepare( $list_query, $contact_id );
+
 			$list_contact_count = $wpdb->get_var( $list_sql );
 			if ( ! empty( $list_contact_count ) ) {
 				$data['list_id'] = true;
@@ -347,10 +464,19 @@ class ES_DB_Contacts {
 		return $data;
 	}
 
-	public static function get_email_details_map() {
+	/**
+	 * Get Email Details Map
+	 *
+	 * @return array
+	 *
+	 * @since 4.0.0
+	 */
+	public function get_email_details_map() {
 		global $wpdb;
 
-		$query    = "SELECT id, email, hash FROM " . IG_CONTACTS_TABLE;
+		$ig_contacts_table = IG_CONTACTS_TABLE;
+
+		$query    = "SELECT id, email, hash FROM $ig_contacts_table";
 		$contacts = $wpdb->get_results( $query, ARRAY_A );
 		$details  = array();
 		if ( count( $contacts ) > 0 ) {
@@ -372,10 +498,12 @@ class ES_DB_Contacts {
 	 * @return array
 	 *
 	 * @since 4.2.1
+	 *
+	 * @modify 4.2.4
 	 */
-	public static function get_details_by_ids( $contact_ids = array() ) {
+	public function get_details_by_ids( $contact_ids = array() ) {
 
-		$contacts = self::get_contacts_by_ids( $contact_ids );
+		$contacts = $this->get_contacts_by_ids( $contact_ids );
 
 		$results = array();
 		if ( ! empty( $contacts ) && count( $contacts ) > 0 ) {
@@ -388,14 +516,25 @@ class ES_DB_Contacts {
 		return $results;
 	}
 
-	public static function get_contact_ids_by_emails( $emails = array() ) {
+	/**
+	 * Get contact ids by emails
+	 *
+	 * @param array $emails
+	 *
+	 * @return array
+	 *
+	 * @sinc 4.0.0
+	 */
+	public function get_contact_ids_by_emails( $emails = array() ) {
 		global $wpdb;
 
-		$query = "SELECT id FROM " . IG_CONTACTS_TABLE;
+		$ig_contacts_table = IG_CONTACTS_TABLE;
+
+		$query = "SELECT id FROM $ig_contacts_table";
 
 		if ( count( $emails ) > 0 ) {
-			$emails_str = "'" . implode( "', '", $emails ) . "'";
-			$query      .= " WHERE email IN ({$emails_str})";
+			$emails_str = $this->array_to_str( $emails );
+			$query      .= " WHERE email IN ($emails_str)";
 		}
 
 		$ids = $wpdb->get_col( $query );
@@ -403,17 +542,29 @@ class ES_DB_Contacts {
 		return $ids;
 	}
 
-	public static function get_email_id_map( $emails = array() ) {
+	/**
+	 * Get contacts Email => id map
+	 *
+	 * @param array $emails
+	 *
+	 * @return array
+	 *
+	 * @since 4.0.0
+	 */
+	public function get_email_id_map( $emails = array() ) {
 		global $wpdb;
 
-		$query = "SELECT id, email FROM " . IG_CONTACTS_TABLE;
+		$ig_contacts_table = IG_CONTACTS_TABLE;
+
+		$query = "SELECT id, email FROM $ig_contacts_table";
 
 		if ( count( $emails ) > 0 ) {
-			$emails_str = implode( ', ', $emails );
-			$query      .= " WHERE email IN ({$emails_str})";
+			$emails_str = $this->array_to_str( $emails );
+			$query      .= " WHERE email IN ($emails_str)";
 		}
 		$results = $wpdb->get_results( $query, ARRAY_A );
-		$map     = array();
+
+		$map = array();
 		if ( count( $results ) > 0 ) {
 			foreach ( $results as $result ) {
 				$map[ $result['email'] ] = $result['id'];
@@ -424,19 +575,26 @@ class ES_DB_Contacts {
 
 	}
 
-	public static function do_batch_insert( $contacts ) {
+	/**
+	 * Batch Insert Contacts
+	 *
+	 * @param $contacts
+	 *
+	 * @since 4.0.0
+	 */
+	public function do_batch_insert( $contacts ) {
 
 		// Prepare a batch of 50 contacts.
 		$batches = array_chunk( $contacts, 50 );
 
-		$columns = self::get_columns();
+		$columns = $this->get_columns();
 		unset( $columns['id'] );
 		$fields = array_keys( $columns );
 		foreach ( $batches as $batch ) {
 			$values = $place_holders = array();
 			foreach ( $batch as $key => $contact ) {
 
-				$contact = wp_parse_args( $contact, self::get_column_defaults() );
+				$contact = wp_parse_args( $contact, $this->get_column_defaults() );
 
 				$formats = array();
 				foreach ( $columns as $column => $format ) {
@@ -451,62 +609,53 @@ class ES_DB_Contacts {
 		}
 	}
 
+	/**
+	 * Get contact id by email
+	 *
+	 * @param $email
+	 *
+	 * @return string|null
+	 */
+	public function get_contact_id_by_email( $email ) {
 
-	public static function do_insert( $place_holders, $values ) {
-		global $wpdb;
-
-		$contacts_table = IG_CONTACTS_TABLE;
-		$query          = "INSERT INTO {$contacts_table} (`wp_user_id`, `first_name`, `last_name`, `email`, `source`, `form_id`, `status`, `unsubscribed`, `hash`, `created_at`, `updated_at` ) VALUES ";
-		$query          .= implode( ', ', $place_holders );
-		$sql            = $wpdb->prepare( "$query ", $values );
-
-		if ( $wpdb->query( $sql ) ) {
-			return true;
-		} else {
-			return false;
+		if ( empty( $email ) ) {
+			return null;
 		}
 
+		return $this->get_column_by( 'id', 'email', $email );
 	}
 
-	public static function get_contact_id_by_email( $email ) {
+	/**
+	 * Migrate all subscribers from 3.5.x to contacts table
+	 *
+	 * @since 4.0.0
+	 */
+	public function migrate_subscribers_from_older_version() {
 		global $wpdb;
 
-		$query   = "SELECT id FROM " . IG_CONTACTS_TABLE . ' WHERE email = %s';
-		$contact = $wpdb->get_var( $wpdb->prepare( $query, $email ) );
-
-		if ( $contact ) {
-			return $contact;
-		}
-
-		return null;
-
-	}
-
-	public static function migrate_subscribers_from_older_version() {
-		global $wpdb;
+		$es_email_list_table = ES_EMAILLIST_TABLE;
 		//Get Total count of subscribers
-		$query = "SELECT count(*) as total FROM " . ES_EMAILLIST_TABLE;
+		$query = "SELECT count(*) as total FROM $es_email_list_table";
 		$total = $wpdb->get_var( $query );
 
 		// If we have subscribers?
 		if ( $total > 0 ) {
 
-			// Get all existing Contacats
-			$query  = "SELECT email from " . IG_CONTACTS_TABLE;
-			$emails = $wpdb->get_col( $query );
+			// Get all existing Contacts
+			$emails = $this->get_column( 'email' );
 			if ( ! is_array( $emails ) ) {
 				$emails = array();
 			}
 
 			// Import subscribers into batch of 100
 			$batch_size     = IG_DEFAULT_BATCH_SIZE;
-			$total_bataches = ( $total > IG_DEFAULT_BATCH_SIZE ) ? ceil( $total / $batch_size ) : 1;
+			$total_batches  = ( $total > IG_DEFAULT_BATCH_SIZE ) ? ceil( $total / $batch_size ) : 1;
 			$lists_contacts = array();
 			//$exclude_status = array( 'Unsubscribed', 'Unconfirmed' );
 			$j = 0;
-			for ( $i = 0; $i < $total_bataches; $i ++ ) {
+			for ( $i = 0; $i < $total_batches; $i ++ ) {
 				$batch_start = $i * $batch_size;
-				$query       = "SELECT * FROM " . ES_EMAILLIST_TABLE . " LIMIT {$batch_start}, {$batch_size} ";
+				$query       = "SELECT * FROM $es_email_list_table LIMIT {$batch_start}, {$batch_size} ";
 				$results     = $wpdb->get_results( $query, ARRAY_A );
 				if ( count( $results ) > 0 ) {
 					$contacts = array();
@@ -552,7 +701,7 @@ class ES_DB_Contacts {
 						//}
 					}
 
-					self::do_batch_insert( $contacts );
+					$this->do_batch_insert( $contacts );
 				}
 
 			}
@@ -580,22 +729,27 @@ class ES_DB_Contacts {
 	 *
 	 * @since 4.2.0
 	 */
-	public static function edit_list_contact_status( $contact_ids, $list_ids, $status ) {
+	public function edit_list_contact_status( $contact_ids, $list_ids, $status ) {
 		global $wpdb;
 
-		$ids      = implode( ',', array_map( 'absint', $contact_ids ) );
-		$list_ids = implode( ',', array_map( 'absint', $list_ids ) );
+		$ids      = array_map( 'absint', $contact_ids );
+		$ids      = $this->array_to_str($ids);
+
+		$list_ids = array_map( 'absint', $list_ids );
+		$list_ids = $this->array_to_str($list_ids);
 
 		$current_date = ig_get_current_date_time();
 
+		$ig_contacts_table = IG_LISTS_CONTACTS_TABLE;
+
 		if ( 'subscribed' === $status ) {
-			$sql   = "UPDATE " . IG_LISTS_CONTACTS_TABLE . " SET status = %s, subscribed_at = %s WHERE contact_id IN ($ids) AND list_id IN ($list_ids)";
+			$sql   = "UPDATE $ig_contacts_table SET status = %s, subscribed_at = %s WHERE contact_id IN ($ids) AND list_id IN ($list_ids)";
 			$query = $wpdb->prepare( $sql, array( $status, $current_date ) );
 		} elseif ( 'unsubscribed' === $status ) {
-			$sql   = "UPDATE " . IG_LISTS_CONTACTS_TABLE . " SET status = %s, unsubscribed_at = %s WHERE contact_id IN ($ids) AND list_id IN ($list_ids)";
+			$sql   = "UPDATE $ig_contacts_table SET status = %s, unsubscribed_at = %s WHERE contact_id IN ($ids) AND list_id IN ($list_ids)";
 			$query = $wpdb->prepare( $sql, array( $status, $current_date ) );
 		} elseif ( 'unconfirmed' === $status ) {
-			$sql   = "UPDATE " . IG_LISTS_CONTACTS_TABLE . " SET status = %s, optin_type = %d, subscribed_at = NULL, unsubscribed_at = NULL WHERE contact_id IN ($ids) AND list_id IN ($list_ids)";
+			$sql   = "UPDATE $ig_contacts_table SET status = %s, optin_type = %d, subscribed_at = NULL, unsubscribed_at = NULL WHERE contact_id IN ($ids) AND list_id IN ($list_ids)";
 			$query = $wpdb->prepare( $sql, array( $status, IG_DOUBLE_OPTIN ) );
 		}
 

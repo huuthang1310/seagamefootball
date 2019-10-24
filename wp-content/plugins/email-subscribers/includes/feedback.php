@@ -117,7 +117,7 @@ function ig_es_render_fb_widget() {
 			return;
 		}
 
-		$total_contacts = ES_DB_Contacts::get_total_subscribers();
+		$total_contacts = ES()->contacts_db->count();
 
 		// Got 25 contacts?
 		// It's time to Join Email Subscribers Secret Club on Facebook

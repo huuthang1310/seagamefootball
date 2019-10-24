@@ -39,7 +39,7 @@ class ES_Post_Notifications_Table {
 			$template_id = ig_es_get_request_data( 'template_id' );
 			$cat         = ig_es_get_request_data( 'es_note_cat' );
 			$es_note_cat_parent = ig_es_get_request_data( 'es_note_cat_parent' );
-			$cat = !empty($es_note_cat_parent) ?  array($es_note_cat_parent) : $cat;
+			$cat = (!empty($es_note_cat_parent) && $es_note_cat_parent == '{a}All{a}') ?  array($es_note_cat_parent) : $cat;
 
 			if ( empty( $list_id ) ) {
 				$message = __( 'Please select list.', 'email-subscribers' );
@@ -78,7 +78,8 @@ class ES_Post_Notifications_Table {
 				return;
 			}
 			$this->save_list( $data );
-			$message = __( 'Post notification has been added successfully!', 'email-subscribers' );
+			$type = ucwords(str_replace('_', ' ', $data['type']));
+			$message = __( "$type has been added successfully!", 'email-subscribers' );
 			ES_Common::show_message( $message, 'success' );
 		}
 
@@ -195,10 +196,25 @@ class ES_Post_Notifications_Table {
 			$data['name'] = $title;
 
             $data = apply_filters( 'ig_es_post_notification_data', $data );
+            //check tempalte id
+            if ( empty( $data['base_template_id'] ) ) {
+				$message = __( 'Please select template.', 'email-subscribers' );
+				ES_Common::show_message( $message, 'error' );
+				$this->prepare_post_notification_form( $id, $data );
+				return;
+			}
+			 //check categories
+			if ( empty( $categories ) ) {
+				$message = __( 'Please select Categories.', 'email-subscribers' );
+				ES_Common::show_message( $message, 'error' );
+				$this->prepare_post_notification_form( $id, $data );
+				return;
+			}
 			$this->save_list( $data, $id );
 
 			$data['categories'] = ES_Common::convert_categories_string_to_array( $data['categories'], true );
-			$message            = __( 'Post notification has been updated successfully!', 'email-subscribers' );
+			$type = ucwords(str_replace('_', ' ', $data['type']));
+			$message            = __( "$type has been updated successfully!", 'email-subscribers' );
 			ES_Common::show_message( $message, 'success' );
 		} else {
 

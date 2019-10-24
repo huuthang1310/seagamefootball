@@ -104,7 +104,7 @@ abstract class ES_DB {
 		$query = "SELECT * FROM $this->table_name";
 
 		if ( ! empty( $where ) ) {
-			$query .= " WHERE {$where}";
+			$query .= " WHERE $where";
 		}
 
 		return $wpdb->get_results( $query, $output );
@@ -256,7 +256,32 @@ abstract class ES_DB {
 			return false;
 		}
 
-		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name WHERE $this->primary_key = %d", $row_id ) ) ) {
+		$where = $wpdb->prepare( "$this->primary_key = %d", $row_id );
+
+		if ( false === $this->delete_by_condition( $where ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Delete records based on $where
+	 *
+	 * @param string $where
+	 *
+	 * @return bool
+	 *
+	 * @since 4.2.4
+	 */
+	public function delete_by_condition( $where = '' ) {
+		global $wpdb;
+
+		if ( empty( $where ) ) {
+			return false;
+		}
+
+		if ( false === $wpdb->query( "DELETE FROM $this->table_name WHERE $where" ) ) {
 			return false;
 		}
 
@@ -303,7 +328,7 @@ abstract class ES_DB {
 		$query = "SELECT count(*) FROM $this->table_name";
 
 		if ( ! empty( $where ) ) {
-			$query .= " WHERE {$where}";
+			$query .= " WHERE $where";
 		}
 
 		return $wpdb->get_var( $query );
@@ -366,7 +391,7 @@ abstract class ES_DB {
 
 				$place_holders[] = "( " . implode( ', ', $formats ) . " )";
 				$fields_str      = "`" . implode( "`, `", $fields ) . "`";
-				$query           = "INSERT INTO $this->table_name ({$fields_str}) VALUES ";
+				$query           = "INSERT INTO $this->table_name({$fields_str}) VALUES ";
 				$query           .= implode( ', ', $place_holders );
 				$sql             = $wpdb->prepare( $query, $final_values );
 
@@ -375,13 +400,22 @@ abstract class ES_DB {
 		}
 	}
 
-
+	/**
+	 * @param $table_name
+	 * @param $fields
+	 * @param $place_holders
+	 * @param $values
+	 *
+	 * @return bool
+	 *
+	 *
+	 */
 	public static function do_insert( $table_name, $fields, $place_holders, $values ) {
 		global $wpdb;
 
 		$fields_str = "`" . implode( "`, `", $fields ) . "`";
 
-		$query = "INSERT INTO {$table_name} ({$fields_str}) VALUES ";
+		$query = "INSERT INTO $table_name ({$fields_str}) VALUES ";
 		$query .= implode( ', ', $place_holders );
 		$sql   = $wpdb->prepare( $query, $values );
 
@@ -392,6 +426,35 @@ abstract class ES_DB {
 		}
 	}
 
+	/**
+	 * Get ID, Name Map
+	 *
+	 * @param string $where
+	 *
+	 * @return array
+	 *
+	 * @since 4.2.2
+	 */
+	public function get_id_name_map( $where = '' ) {
+		global $wpdb;
+
+		$query = "SELECT $this->primary_key, name FROM $this->table_name";
+
+		if ( ! empty( $where ) ) {
+			$query .= " WHERE $where";
+		}
+
+		$results = $wpdb->get_results( $query, ARRAY_A );
+
+		$id_name_map = array();
+		if ( count( $results ) > 0 ) {
+			foreach ( $results as $result ) {
+				$id_name_map[ $result['id'] ] = $result['name'];
+			}
+		}
+
+		return $id_name_map;
+	}
 
 	public static function prepare_data( $data, $column_formats, $column_defaults, $insert = true ) {
 
@@ -415,6 +478,23 @@ abstract class ES_DB {
 			'column_formats' => $column_formats
 		);
 
+	}
+
+	/**
+	 * Convert array into str for IN query
+	 *
+	 * @param $array
+	 *
+	 * @return string
+	 *
+	 * @since 4.2.4
+	 */
+	public function array_to_str( $array, $glue = ', ' ) {
+		if ( is_array( $array ) && count( $array ) > 0 ) {
+			return implode( $glue, $array );
+		}
+
+		return '';
 	}
 
 }

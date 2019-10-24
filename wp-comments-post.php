@@ -28,7 +28,7 @@ if ( is_wp_error( $comment ) ) {
 	if ( ! empty( $data ) ) {
 		wp_die(
 			'<p>' . $comment->get_error_message() . '</p>',
-			__( 'Đăng bình luận thất bại' ),
+			__( 'Comment Submission Failure' ),
 			array(
 				'response'  => $data,
 				'back_link' => true,

@@ -83,7 +83,7 @@ class ES_Handle_Post_Notification {
 					$template    = get_post( $template_id );    // to confirm if template exists in ES->Templates
 					if ( is_object( $template ) ) {
 						$list_id     = $notification['list_ids'];
-						$subscribers = ES_DB_Contacts::get_active_subscribers_by_list_id( $list_id );
+						$subscribers = ES()->contacts_db->get_active_contacts_by_list_id( $list_id );
 
 						//schedule
 						if ( count( $subscribers ) > 0 ) {

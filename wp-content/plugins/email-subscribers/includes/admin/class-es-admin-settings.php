@@ -32,73 +32,81 @@ class ES_Admin_Settings {
 		$submitted     = ig_es_get_request_data( 'submitted' );
 		$submit_action = ig_es_get_request_data( 'submit_action' );
 
-		$nonce = ig_es_get_request_data( '_wpnonce' );
-
 		if ( 'submitted' === $submitted && 'ig-es-save-admin-settings' === $submit_action ) {
-			$options = ig_es_get_post_data('', '', false);
-			$options = apply_filters( 'ig_es_before_save_settings', $options );
 
-			$options['ig_es_disable_wp_cron']   = isset( $options['ig_es_disable_wp_cron'] ) ? $options['ig_es_disable_wp_cron'] : 'no';
-			$options['ig_es_track_email_opens'] = isset( $options['ig_es_track_email_opens'] ) ? $options['ig_es_track_email_opens'] : 'no';
-			$text_fields_to_sanitize = array(
-				'ig_es_from_name',
-				'ig_es_admin_emails',
-				'ig_es_email_type',
-				'ig_es_optin_type',
-				'ig_es_post_image_size',
-				'ig_es_track_email_opens',
-				'ig_es_enable_welcome_email',
-				'ig_es_welcome_email_subject',
-				'ig_es_confirmation_mail_subject',
-				'ig_es_notify_admin',
-				'ig_es_admin_new_contact_email_subject',
-				'ig_es_enable_cron_admin_email',
-				'ig_es_cron_admin_email_subject',
-				'ig_es_cronurl',
-				'ig_es_hourly_email_send_limit',
-				'ig_es_disable_wp_cron'
-			);
+			$nonce = ig_es_get_request_data( 'update-settings' );
+			if ( ! wp_verify_nonce( $nonce, 'update-settings' ) ) {
+				$message = __( 'You do not have permission to update settings', 'email-subscribers' );
+				ES_Common::show_message( $message, 'error' );
+			} else {
 
-			$texarea_fields_to_sanitize = array(
-				'ig_es_unsubscribe_link_content',
-				'ig_es_subscription_success_message',
-				'ig_es_subscription_error_messsage',
-				'ig_es_unsubscribe_success_message',
-				'ig_es_unsubscribe_error_message',
-				'ig_es_welcome_email_content',
-				'ig_es_confirmation_mail_content',
-				'ig_es_admin_new_contact_email_content',
-				'ig_es_cron_admin_email',
-				'ig_es_blocked_domains',
-				'ig_es_form_submission_success_message'
-			);
+				$options = ig_es_get_post_data( '', '', false );
 
-			$email_fields_to_sanitize = array(
-				'ig_es_from_email'
-			);
+				$options = apply_filters( 'ig_es_before_save_settings', $options );
 
-			foreach ( $options as $key => $value ) {
-				if ( substr( $key, 0, 6 ) === 'ig_es_' ) {
+				$options['ig_es_disable_wp_cron']   = isset( $options['ig_es_disable_wp_cron'] ) ? $options['ig_es_disable_wp_cron'] : 'no';
+				$options['ig_es_track_email_opens'] = isset( $options['ig_es_track_email_opens'] ) ? $options['ig_es_track_email_opens'] : 'no';
+				$text_fields_to_sanitize            = array(
+					'ig_es_from_name',
+					'ig_es_admin_emails',
+					'ig_es_email_type',
+					'ig_es_optin_type',
+					'ig_es_post_image_size',
+					'ig_es_track_email_opens',
+					'ig_es_enable_welcome_email',
+					'ig_es_welcome_email_subject',
+					'ig_es_confirmation_mail_subject',
+					'ig_es_notify_admin',
+					'ig_es_admin_new_contact_email_subject',
+					'ig_es_enable_cron_admin_email',
+					'ig_es_cron_admin_email_subject',
+					'ig_es_cronurl',
+					'ig_es_hourly_email_send_limit',
+					'ig_es_disable_wp_cron'
+				);
 
-					$value = stripslashes_deep( $value );
+				$texarea_fields_to_sanitize = array(
+					'ig_es_unsubscribe_link_content',
+					'ig_es_subscription_success_message',
+					'ig_es_subscription_error_messsage',
+					'ig_es_unsubscribe_success_message',
+					'ig_es_unsubscribe_error_message',
+					'ig_es_welcome_email_content',
+					'ig_es_confirmation_mail_content',
+					'ig_es_admin_new_contact_email_content',
+					'ig_es_cron_admin_email',
+					'ig_es_blocked_domains',
+					'ig_es_form_submission_success_message'
+				);
 
-					if ( in_array( $key, $text_fields_to_sanitize ) ) {
-						$value = sanitize_text_field( $value );
-					} elseif ( in_array( $key, $texarea_fields_to_sanitize ) ) {
-						$value = wp_kses_post( $value );
-					} elseif ( in_array( $key, $email_fields_to_sanitize ) ) {
-						$value = sanitize_email( $value );
+				$email_fields_to_sanitize = array(
+					'ig_es_from_email'
+				);
+
+				foreach ( $options as $key => $value ) {
+					if ( substr( $key, 0, 6 ) === 'ig_es_' ) {
+
+						$value = stripslashes_deep( $value );
+
+						if ( in_array( $key, $text_fields_to_sanitize ) ) {
+							$value = sanitize_text_field( $value );
+						} elseif ( in_array( $key, $texarea_fields_to_sanitize ) ) {
+							$value = wp_kses_post( $value );
+						} elseif ( in_array( $key, $email_fields_to_sanitize ) ) {
+							$value = sanitize_email( $value );
+						}
+
+						update_option( $key, wp_unslash( $value ), false);
 					}
-
-					update_option( $key, wp_unslash( $value ) );
 				}
+
+				do_action( 'ig_es_after_settings_save', $options );
+
+				$message = __( 'Settings have been saved successfully!' );
+				$status  = 'success';
+				ES_Common::show_message( $message, $status );
 			}
 
-			do_action( 'ig_es_after_settings_save', $options );
-
-			$message = __( 'Settings have been saved successfully!' );
-			$status  = 'success';
-			ES_Common::show_message( $message, $status );
 		}
 
 
@@ -141,17 +149,6 @@ class ES_Admin_Settings {
                     </div>
 
                 </div>
-
-                <!--
-                <div class="content save">
-                    <input type="hidden" name="submitted" value="submitted"/>
-                    <input type="hidden" name="submit_action" value="ig-es-save-admin-settings"/>
-					<?php $nonce = wp_create_nonce( 'es-update-settings' ); ?>
-
-                    <input type="hidden" name="update-settings" id="ig-update-settings" value="<?php echo $nonce; ?>"/>
-					<?php submit_button(); ?>
-                </div>
-                -->
             </form>
         </div>
 		<?php
@@ -538,31 +535,31 @@ class ES_Admin_Settings {
 			'ig_es_mailer_settings' => array(
 				'type'         => 'html',
 				// 'html'         => ES_Admin_Settings::mailers_html(),
-				'sub_fields' => array(
-					'mailer'  => array(
-						'id'      => 'ig_es_mailer_settings[mailer]',
-						'name'    => __( 'Select Mailer', 'email-subscribers' ),
-						'type'    => 'html',
-						'html'    => ES_Admin_Settings::mailers_html(),
-						'desc'    => '',
+				'sub_fields'   => array(
+					'mailer'                  => array(
+						'id'   => 'ig_es_mailer_settings[mailer]',
+						'name' => __( 'Select Mailer', 'email-subscribers' ),
+						'type' => 'html',
+						'html' => ES_Admin_Settings::mailers_html(),
+						'desc' => '',
 					),
-					'ig_es_pepipost_api_key' => array(
-							'type'         => 'password',
-							'options'      => false,
-							'placeholder'  => '',
-							'supplemental' => '',
-							'default'      => '',
-							'id'           => "ig_es_mailer_settings[pepipost][api_key]",
-							'name'         => __( 'Pepipost API key', 'email-subscribers' ),
-							'desc'         => '',
-							'class'        => 'pepipost'
+					'ig_es_pepipost_api_key'  => array(
+						'type'         => 'password',
+						'options'      => false,
+						'placeholder'  => '',
+						'supplemental' => '',
+						'default'      => '',
+						'id'           => "ig_es_mailer_settings[pepipost][api_key]",
+						'name'         => __( 'Pepipost API key', 'email-subscribers' ),
+						'desc'         => '',
+						'class'        => 'pepipost'
 					),
 					'ig_es_pepipost_docblock' => array(
-						'type'         => 'html',
-						'html'         => ES_Admin_Settings::pepipost_doc_block(),
-						'id'           => 'ig_es_pepipost_docblock',
+						'type' => 'html',
+						'html' => ES_Admin_Settings::pepipost_doc_block(),
+						'id'   => 'ig_es_pepipost_docblock',
 						// 'class'        => 'ig_es_docblock',
-						'name'         => ''
+						'name' => ''
 					)
 
 				),
@@ -605,22 +602,22 @@ class ES_Admin_Settings {
 		if ( 'ig_es_cronurl' === $arguments['id'] ) {
 			$value = ES_Common::get_cron_url();
 		} else {
-			if(!empty($arguments['option_value'])){
-				preg_match("(\[.*$)",$arguments['id'],$m);
-				$n = explode('][', $m[0]);
-				$n = str_replace('[', '', $n);
-				$n = str_replace(']', '', $n);
-				$count = count($n);
-				$id = '';
-				foreach ($n as $key => $val) {
-					if( $id == ''){
-						$id = !empty($arguments['option_value'][$val]) ? $arguments['option_value'][$val] : '';
-					}else{
-						$id = $id[$val];
+			if ( ! empty( $arguments['option_value'] ) ) {
+				preg_match( "(\[.*$)", $arguments['id'], $m );
+				$n     = explode( '][', $m[0] );
+				$n     = str_replace( '[', '', $n );
+				$n     = str_replace( ']', '', $n );
+				$count = count( $n );
+				$id    = '';
+				foreach ( $n as $key => $val ) {
+					if ( $id == '' ) {
+						$id = ! empty( $arguments['option_value'][ $val ] ) ? $arguments['option_value'][ $val ] : '';
+					} else {
+						$id = $id[ $val ];
 					}
 				}
 				$value = $id;
-			}else{
+			} else {
 				$value = get_option( $arguments['id'] ); // Get the current value, if there is one
 			}
 		}
@@ -657,10 +654,10 @@ class ES_Admin_Settings {
 					$uid, $id_key, $placeholder, $value, $class );
 				break;
 			case 'file':
-				$field_html = '<input type="text" id="logo_url" name="' . $uid . '" value="' . $value . '" class="'.$class.'"/> <input id="upload_logo_button" type="button" class="button" value="Upload Logo" />';
+				$field_html = '<input type="text" id="logo_url" name="' . $uid . '" value="' . $value . '" class="' . $class . '"/> <input id="upload_logo_button" type="button" class="button" value="Upload Logo" />';
 				break;
 			case 'checkbox' :
-				$field_html = '<input id="' . $id_key . '"  type="checkbox" name="' . $uid . '"  value="yes" ' . checked( $value, 'yes', false ) . ' class="'.$class.'" />' . $placeholder . '</input>';
+				$field_html = '<input id="' . $id_key . '"  type="checkbox" name="' . $uid . '"  value="yes" ' . checked( $value, 'yes', false ) . ' class="' . $class . '" />' . $placeholder . '</input>';
 				break;
 
 			case 'select':
@@ -725,7 +722,7 @@ class ES_Admin_Settings {
 		$html        .= "<tbody>";
 		$button_html = '';
 		foreach ( $fields as $key => $field ) {
-			if(!empty($field['name'])){
+			if ( ! empty( $field['name'] ) ) {
 				$html .= "<tr><th scope='row'>";
 				$html .= $field['name'];
 
@@ -743,18 +740,18 @@ class ES_Admin_Settings {
 			if ( ! empty( $field['sub_fields'] ) ) {
 				$option_key = '';
 				foreach ( $field['sub_fields'] as $key => $sub_field ) {
-					if(strpos($sub_field['id'], '[') ){
-						$parts = explode('[', $sub_field['id']);
-						if($option_key !== $parts[0]){
+					if ( strpos( $sub_field['id'], '[' ) ) {
+						$parts = explode( '[', $sub_field['id'] );
+						if ( $option_key !== $parts[0] ) {
 							$option_value = get_option( $parts[0] );
-							$option_key = $parts[0];
+							$option_key   = $parts[0];
 						}
-						$sub_field['option_value'] = is_array($option_value) ? $option_value : '';
+						$sub_field['option_value'] = is_array( $option_value ) ? $option_value : '';
 					}
-					$class = (!empty($sub_field['class'])) ? $sub_field['class'] : "";
-					$html .= ( $sub_field !== reset( $field['sub_fields'] ) ) ? '<br/>' : '';
-					$html .= '<div class="es_sub_headline '.$class.'" ><strong>' . $sub_field['name'] . '</strong></div>';
-					$html .= $this->field_callback( $sub_field, $key ) ;
+					$class = ( ! empty( $sub_field['class'] ) ) ? $sub_field['class'] : "";
+					$html  .= ( $sub_field !== reset( $field['sub_fields'] ) ) ? '<br/>' : '';
+					$html  .= '<div class="es_sub_headline ' . $class . '" ><strong>' . $sub_field['name'] . '</strong></div>';
+					$html  .= $this->field_callback( $sub_field, $key );
 				}
 			} else {
 				$html .= $this->field_callback( $field );
@@ -765,54 +762,56 @@ class ES_Admin_Settings {
 
 		$button_html = empty( $button_html ) ? "<tr>" : $button_html;
 
-		$html  .= $button_html . "<td class='es-settings-submit-btn'>";
-		$html  .= '<input type="hidden" name="submitted" value="submitted"/>';
-		$html  .= '<input type="hidden" name="submit_action" value="ig-es-save-admin-settings"/>';
-		$nonce = wp_create_nonce( 'es-update-settings' );
-		$html  .= '<input type="hidden" name="update-settings" id="ig-update-settings" value="' . $nonce . '"/>';
-		$html  .= '<input type="submit" name="submit" id="submit" class="button button-primary" value="' . __( 'Save Settings', 'email-subscribers' ) . '">';
-		$html  .= "</td></tr>";
-		$html  .= "</tbody>";
-		$html  .= "</table>";
+		$nonce_field = wp_nonce_field( 'update-settings', 'update-settings', true, false );
+
+		$html .= $button_html . "<td class='es-settings-submit-btn'>";
+		$html .= '<input type="hidden" name="submitted" value="submitted"/>';
+		$html .= '<input type="hidden" name="submit_action" value="ig-es-save-admin-settings"/>';
+		//$html .= '<input type="hidden" name="update-settings" id="update-settings" value="' . $nonce . '"/>';
+		$html .= $nonce_field;
+		$html .= '<input type="submit" name="submit" id="submit" class="button button-primary" value="' . __( 'Save Settings', 'email-subscribers' ) . '">';
+		$html .= "</td></tr>";
+		$html .= "</tbody>";
+		$html .= "</table>";
 		echo $html;
 
 	}
 
-	public static function mailers_html(){
-		$html = '';
-		$es_email_type = get_option( 'ig_es_email_type' ); 
-		$selected_mailer_settings = get_option( 'ig_es_mailer_settings' ); 
-		$selected_mailer = $selected_mailer_settings['mailer'];
-		$default_mailer = ($es_email_type === 'php_html_mail' || $es_email_type === 'php_plaintext_mail' || $selected_mailer === 'phpmail') ? 'phpmail' : $selected_mailer;
-		$pepipost_doc_block = '';
-		$mailers = array(
-			'wpmail' => array( 'name'=> 'WP Mail', 'logo' => EMAIL_SUBSCRIBERS_URL . '/admin/images/wpmail.png'),
-			'phpmail' => array( 'name'=> 'PHP mail', 'logo' => EMAIL_SUBSCRIBERS_URL . '/admin/images/phpmail.png'),
-			'pepipost' => array( 'name'=> 'Pepipost', 'logo' => EMAIL_SUBSCRIBERS_URL . '/admin/images/pepipost.png', 'docblock' => $pepipost_doc_block ),
+	public static function mailers_html() {
+		$html                     = '';
+		$es_email_type            = get_option( 'ig_es_email_type' );
+		$selected_mailer_settings = get_option( 'ig_es_mailer_settings' );
+		$selected_mailer          = $selected_mailer_settings['mailer'];
+		$default_mailer           = ( $es_email_type === 'php_html_mail' || $es_email_type === 'php_plaintext_mail' || $selected_mailer === 'phpmail' ) ? 'phpmail' : $selected_mailer;
+		$pepipost_doc_block       = '';
+		$mailers                  = array(
+			'wpmail'   => array( 'name' => 'WP Mail', 'logo' => EMAIL_SUBSCRIBERS_URL . '/admin/images/wpmail.png' ),
+			'phpmail'  => array( 'name' => 'PHP mail', 'logo' => EMAIL_SUBSCRIBERS_URL . '/admin/images/phpmail.png' ),
+			'pepipost' => array( 'name' => 'Pepipost', 'logo' => EMAIL_SUBSCRIBERS_URL . '/admin/images/pepipost.png', 'docblock' => $pepipost_doc_block ),
 		);
-		$mailers = apply_filters('ig_es_mailers', $mailers);
-		$default_mailer = (array_key_exists($default_mailer, $mailers)) ? $default_mailer : 'wpmail';
-		foreach ($mailers as $key => $mailer) {
-			$class = ($key === 'pepipost') ? 'es_recommended' : '';
-			$html .= '<label><div class="es-mailer-logo '.$class.'"><div class="es-logo-wrapper"><img src="' .$mailer['logo'].'" alt="Default (none)"></div>';
-			$html .= '<input type="radio" class="es_mailer" name="ig_es_mailer_settings[mailer]" value="'.$key.'" '.checked( $default_mailer, $key, false ).'>'.$mailer['name'].'</input></div></label>';
+		$mailers                  = apply_filters( 'ig_es_mailers', $mailers );
+		$default_mailer           = ( array_key_exists( $default_mailer, $mailers ) ) ? $default_mailer : 'wpmail';
+		foreach ( $mailers as $key => $mailer ) {
+			$class = ( $key === 'pepipost' ) ? 'es_recommended' : '';
+			$html  .= '<label><div class="es-mailer-logo ' . $class . '"><div class="es-logo-wrapper"><img src="' . $mailer['logo'] . '" alt="Default (none)"></div>';
+			$html  .= '<input type="radio" class="es_mailer" name="ig_es_mailer_settings[mailer]" value="' . $key . '" ' . checked( $default_mailer, $key, false ) . '>' . $mailer['name'] . '</input></div></label>';
 		}
 
 		return $html;
 
 	}
 
-	public static function pepipost_doc_block(){
+	public static function pepipost_doc_block() {
 		$html = '';
 		ob_start();
 		?>
-		<div class="es_sub_headline ig_es_docblock ig_es_pepipost_div_wrapper pepipost">
-			<ul>
-				<li><a class="" href="https://app.pepipost.com/index.php/signup/icegram?fpr=icegram" target="_blank"><?php _e('Signup for Pepipost', 'email-subscribers') ?></a></li>
-				<li><?php _e('How to find', 'email-subscribers' ) ?> <a href="https://developers.pepipost.com/api/getstarted/overview?utm_source=icegram&utm_medium=es_inapp&utm_campaign=pepipost" target="_blank"> <?php _e('Pepipost API key', 'email-subscribers')?></a></li>
-				<li><a href="https://www.icegram.com/email-subscribers-integrates-with-pepipost?utm_source=es_inapp&utm_medium=es_upsale&utm_campaign=upsale" target="_blank"><?php _e('Why to choose Pepipost') ?></a></li>
-			</ul>
-		</div>
+        <div class="es_sub_headline ig_es_docblock ig_es_pepipost_div_wrapper pepipost">
+            <ul>
+                <li><a class="" href="https://app.pepipost.com/index.php/signup/icegram?fpr=icegram" target="_blank"><?php _e( 'Signup for Pepipost', 'email-subscribers' ) ?></a></li>
+                <li><?php _e( 'How to find', 'email-subscribers' ) ?> <a href="https://developers.pepipost.com/api/getstarted/overview?utm_source=icegram&utm_medium=es_inapp&utm_campaign=pepipost" target="_blank"> <?php _e( 'Pepipost API key', 'email-subscribers' ) ?></a></li>
+                <li><a href="https://www.icegram.com/email-subscribers-integrates-with-pepipost?utm_source=es_inapp&utm_medium=es_upsale&utm_campaign=upsale" target="_blank"><?php _e( 'Why to choose Pepipost' ) ?></a></li>
+            </ul>
+        </div>
 
 		<?php
 

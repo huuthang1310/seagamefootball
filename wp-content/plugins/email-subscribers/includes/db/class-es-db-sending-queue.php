@@ -212,7 +212,8 @@ class ES_DB_Sending_Queue {
 		global $wpdb;
 
 		$delivery_reports_table = IG_SENDING_QUEUE_TABLE;
-		$query                  = "INSERT INTO {$delivery_reports_table} (`mailing_queue_id`, `mailing_queue_hash`, `campaign_id`, `contact_id`, `contact_hash`, `email`, `status`, `links`, `opened`, `sent_at`, `opened_at`) VALUES ";
+
+		$query                  = "INSERT INTO $delivery_reports_table (`mailing_queue_id`, `mailing_queue_hash`, `campaign_id`, `contact_id`, `contact_hash`, `email`, `status`, `links`, `opened`, `sent_at`, `opened_at`) VALUES ";
 		$query                  .= implode( ', ', $place_holders );
 		$sql                    = $wpdb->prepare( "$query ", $values );
 
@@ -239,7 +240,7 @@ class ES_DB_Sending_Queue {
 		global $wpdb;
 
 		$mailing_queue_details = ES_DB_Mailing_Queue::get_id_details_map();
-		$email_details         = ES_DB_Contacts::get_email_details_map();
+		$email_details         = ES()->contacts_db->get_email_details_map();
 
 		$query = "SELECT count(*) as total FROM " . EMAIL_SUBSCRIBERS_STATS_TABLE;
 
@@ -326,7 +327,7 @@ class ES_DB_Sending_Queue {
 		global $wpdb;
 
 		$mailing_queue_details = ES_DB_Mailing_Queue::get_id_details_map();
-		$email_details         = ES_DB_Contacts::get_email_details_map();
+		$email_details         = ES()->contacts_db->get_email_details_map();
 
 		$query = "SELECT count(*) as total FROM " . EMAIL_SUBSCRIBERS_STATS_TABLE;
 

@@ -56,7 +56,7 @@ Class ES_Common {
 		return $convert_template;
 	}
 
-	public static function es_process_template_body( $content, $tmpl_id = 0 ) {
+	public static function es_process_template_body( $content, $tmpl_id = 0, $campaign_id = 0 ) {
 		$content = convert_chars( convert_smilies( wptexturize( $content ) ) );
 		if ( isset( $GLOBALS['wp_embed'] ) ) {
 			$content = $GLOBALS['wp_embed']->autoembed( $content );
@@ -66,10 +66,11 @@ Class ES_Common {
 		$content         = do_shortcode( shortcode_unautop( $content ) );
 		$data['content'] = $content;
 		$data['tmpl_id'] = $tmpl_id;
+		$data['campaign_id'] = $campaign_id;
 		$data            = apply_filters( 'es_after_process_template_body', $data );
 		$content         = $data['content'];
 		//total contacts
-		$total_contacts = ES_DB_Contacts::count_active_subscribers_by_list_id();
+		$total_contacts = ES()->contacts_db->count_active_contacts_by_list_id();
 		$content        = str_replace( "{{TOTAL-CONTACTS}}", $total_contacts, $content );
 		//blog title
 		$blog_name = get_option( 'blogname' );
@@ -170,7 +171,10 @@ Class ES_Common {
 
 	public static function prepare_form_dropdown_options( $selected = '', $default_label = 'Select Form' ) {
 
-		$lists = ES_DB_Forms::get_forms_id_name_map();
+		$where = "(deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')";
+
+		$lists = ES()->forms_db->get_id_name_map( $where );
+
 		if ( ! is_null( $default_label ) ) {
 			$default_option[0] = __( $default_label, 'email-subscribers' );
 			$lists             = $default_option + $lists;
@@ -749,7 +753,7 @@ Class ES_Common {
 
 						$prepared_form_data = ES_Forms_Table::prepare_form_data( $data );
 
-						$inserted_form_id = ES_DB_Forms::add_form( $prepared_form_data );
+						$inserted_form_id = ES()->forms_db->add_form( $prepared_form_data );
 
 						$data_to_set = array(
 							'title'   => $title,
@@ -795,7 +799,7 @@ Class ES_Common {
 
 						$prepared_form_data = ES_Forms_Table::prepare_form_data( $data );
 
-						$inserted_form_id = ES_DB_Forms::add_form( $prepared_form_data );
+						$inserted_form_id = ES()->forms_db->add_form( $prepared_form_data );
 
 						$data_to_set = array(
 							'title'   => $title,
@@ -936,7 +940,7 @@ Class ES_Common {
 	 *
 	 */
 	public static function render_feedback_widget( $params ) {
-        global $ig_es_feedback;
+		global $ig_es_feedback;
 
 		$feedback = $ig_es_feedback;
 
@@ -1021,7 +1025,7 @@ Class ES_Common {
 
 	public static function get_ig_es_meta_info() {
 
-		$total_contacts           = ES_DB_Contacts::get_total_subscribers();
+		$total_contacts           = ES()->contacts_db->count();
 		$total_lists              = ES()->lists_db->count_lists();
 		$total_newsletters        = ES()->campaigns_db->get_total_newsletters();
 		$total_post_notifications = ES()->campaigns_db->get_total_post_notifications;
@@ -1159,6 +1163,98 @@ Class ES_Common {
 
 		ES_Common::set_ig_option( $email_sent_data_option, $data );
 
+	}
+
+	/**
+	 * Check whether user has access to this page
+	 *
+	 * @param $page
+	 *
+	 * @return bool|mixed|void
+	 *
+	 * @since 4.2.3
+	 */
+	public static function ig_es_can_access( $page ) {
+
+		$user = wp_get_current_user();
+
+		if ( ! $user->exists() ) {
+			return false;
+		}
+
+		$default_permission = 'manage_options';
+
+		$can_access = $user->has_cap( $default_permission );
+
+		// Is Admin? Have full access
+		if ( $can_access ) {
+			return true;
+		}
+
+		// We are using this filter in ES Premium to check permission
+		return apply_filters( 'ig_es_can_access', $can_access, $page );
+
+	}
+
+	/**
+	 * Get accessible submenus
+	 *
+	 * @return array|mixed|void
+	 *
+	 * @since 4.2.3
+	 */
+	public static function ig_es_get_accessible_sub_menus() {
+
+		$sub_menus = array();
+
+		$user = wp_get_current_user();
+
+		if ( ! $user->exists() ) {
+			return $sub_menus;
+		}
+
+		$default_permission = 'manage_options';
+		$is_administrator   = $user->has_cap( $default_permission );
+
+		// Is user administrator? User has access to all submenus
+		if ( $is_administrator ) {
+			$sub_menus = array(
+				'dashboard',
+				'audience',
+				'reports',
+				'forms',
+				'campaigns',
+				'sequences',
+				'settings'
+			);
+
+			return $sub_menus;
+		}
+
+		// We are using this in ES Premium
+		$sub_menus = apply_filters( 'ig_es_accessible_sub_menus', $sub_menus );
+
+		return array_unique( $sub_menus );
+	}
+
+	/**
+	 * Generate Hash
+	 *
+	 * @param $length
+	 *
+	 * @return false|string
+	 *
+	 * @since 4.2.4
+	 */
+	public static function generate_hash( $length ) {
+
+		$length   = ( $length ) ? $length : 12;
+		$auth_key = '';
+		if ( defined( 'AUTH_KEY' ) ) {
+			$auth_key = AUTH_KEY;
+		}
+
+		return substr( md5( $auth_key . wp_rand( $length, 64 ) ), 0, $length );
 	}
 
 }

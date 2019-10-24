@@ -1,8 +1,8 @@
-(function ($) {
+(function($) {
 
 	$(document).ready(
-		function () {
-			$(document).on('change', '.es_visible', function () {
+		function() {
+			$(document).on('change', '.es_visible', function() {
 				if ($('.es_visible:checked').length >= 1) {
 					$('.es_required').prop('disabled', false);
 					$('.es_name_label').removeAttr('disabled');
@@ -19,7 +19,7 @@
 			$('div#es-settings-tabs div#menu-tab-listing ul').height(defaultHeight);
 
 			// Set Tab Height
-			$('.ui-tabs-anchor').click(function () {
+			$('.ui-tabs-anchor').click(function() {
 				var tab = $(this).attr('href');
 				$('#email_tabs_form').attr('action', tab);
 				var tabHight = $('div#es-settings-tabs div#menu-tab-content div' + tab).height() + 30;
@@ -40,7 +40,7 @@
 			//jQuery(".es-audience-view .bulkactions #bulk-action-selector-bottom").after(statusselect);
 			// jQuery(".es-audience-view .bulkactions #bulk-action-selector-bottom").after(groupselect);
 
-			jQuery("#bulk-action-selector-top").change(function () {
+			jQuery("#bulk-action-selector-top").change(function() {
 				if (jQuery('option:selected', this).attr('value') == 'bulk_list_update' || jQuery('option:selected', this).attr('value') == 'bulk_list_add') {
 					jQuery('.groupsselect').eq(1).show();
 					jQuery('.statusesselect').eq(1).hide();
@@ -55,13 +55,13 @@
 
 			jQuery('.es-audience-view .tablenav.bottom #bulk-action-selector-bottom').hide();
 			jQuery('.es-audience-view .tablenav.bottom #doaction2').hide();
-			jQuery(document).on('change', "#base_template_id", function () {
+			jQuery(document).on('change', "#base_template_id", function() {
 				var img = jQuery('option:selected', this).data('img')
 				jQuery('.es-templ-img').html(img);
 			});
 
 			//send test emails
-			$(document).on('click', '#es-send-test', function (e) {
+			$(document).on('click', '#es-send-test', function(e) {
 				e.preventDefault();
 				var test_email = $('#es-test-email').val();
 				var params = {};
@@ -74,7 +74,7 @@
 						url: ajaxurl,
 						data: params,
 						dataType: 'json',
-						success: function (response) {
+						success: function(response) {
 							if (response && typeof response.status !== 'undefined' && response.status == "SUCCESS") {
 								$('#es-send-test').parent().find('.helper').html('<span style="color:green">' + response.message + '</span>');
 							} else {
@@ -84,7 +84,7 @@
 							$('#es-send-test').next('#spinner-image').hide();
 						},
 
-						error: function (err) {
+						error: function(err) {
 							$('#es-send-test').next('#spinner-image').hide();
 						}
 					});
@@ -95,14 +95,17 @@
 			});
 
 			//klawoo form submit
-			jQuery("form[name=klawoo_subscribe]").submit(function (e) {
+			jQuery("form[name=klawoo_subscribe]").submit(function(e) {
 				e.preventDefault();
 				var form = e.target;
 				jQuery(form).find('#klawoo_response').html('');
 				jQuery(form).find('#klawoo_response').show();
 
 				params = jQuery(form).serializeArray();
-				params.push({name: 'action', value: 'es_klawoo_subscribe'});
+				params.push({
+					name: 'action',
+					value: 'es_klawoo_subscribe'
+				});
 
 				jQuery.ajax({
 					method: 'POST',
@@ -110,7 +113,7 @@
 					url: ajaxurl,
 					async: false,
 					data: params,
-					success: function (response) {
+					success: function(response) {
 						if (response != '') {
 							var parser = new DOMParser()
 							var el = parser.parseFromString(response, "text/xml");
@@ -123,7 +126,7 @@
 								jQuery('.es-emm-optin #name').val('');
 								jQuery('.es-emm-optin #email').val('');
 								jQuery('.es-emm-optin #es-gdpr-agree').attr('checked', false);
-								setTimeout(function () {
+								setTimeout(function() {
 									jQuery(form).find('#klawoo_response').hide('slow');
 								}, 2000);
 							}
@@ -140,7 +143,7 @@
 
 			// Select List ID for Export
 			var _href = $('#ig_es_export_link_select_list').attr("href");
-			$('#ig_es_export_list_dropdown').change(function () {
+			$('#ig_es_export_list_dropdown').change(function() {
 				var selected_list_id = $(this).val();
 
 				$('#ig_es_export_link_select_list').attr("href", _href + '&list_id=' + selected_list_id);
@@ -156,7 +159,7 @@
 					url: ajaxurl,
 					async: false,
 					data: params,
-					success: function (response) {
+					success: function(response) {
 						if (response != '') {
 							response = JSON.parse(response);
 							$('#ig_es_export_select_list .ig_es_total_contacts').text(response.total);
@@ -169,7 +172,7 @@
 			// Broadcast Setttings
 			// Get count by list
 			$('#ig_es_campaign_submit_button').attr("disabled", true);
-			$('#ig_es_broadcast_list_ids').change(function(){
+			$('#ig_es_broadcast_list_ids').change(function() {
 				var selected_list_id = $(this).val();
 
 				// Update total count in lists
@@ -184,13 +187,13 @@
 					url: ajaxurl,
 					async: false,
 					data: params,
-					success: function (response) {
+					success: function(response) {
 						if (response !== '') {
 							response = JSON.parse(response);
-							if(response.hasOwnProperty('total')) {
+							if (response.hasOwnProperty('total')) {
 								var total = response.total;
 								$('#ig_es_total_contacts').text(response.total);
-								if(total == 0 ) {
+								if (total == 0) {
 									$('#ig_es_campaign_submit_button').attr("disabled", true);
 								} else {
 									$('#ig_es_campaign_submit_button').attr("disabled", false);
@@ -201,29 +204,76 @@
 				});
 			});
 
+			jQuery(document).on('change', '#base_template_id', function() {
+				var template_id = $(this).val();
+				// Update total count in lists
+				var params = {
+					action: 'get_template_content',
+					template_id: template_id,
+				};
+
+				$.ajax({
+					method: 'POST',
+					url: ajaxurl,
+					async: false,
+					data: params,
+					success: function(response) {
+						if (response !== '') {
+							response = JSON.parse(response);
+							if (response.hasOwnProperty('subject')) {
+								// jQuery('#ig_es_broadcast_subject').val(response.subject);
+								jQuery('.wp-editor-boradcast').val(response.body);
+								tinyMCE.activeEditor.setContent(response.body);
+								if (response.inline_css && jQuery('#inline_css').length) {
+									jQuery('#inline_css').val(response.inline_css);
+								}
+								if (response.es_utm_campaign && jQuery('#es_utm_campaign').length) {
+									jQuery('#es_utm_campaign').val(response.es_utm_campaign);
+								}
+							}
+						}
+					}
+				});
+			});
+
 			//post notification category select
-			jQuery(document).on('change', '.es-note-category-parent', function(){
+			jQuery(document).on('change', '.es-note-category-parent', function() {
 				var val = jQuery('.es-note-category-parent:checked').val();
-				if('{a}All{a}' === val){
+				if ('{a}All{a}' === val) {
 					jQuery('input[name="es_note_cat[]"]').not('.es_custom_post_type').closest('tr').hide();
-				}else{
+				} else {
 					jQuery('input[name="es_note_cat[]"]').not('.es_custom_post_type').closest('tr').show();
 				}
 
 			});
+
 			jQuery('.es-note-category-parent').trigger('change');
 
 
 			//es mailer settings
-			jQuery( document ).on( 'change', '.es_mailer' , function(e) {
-				var val =  jQuery('.es_mailer:checked').val();
+			jQuery(document).on('change', '.es_mailer', function(e) {
+				var val = jQuery('.es_mailer:checked').val();
 				jQuery('[name*="ig_es_mailer_settings"], .es_sub_headline').not('.es_mailer').hide();
-				jQuery(document).find('.'+val).show();
+				jQuery(document).find('.' + val).show();
 			});
 			jQuery('.es_mailer').trigger('change');
+
+			//preview broadcast
+			// ig_es_preview_broadcast
+			jQuery(document).on('click', '#ig_es_preview_broadcast', function(e) {
+				if (jQuery('.wp-editor-boradcast').val() !== '') {
+					jQuery('.es-form').find('form').attr('target', '_blank');
+					jQuery('.es-form').find('form').find('#es_broadcast_preview').val('preview');
+					jQuery(this).unbind('submit').submit();
+				}
+			});
+			jQuery(document).on('click', '#ig_es_campaign_submit_button', function(e) {
+				if (jQuery('.wp-editor-boradcast').val() !== '') {
+					jQuery('.es-form').find('form').attr('target', '');
+					jQuery('.es-form').find('form').find('#es_broadcast_preview').val('');
+				}
+			});
 		});
-
-
 
 
 

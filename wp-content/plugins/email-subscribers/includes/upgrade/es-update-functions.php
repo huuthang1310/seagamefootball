@@ -480,7 +480,7 @@ function ig_es_update_400_migrate_lists() {
 
 // Import contacts from es_emaillist table to ig_contacts and ig_lists_contacts table
 function ig_es_update_400_migrate_subscribers() {
-	ES_DB_Contacts::migrate_subscribers_from_older_version();
+	ES()->contacts_db->migrate_subscribers_from_older_version();
 }
 
 function ig_es_update_400_migrate_post_notifications() {
@@ -509,7 +509,7 @@ function ig_es_update_400_migrate_reports_data() {
 }
 
 function ig_es_update_400_migrate_group_selectors_forms() {
-	ES_DB_Forms::migrate_advanced_forms();
+	ES()->forms_db->migrate_advanced_forms();
 }
 
 function ig_es_update_400_db_version() {
@@ -533,7 +533,7 @@ function ig_es_update_401_db_version() {
  * Change es_template_type from "Post Notification" to "post_notification"
  */
 function ig_es_update_402_migrate_post_notification_es_template_type() {
-	ES_DB_Notifications::migratate_post_notification_es_template_type();
+	ES_DB_Notifications::migrate_post_notification_es_template_type();
 }
 
 function ig_es_update_402_db_version() {
@@ -928,3 +928,51 @@ function ig_es_update_421_db_version() {
 }
 
 /* --------------------- ES 4.2.1(End)--------------------------- */
+
+/**
+ * Drop ig_links table
+ *
+ * @since 4.2.4
+ */
+function ig_es_update_424_drop_tables() {
+	global $wpdb;
+
+	/**
+	 * Note: Still we are not using ig_links table.
+	 * So, it's ok to drop ig_links table now as we want to modify structure
+	 * Which we are going to create in 'ig_es_update_424_create_table' function.
+	 */
+	$tables_to_drop = array(
+		$wpdb->prefix . 'ig_links'
+	);
+
+	foreach ( $tables_to_drop as $table ) {
+		$query = "DROP TABLE IF EXISTS {$table}";
+		$wpdb->query( $query );
+	}
+}
+
+/**
+ * Create ig_links table
+ *
+ * @since 4.2.4
+ */
+function ig_es_update_424_create_tables() {
+	global $wpdb;
+
+	$wpdb->hide_errors();
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	dbDelta( ES_Install::get_ig_es_424_schema() );
+}
+
+/**
+ * Update DB Update history
+ *
+ * @since 4.2.4
+ */
+function ig_es_update_424_db_version() {
+	ES_Install::update_db_version( '4.2.4' );
+}
+
+
+/* --------------------- ES 4.2.4(End)--------------------------- */

@@ -53,7 +53,7 @@ if ( ! class_exists( 'ES_Actions' ) ) {
 			add_action( 'ig_es_contact_subscribe', array( &$this, 'subscribe' ), 10, 2 );
 			add_action( 'ig_es_message_sent', array( &$this, 'sent' ), 10, 3 );
 			add_action( 'ig_es_message_open', array( &$this, 'open' ), 10, 3 );
-			add_action( 'ig_es_message_click', array( &$this, 'click' ), 10, 4 );
+			add_action( 'ig_es_message_click', array( &$this, 'click' ), 10, 5 );
 			add_action( 'ig_es_contact_unsubscribe', array( &$this, 'unsubscribe' ), 10, 4 );
 			//add_action( 'ig_es_message_bounce', array( &$this, 'bounce' ), 10, 3 );
 			//add_action( 'ig_es_subscriber_error', array( &$this, 'error' ), 10, 3 );
@@ -94,26 +94,27 @@ if ( ! class_exists( 'ES_Actions' ) ) {
 		 */
 		private function add( $args, $explicit = true ) {
 
-			global $wpdb;
-
 			$args = wp_parse_args( $args, array(
 				'created_at' => ig_es_get_current_gmt_timestamp(),
 				'updated_at' => ig_es_get_current_gmt_timestamp(),
 				'count'      => 1,
 			) );
 
-			$sql = "INSERT INTO {$wpdb->prefix}ig_actions (" . implode( ', ', array_keys( $args ) ) . ')';
-			$sql .= " VALUES ('" . implode( "','", array_values( $args ) ) . "') ON DUPLICATE KEY UPDATE";
+			return $this->db->add( $args, $explicit );
 
-			$sql .= ( $explicit ) ? " created_at = created_at, count = count+1, updated_at = '" . ig_es_get_current_gmt_timestamp() . "'" : ' count = values(count)';
+		}
 
-			$result = $wpdb->query( $sql );
+		/**
+		 * Track Contact Action
+		 *
+		 * @param $args
+		 * @param bool $explicit
+		 *
+		 * @since 4.2.4
+		 */
+		private function add_contact_action( $args, $explicit = true ) {
 
-			if ( false !== $result ) {
-				return true;
-			}
-
-			return false;
+			return $this->add( $args, $explicit );
 		}
 
 		/**
@@ -128,18 +129,6 @@ if ( ! class_exists( 'ES_Actions' ) ) {
 		 */
 		private function add_action( $args, $explicit = true ) {
 			return $this->add( $args, $explicit );
-		}
-
-		/**
-		 * Add contact action
-		 *
-		 * @param $args
-		 * @param bool $explicit
-		 *
-		 * @since 4.2.0
-		 */
-		public function add_contact_action( $args, $explicit = true ) {
-
 		}
 
 		/**
@@ -194,13 +183,18 @@ if ( ! class_exists( 'ES_Actions' ) ) {
 		 *
 		 * @since 4.2.0
 		 */
-		public function open( $contact_id, $message_id, $campaign_id ) {
-			return $this->add_action( array(
-				'contact_id'  => $contact_id,
-				'message_id'  => $message_id,
-				'campaign_id' => $campaign_id,
-				'type'        => IG_MESSAGE_OPEN,
-			) );
+		public function open( $contact_id, $message_id, $campaign_id, $explicit = true ) {
+
+			// Track only if campaign sent.
+			if ( $this->is_campaign_sent( $contact_id, $message_id, $campaign_id ) ) {
+
+				return $this->add_action( array(
+					'contact_id'  => $contact_id,
+					'message_id'  => $message_id,
+					'campaign_id' => $campaign_id,
+					'type'        => IG_MESSAGE_OPEN,
+				), $explicit );
+			}
 		}
 
 		/**
@@ -215,13 +209,19 @@ if ( ! class_exists( 'ES_Actions' ) ) {
 		 *
 		 * @since 4.2.0
 		 */
-		public function click( $contact_id, $campaign_id, $link_id ) {
-			return $this->add_action( array(
+		public function click( $link_id, $contact_id, $message_id, $campaign_id, $explicit = true ) {
+
+			// When someone click on link which means they have opened that email
+			// Track Email Open
+			$this->open( $contact_id, $message_id, $campaign_id, false );
+
+			return $this->add_contact_action( array(
 				'contact_id'  => $contact_id,
 				'campaign_id' => $campaign_id,
+				'message_id'  => $message_id,
 				'link_id'     => $link_id,
 				'type'        => IG_LINK_CLICK,
-			) );
+			), $explicit );
 		}
 
 		/**
@@ -265,6 +265,28 @@ if ( ! class_exists( 'ES_Actions' ) ) {
 				'campaign_id' => $campaign_id,
 				'type'        => $hard ? IG_MESSAGE_HARD_BOUNCE : IG_MESSAGE_SOFT_BOUNCE,
 			) );
+		}
+
+		/**
+		 * Check whether campaign is sent to specific contact
+		 *
+		 * @param $contact_id
+		 * @param $message_id
+		 * @param $campaign_id
+		 *
+		 * @return string|null
+		 *
+		 * @since 4.2.3
+		 */
+		public function is_campaign_sent( $contact_id, $message_id, $campaign_id ) {
+
+			global $wpdb;
+
+			$ig_actions_table = IG_ACTIONS_TABLE;
+
+			$sql = "SELECT count(*) FROM $ig_actions_table WHERE contact_id = %d AND message_id = %d AND campaign_id = %d AND type = %d";
+
+			return $wpdb->get_var( $wpdb->prepare( $sql, $contact_id, $message_id, $campaign_id, IG_MESSAGE_SENT ) );
 		}
 	}
 }

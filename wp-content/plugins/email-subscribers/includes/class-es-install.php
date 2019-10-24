@@ -141,6 +141,12 @@ class ES_Install {
 			'ig_es_update_421_drop_tables',
 			'ig_es_update_421_create_tables',
 			'ig_es_update_421_db_version'
+		),
+
+		'4.2.4' => array(
+			'ig_es_update_424_drop_tables',
+			'ig_es_update_424_create_tables',
+			'ig_es_update_424_db_version'
 		)
 
 	);
@@ -843,20 +849,7 @@ class ES_Install {
                 KEY `contact_id` (contact_id),
                 KEY `meta_ley` (meta_key)
             ) $collate;
-
-			CREATE TABLE `{$wpdb->prefix}ig_links` (
-				`id` int(10) NOT NULL AUTO_INCREMENT,
-				`message_id` int(10) unsigned NOT NULL,
-				`campaign_id` int(10) unsigned NOT NULL,
-				`link` varchar(2083) NOT NULL,
-				`hash` varchar(20) NOT NULL,
-				`created_at` datetime DEFAULT NULL,
-                PRIMARY KEY  (id),
-      			KEY `campaign_id` (campaign_id),
-      			KEY `message_id` (message_id),
-      			KEY `link` (link(100))
-            ) $collate;
-		";
+         ";
 
 		return $tables;
 	}
@@ -933,11 +926,54 @@ class ES_Install {
 		return $tables;
 	}
 
+	/**
+	 * Create Links Table
+	 *
+	 * @return string
+	 *
+	 * @sinc 4.2.4
+	 */
+	public static function get_ig_es_424_schema() {
+
+		global $wpdb;
+
+		$collate = '';
+
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			$collate = $wpdb->get_charset_collate();
+		}
+
+		$tables = "CREATE TABLE `{$wpdb->prefix}ig_links` (
+				`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				`message_id` int(10) unsigned NOT NULL,
+				`campaign_id` int(10) unsigned NOT NULL,
+				`link` varchar(2083) NOT NULL,
+				`hash` varchar(20) NOT NULL,
+				`i` tinyint(1) unsigned NOT NULL,
+				`created_at` datetime DEFAULT NULL,
+                PRIMARY KEY  (id),
+      			KEY `campaign_id` (campaign_id),
+      			KEY `message_id` (message_id),
+      			KEY `link` (link(100))
+            ) $collate;
+		";
+
+		return $tables;
+	}
+
+	/**
+	 * Collect multiple version table schema
+	 *
+	 * @return string
+	 *
+	 * @since 4.2.0
+	 */
 	private static function get_schema() {
 
 		$tables = self::get_ig_es_400_schema();
 		$tables .= self::get_ig_es_420_schema();
 		$tables .= self::get_ig_es_421_schema();
+		$tables .= self::get_ig_es_424_schema();
 
 		return $tables;
 	}
@@ -971,7 +1007,7 @@ class ES_Install {
 				'created_at'   => ig_get_current_date_time()
 			);
 
-			$contact_id = ES_DB_Contacts::add_subscriber( $data );
+			$contact_id = ES()->contacts_db->insert( $data );
 
 			if ( $contact_id ) {
 				$data = array(
@@ -1066,7 +1102,7 @@ class ES_Install {
 
 				$campaign_id = ES()->campaigns_db->save_campaign( $data );
 
-				$subscribers = ES_DB_Contacts::get_active_subscribers_by_list_id( $list_id );
+				$subscribers = ES()->contacts_db->get_active_contacts_by_list_id( $list_id );
 				if ( ! empty( $subscribers ) && count( $subscribers ) > 0 ) {
 					$guid = ES_Common::generate_guid( 6 );
 					$now  = ig_get_current_date_time();
@@ -1179,7 +1215,7 @@ class ES_Install {
 
 			$campaign_id = ES()->campaigns_db->save_campaign( $data );
 
-			$subscribers = ES_DB_Contacts::get_active_subscribers_by_list_id( $list_id );
+			$subscribers = ES()->contacts_db->get_active_contacts_by_list_id( $list_id );
 			if ( ! empty( $subscribers ) && count( $subscribers ) > 0 ) {
 
 				$args  = array( 'posts_per_page' => 1 );
@@ -1314,7 +1350,7 @@ class ES_Install {
 		$form_data['updated_at'] = null;
 		$form_data['deleted_at'] = null;
 		$form_data['af_id']      = 0;
-		$form_id                 = ES_DB_Forms::add_form( $form_data );
+		$form_id                 = ES()->forms_db->add_form( $form_data );
 	}
 
 	/**

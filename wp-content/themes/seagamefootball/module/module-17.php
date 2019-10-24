@@ -13,18 +13,22 @@
 
                 <!-- ARTICLE -->
                 <?php
-$queryObject = new  Wp_Query( array(
-    'post_type' => 'post',
-    'category_name' => 'video'
-    ));?>
+                 $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+
+                 $queryObject = new  Wp_Query( array(
+                     'post_type' => 'post',
+                     'category_name' => 'video',
+                     'posts_per_page' => 5,
+                     'paged' => $paged
+                 
+                      
+                     ));?>
 
                 <?php if ( $queryObject->have_posts() ) :
-    $m = 0;
+    
   
     while ( $queryObject->have_posts() ) :
-        $queryObject->the_post(); 
-
-        if ( $m <= 10  ) : ?>
+        $queryObject->the_post();  ?>
                 <article class="article row-article">
                     <div class="article-img">
                         <a href="#">
@@ -45,10 +49,14 @@ $queryObject = new  Wp_Query( array(
                         <a href="<?php the_permalink(); ?>"><b>Xem thêm</b></a>
                     </div>
                 </article>
-                <?php endif; ?>
-                <?php $m++;?>
                 <?php endwhile;?>
                 <?php endif;?>
+                <nav>
+    <ul>
+        <li><?php previous_posts_link( '&laquo; Trở về trang trước', $queryObject->max_num_pages) ?></li> 
+        <li><?php next_posts_link( 'Trang tiếp theo &raquo;', $queryObject->max_num_pages) ?></li>
+    </ul>
+</nav>
             </div>
 
         </div>

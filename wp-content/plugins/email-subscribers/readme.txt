@@ -5,7 +5,7 @@ Author URI: https://www.icegram.com/
 Tags: subscription, newsletter, email marketing, post notification, email newsletter form, email signup, email widget, newsletter signup, subscribe, subscription form, bulk emails, signup form, list builder, lead generation, welcome email, contacts
 Requires at least: 3.9
 Tested up to: 5.2.3
-Stable tag: 4.2.1
+Stable tag: 4.2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses
 
@@ -299,6 +299,25 @@ Refer [here](https://www.icegram.com/documentation/es-faq/).
 9. Admin page - Settings Tab 4 - Security Settings
 
 == Changelog ==
+
+**4.2.4 (23.10.2019)**
+
+* Update: Improve Create Broadcast UI
+* Fix: Unable to remove label for Email field in Subscription Form
+* Fix: Validate Post Notification data
+
+**4.2.3 (17.10.2019)**
+
+* Update: Now, only administrator can access Email Subscribers menus.
+* Fix: Email open tracking
+* Fix: Vulnerability while exporting contacts
+* Fix: Vulnerability while sending test email
+* Fix: Check permission before saving settings
+
+= 4.2.2 (15.10.2019) =
+* New: Added configuration option for label & placeholder for subscription form
+* Update: Ask subscribers for confirmation before unsubscription
+* Fix: Unsubscription issue
 
 = 4.2.1 (10.10.2019) =
 * Update: Added per page screen option for Contacts, Forms, Lists & Campaigns

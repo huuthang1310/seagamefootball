@@ -31,7 +31,7 @@ $queryObject = new  Wp_Query( array(
 
         if ( $k < 1 ) : ?>
                         <article class="article">
-                            <div class="article-img">
+                            <div class="article-img aing">
                                 <a href="<?php the_permalink();?>">
                                     <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                                 </a>

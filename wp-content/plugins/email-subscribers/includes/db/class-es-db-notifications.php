@@ -64,7 +64,14 @@ class ES_DB_Notifications {
 
 	}
 
-	public static function migratate_post_notification_es_template_type() {
+	/**
+	 * Migrate Post Notification Email Template Type
+	 *
+	 * @return bool|int
+	 *
+	 * @since 4.0.0
+	 */
+	public static function migrate_post_notification_es_template_type() {
 		global $wpdb;
 
 		$sql    = "UPDATE {$wpdb->prefix}postmeta SET meta_value = %s WHERE meta_key = %s AND meta_value = %s";
@@ -74,6 +81,13 @@ class ES_DB_Notifications {
 		return $update;
 	}
 
+	/**
+	 * Migrate Newsletter Email template type
+	 *
+	 * @return bool|int
+	 *
+	 * @since 4.0.0
+	 */
 	public static function migrate_newsletter_es_template_type() {
 		global $wpdb;
 
