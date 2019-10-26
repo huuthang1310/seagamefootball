@@ -62,7 +62,7 @@ class ES_Import_Subscribers {
 								// Get Headers
 								$headers = array_map( 'trim', fgetcsv( $handle ) );
 
-								$existing_contacts_email_id_map = ES_DB_Contacts::get_email_id_map();
+								$existing_contacts_email_id_map = ES()->contacts_db->get_email_id_map();
 
 								$existing_contacts = array();
 								if ( count( $existing_contacts_email_id_map ) > 0 ) {
@@ -129,9 +129,9 @@ class ES_Import_Subscribers {
 
 								if ( count( $emails ) > 0 ) {
 
-									ES_DB_Contacts::do_batch_insert( $contacts_data );
+									ES()->contacts_db->do_batch_insert( $contacts_data );
 
-									$contact_ids = ES_DB_Contacts::get_contact_ids_by_emails( $emails );
+									$contact_ids = ES()->contacts_db->get_contact_ids_by_emails( $emails );
 									if ( count( $contact_ids ) > 0 ) {
 										ES_DB_Lists_Contacts::delete_contacts_from_list( $list_id, $contact_ids );
 										ES_DB_Lists_Contacts::do_import_contacts_into_list( $list_id, $contact_ids, $status, 1, $current_date_time );

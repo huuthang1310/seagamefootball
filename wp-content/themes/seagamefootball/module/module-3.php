@@ -26,6 +26,8 @@
 $queryObject = new  Wp_Query( array(
     'post_type' => 'post',
      'category_name' => 'tintucseagame'
+
+
     ));?>
 
                             <?php if ( $queryObject->have_posts() ) :

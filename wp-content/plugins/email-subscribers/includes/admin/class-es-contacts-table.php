@@ -256,14 +256,14 @@ class ES_Contacts_Table extends WP_List_Table {
 							if ( $id ) {
 								$this->update_contact( $id, $contact );
 							} else {
-								$id = ES_DB_Contacts::get_contact_id_by_email( $email );
+								$id = ES()->contacts_db->get_contact_id_by_email( $email );
 								if ( ! $id ) {
 									$contact['source']     = 'admin';
 									$contact['status']     = 'verified';
 									$contact['hash']       = ES_Common::generate_guid();
 									$contact['created_at'] = ig_get_current_date_time();
 
-									$id = ES_DB_Contacts::add_subscriber( $contact );
+									$id = ES()->contacts_db->insert( $contact );
 
 								} else {
 									$message = __( 'Contact already exist.', 'email-subscribers' );
@@ -895,7 +895,7 @@ class ES_Contacts_Table extends WP_List_Table {
 				die( 'You do not have a permission to delete contact(s)' );
 			} else {
 				$subscriber_id = absint( ig_es_get_request_data( 'subscriber' ) );
-				$deleted       = ES_DB_Contacts::delete_subscribers( array( $subscriber_id ) );
+				$deleted       = ES()->contacts_db->delete_contacts_by_ids( array( $subscriber_id ) );
 				if ( $deleted ) {
 					$message = __( 'Contact(s) have been deleted successfully!', 'email-subscribers' );
 					ES_Common::show_message( $message, 'success' );
@@ -914,7 +914,7 @@ class ES_Contacts_Table extends WP_List_Table {
 				die( 'You do not have a permission to resend email confirmation' );
 			} else {
 				$id            = absint( ig_es_get_request_data( 'subscriber' ) );
-				$subscriber    = ES_DB_Contacts::get_subscribers_by_id( $id );
+				$subscriber    = ES()->contacts_db->get_by_id( $id );
 				$template_data = array(
 					'email'      => $subscriber['email'],
 					'db_id'      => $subscriber['id'],
@@ -956,7 +956,7 @@ class ES_Contacts_Table extends WP_List_Table {
 			// If the delete bulk action is triggered
 			if ( ( 'bulk_delete' === $action ) || ( 'bulk_delete' === $action2 ) ) {
 
-				$deleted = ES_DB_Contacts::delete_subscribers( $subscriber_ids );
+				$deleted = ES()->contacts_db->delete_contacts_by_ids( $subscriber_ids );
 
 				if ( $deleted ) {
 					$message = __( 'Contact(s) have been deleted successfully!', 'email-subscribers' );
@@ -997,7 +997,7 @@ class ES_Contacts_Table extends WP_List_Table {
 					return;
 				}
 
-				$edited = ES_DB_Contacts::update_contacts_list( $subscriber_ids, $list_id );
+				$edited = ES()->contacts_db->update_contacts_list( $subscriber_ids, $list_id );
 
 				if ( $edited ) {
 					$message = __( 'Contact(s) have been moved to list successfully!', 'email-subscribers' );
@@ -1018,7 +1018,7 @@ class ES_Contacts_Table extends WP_List_Table {
 					return;
 				}
 
-				$edited = ES_DB_Contacts::add_contacts_to_list( $subscriber_ids, $list_id );
+				$edited = ES()->contacts_db->add_contacts_to_list( $subscriber_ids, $list_id );
 
 				if ( $edited ) {
 					$message = __( 'Contact(s) have been added to list successfully!', 'email-subscribers' );

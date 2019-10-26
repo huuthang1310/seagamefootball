@@ -12,9 +12,9 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 class ES_Forms_Table extends WP_List_Table {
 
 	/**
+	 * @since 4.2.1
 	 * @var string
 	 *
-	 * @since 4.2.1
 	 */
 	public static $option_per_page = 'es_forms_per_page';
 
@@ -52,8 +52,8 @@ class ES_Forms_Table extends WP_List_Table {
 
 
 	/**
-     * Render Forms list view
-     *
+	 * Render Forms list view
+	 *
 	 * @since 4.0
 	 */
 	public function render() {
@@ -223,16 +223,18 @@ class ES_Forms_Table extends WP_List_Table {
 			$action = 'edit';
 		}
 
-		$form_data['name']          = ! empty( $data['name'] ) ? sanitize_text_field( $data['name'] ) : '';
-		$form_data['name_visible']  = ! empty( $data['name_visible'] ) ? sanitize_text_field( $data['name_visible'] ) : 'no';
-		$form_data['name_required'] = ! empty( $data['name_required'] ) ? sanitize_text_field( $data['name_required'] ) : 'no';
-		$form_data['name_label']    = ! empty( $data['name_label'] ) ? sanitize_text_field( $data['name_label'] ) : '';
-		$form_data['email_label']   = ! empty( $data['email_label'] ) ? sanitize_text_field( $data['email_label'] ) : '';
-		$form_data['button_label']  = ! empty( $data['button_label'] ) ? sanitize_text_field( $data['button_label'] ) : __( 'Subscribe', 'email-subscribers' );
-		$form_data['list_visible']  = ! empty( $data['list_visible'] ) ? $data['list_visible'] : 'no';
-		$form_data['lists']         = ! empty( $data['lists'] ) ? $data['lists'] : array();
-		$form_data['af_id']         = ! empty( $data['af_id'] ) ? $data['af_id'] : 0;
-		$form_data['desc']          = ! empty( $data['desc'] ) ? sanitize_text_field( $data['desc'] ) : '';
+		$form_data['name']               = ! empty( $data['name'] ) ? sanitize_text_field( $data['name'] ) : '';
+		$form_data['name_visible']       = ! empty( $data['name_visible'] ) ? sanitize_text_field( $data['name_visible'] ) : 'no';
+		$form_data['name_required']      = ! empty( $data['name_required'] ) ? sanitize_text_field( $data['name_required'] ) : 'no';
+		$form_data['name_label']         = ! empty( $data['name_label'] ) ? sanitize_text_field( $data['name_label'] ) : '';
+		$form_data['name_place_holder']  = ! empty( $data['name_place_holder'] ) ? sanitize_text_field( $data['name_place_holder'] ) : '';
+		$form_data['email_label']        = ! empty( $data['email_label'] ) ? sanitize_text_field( $data['email_label'] ) : '';
+		$form_data['email_place_holder'] = ! empty( $data['email_place_holder'] ) ? sanitize_text_field( $data['email_place_holder'] ) : '';
+		$form_data['button_label']       = ! empty( $data['button_label'] ) ? sanitize_text_field( $data['button_label'] ) : __( 'Subscribe', 'email-subscribers' );
+		$form_data['list_visible']       = ! empty( $data['list_visible'] ) ? $data['list_visible'] : 'no';
+		$form_data['lists']              = ! empty( $data['lists'] ) ? $data['lists'] : array();
+		$form_data['af_id']              = ! empty( $data['af_id'] ) ? $data['af_id'] : 0;
+		$form_data['desc']               = ! empty( $data['desc'] ) ? sanitize_text_field( $data['desc'] ) : '';
 
 		$lists = ES()->lists_db->get_list_id_name_map();
 		$nonce = wp_create_nonce( 'es_form' );
@@ -287,12 +289,14 @@ class ES_Forms_Table extends WP_List_Table {
                                                     <td><b><?php _e( 'Show?', 'email-subscribers' ); ?></b></td>
                                                     <td><b><?php _e( 'Required?', 'email-subscribers' ); ?></b></td>
                                                     <td><b><?php _e( 'Label', 'email-subscribers' ); ?></b></td>
+                                                    <td><b><?php _e( 'Place Holder', 'email-subscribers' ); ?></b></td>
                                                 </tr>
                                                 <tr class="form-field">
                                                     <td><?php _e( 'Email', 'email-subscribers' ); ?></td>
                                                     <td><input type="checkbox" class="" name="form_data[email_visible]" value="yes" disabled="disabled" checked="checked"></td>
                                                     <td><input type="checkbox" class="" name="form_data[email_required]" value="yes" disabled="disabled" checked="checked"></td>
-                                                    <!--<td><input type="text" class="" name="form_data[email_label]" value="<?php echo $form_data['email_label']; ?>"></td>-->
+                                                    <td><input type="text" class="" name="form_data[email_label]" value="<?php echo $form_data['email_label']; ?>"></td>
+                                                    <td><input type="text" class="" name="form_data[email_place_holder]" value="<?php echo $form_data['email_place_holder']; ?>"></td>
                                                 </tr>
                                                 <tr class="form-field">
                                                     <td><?php _e( 'Name', 'email-subscribers' ); ?></td>
@@ -302,9 +306,12 @@ class ES_Forms_Table extends WP_List_Table {
                                                     <td><input type="checkbox" class="es_required" name="form_data[name_required]" value="yes" <?php if ( $form_data['name_required'] === 'yes' ) {
 															echo 'checked=checked';
 														} ?>></td>
-                                                    <!-- <td> <input type="text" class="es_name_label" name="form_data[name_label]"  value="<?php echo $form_data['name_label']; ?>" <?php if ( $form_data['name_required'] === 'yes' ) {
-														echo 'disabled=disabled';
-													} ?> ></td>-->
+                                                    <td><input type="text" class="es_name_label" name="form_data[name_label]" value="<?php echo $form_data['name_label']; ?>" <?php if ( $form_data['name_required'] === 'yes' ) {
+															echo 'disabled=disabled';
+														} ?> ></td>
+                                                    <td><input type="text" class="es_name_label" name="form_data[name_place_holder]" value="<?php echo $form_data['name_place_holder']; ?>" <?php if ( $form_data['name_required'] === 'yes' ) {
+															echo 'disabled=disabled';
+														} ?> ></td>
                                                 </tr>
                                                 <tr class="form-field">
                                                     <td><?php _e( 'Button', 'email-subscribers' ); ?></td>
@@ -402,18 +409,20 @@ class ES_Forms_Table extends WP_List_Table {
 
 	public static function prepare_form_data( $data ) {
 
-		$form_data     = array();
-		$name          = ! empty( $data['name'] ) ? sanitize_text_field( $data['name'] ) : '';
-		$desc          = ! empty( $data['desc'] ) ? sanitize_text_field( $data['desc'] ) : '';
-		$email_label   = ! empty( $data['email_label'] ) ? sanitize_text_field( $data['email_label'] ) : '';
-		$name_label    = ! empty( $data['name_label'] ) ? sanitize_text_field( $data['name_label'] ) : '';
-		$button_label  = ! empty( $data['button_label'] ) ? sanitize_text_field( $data['button_label'] ) : '';
-		$name_visible  = ( ! empty( $data['name_visible'] ) && $data['name_visible'] === 'yes' ) ? true : false;
-		$name_required = ( ! empty( $data['name_required'] ) && $data['name_required'] === 'yes' ) ? true : false;
-		$list_visible  = ( ! empty( $data['list_visible'] ) && $data['list_visible'] === 'yes' ) ? true : false;
-		$list_requried = true;
-		$list_ids      = ! empty( $data['lists'] ) ? $data['lists'] : array();
-		$af_id         = ! empty( $data['af_id'] ) ? $data['af_id'] : 0;
+		$form_data          = array();
+		$name               = ! empty( $data['name'] ) ? sanitize_text_field( $data['name'] ) : '';
+		$desc               = ! empty( $data['desc'] ) ? sanitize_text_field( $data['desc'] ) : '';
+		$email_label        = ! empty( $data['email_label'] ) ? sanitize_text_field( $data['email_label'] ) : '';
+		$email_place_holder = ! empty( $data['email_place_holder'] ) ? sanitize_text_field( $data['email_place_holder'] ) : '';
+		$name_label         = ! empty( $data['name_label'] ) ? sanitize_text_field( $data['name_label'] ) : '';
+		$name_place_holder  = ! empty( $data['name_place_holder'] ) ? sanitize_text_field( $data['name_place_holder'] ) : '';
+		$button_label       = ! empty( $data['button_label'] ) ? sanitize_text_field( $data['button_label'] ) : '';
+		$name_visible       = ( ! empty( $data['name_visible'] ) && $data['name_visible'] === 'yes' ) ? true : false;
+		$name_required      = ( ! empty( $data['name_required'] ) && $data['name_required'] === 'yes' ) ? true : false;
+		$list_visible       = ( ! empty( $data['list_visible'] ) && $data['list_visible'] === 'yes' ) ? true : false;
+		$list_requried      = true;
+		$list_ids           = ! empty( $data['lists'] ) ? $data['lists'] : array();
+		$af_id              = ! empty( $data['af_id'] ) ? $data['af_id'] : 0;
 
 		$body = array(
 			array(
@@ -421,9 +430,10 @@ class ES_Forms_Table extends WP_List_Table {
 				'name'   => 'Name',
 				'id'     => 'name',
 				'params' => array(
-					'label'    => $name_label,
-					'show'     => $name_visible,
-					'required' => $name_required
+					'label'        => $name_label,
+					'place_holder' => $name_place_holder,
+					'show'         => $name_visible,
+					'required'     => $name_required
 				),
 
 				'position' => 1
@@ -434,9 +444,10 @@ class ES_Forms_Table extends WP_List_Table {
 				'name'   => 'Email',
 				'id'     => 'email',
 				'params' => array(
-					'label'    => $email_label,
-					'show'     => true,
-					'required' => true
+					'label'        => $email_label,
+					'place_holder' => $email_place_holder,
+					'show'         => true,
+					'required'     => true
 				),
 
 				'position' => 2
@@ -472,8 +483,9 @@ class ES_Forms_Table extends WP_List_Table {
 		);
 
 		$settings = array(
-			'lists' => $list_ids,
-			'desc'  => $desc
+			'lists'        => $list_ids,
+			'desc'         => $desc,
+			'form_version' => ES()->forms_db->version
 		);
 
 		$form_data['name']       = $name;
@@ -496,20 +508,23 @@ class ES_Forms_Table extends WP_List_Table {
 		$body_data     = maybe_unserialize( $data['body'] );
 		$settings_data = maybe_unserialize( $data['settings'] );
 
-		$desc = ! empty( $settings_data['desc'] ) ? $settings_data['desc'] : '';
+		$desc         = ! empty( $settings_data['desc'] ) ? $settings_data['desc'] : '';
+		$form_version = ! empty( $settings_data['form_version'] ) ? $settings_data['form_version'] : '0.1';
 
-		$form_data = array( 'form_id' => $id, 'name' => $name, 'af_id' => $af_id, 'desc' => $desc );
+		$form_data = array( 'form_id' => $id, 'name' => $name, 'af_id' => $af_id, 'desc' => $desc, 'form_version' => $form_version );
 		foreach ( $body_data as $d ) {
 			if ( $d['id'] === 'name' ) {
-				$form_data['name_visible']  = ( $d['params']['show'] === true ) ? 'yes' : '';
-				$form_data['name_required'] = ( $d['params']['required'] === true ) ? 'yes' : '';
-				$form_data['name_label']    = ! empty( $d['params']['label'] ) ? $d['params']['label'] : '';
+				$form_data['name_visible']      = ( $d['params']['show'] === true ) ? 'yes' : '';
+				$form_data['name_required']     = ( $d['params']['required'] === true ) ? 'yes' : '';
+				$form_data['name_label']        = ! empty( $d['params']['label'] ) ? $d['params']['label'] : '';
+				$form_data['name_place_holder'] = ! empty( $d['params']['place_holder'] ) ? $d['params']['place_holder'] : '';
 			} elseif ( $d['id'] === 'lists' ) {
 				$form_data['list_visible']  = ( $d['params']['show'] === true ) ? 'yes' : '';
 				$form_data['list_required'] = ( $d['params']['required'] === true ) ? 'yes' : '';
 				$form_data['lists']         = ! empty( $d['params']['values'] ) ? $d['params']['values'] : array();
 			} elseif ( $d['id'] === 'email' ) {
-				$form_data['email_label'] = ! empty( $d['params']['label'] ) ? $d['params']['label'] : '';
+				$form_data['email_label']        = ! empty( $d['params']['label'] ) ? $d['params']['label'] : '';
+				$form_data['email_place_holder'] = ! empty( $d['params']['place_holder'] ) ? $d['params']['place_holder'] : '';
 			} elseif ( $d['id'] === 'submit' ) {
 				$form_data['button_label'] = ! empty( $d['params']['label'] ) ? $d['params']['label'] : '';
 			}

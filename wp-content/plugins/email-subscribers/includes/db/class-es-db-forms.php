@@ -5,92 +5,215 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class ES_DB_Forms {
-
+class ES_DB_Forms extends ES_DB {
+	/**
+	 * @since 4.2.2
+	 * @var string
+	 *
+	 */
 	public $table_name;
 
+	/**
+	 * @since 4.2.2
+	 * @var string
+	 *
+	 */
 	public $version;
 
+	/**
+	 * @since 4.2.2
+	 * @var string
+	 *
+	 */
 	public $primary_key;
 
+	/**
+	 * ES_DB_Forms constructor.
+	 *
+	 * @since 4.0.0
+	 */
 	public function __construct() {
+		global $wpdb;
 
+		parent::__construct();
+
+		$this->table_name = $wpdb->prefix . 'ig_forms';
+
+		$this->primary_key = 'id';
+
+		$this->version = '1.0';
 	}
 
-	public static function do_insert( $place_holders, $values ) {
+	/**
+	 * Get table columns
+	 *
+	 * @return array
+	 *
+	 * @since 4.2.2
+	 */
+	public function get_columns() {
+		return array(
+			'id'         => '%d',
+			'name'       => '%s',
+			'body'       => '%s',
+			'settings'   => '%s',
+			'styles'     => '%s',
+			'created_at' => '%s',
+			'updated_at' => '%s',
+			'deleted_at' => '%s',
+			'af_id'      => '%d'
+		);
+	}
+
+	/**
+	 * Get default column values
+	 *
+	 * @since  4.2.2
+	 */
+	public function get_column_defaults() {
+		return array(
+			'name'       => null,
+			'body'       => null,
+			'settings'   => null,
+			'styles'     => null,
+			'created_at' => ig_get_current_date_time(),
+			'updated_at' => null,
+			'deleted_at' => null,
+			'af_id'      => 0
+		);
+	}
+
+	/**
+	 * Insert Forms
+	 *
+	 * @param $place_holders
+	 * @param $values
+	 *
+	 * @return bool
+	 *
+	 * @since 4.2.2
+	 */
+	public function do_forms_insert( $place_holders, $values ) {
+		$forms_table = IG_FORMS_TABLE;
+
+		$fields = array_keys( $this->get_column_defaults() );
+
+		return ES_DB::do_insert( $forms_table, $fields, $place_holders, $values );
+	}
+
+	/**
+	 * Get ID Name Map of Forms
+	 *
+	 * Note: We are using this static function in Icegram. Think about compatibility before any modification
+	 *
+	 * @return array
+	 *
+	 * @since 4.0.0
+	 *
+	 * @modify 4.2.2
+	 */
+	public static function get_forms_id_name_map() {
+
 		global $wpdb;
 
 		$forms_table = IG_FORMS_TABLE;
 
-		$query = "INSERT INTO {$forms_table} (`name`, `body`, `settings`, `styles`, `created_at`, `updated_at`, `deleted_at`, `af_id`) VALUES ";
-		$query .= implode( ', ', $place_holders );
-		$sql   = $wpdb->prepare( "$query ", $values );
+		$where = "(deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')";
 
-		if ( $wpdb->query( $sql ) ) {
-			return true;
-		} else {
-			return false;
-		}
+		$query = "SELECT id, name FROM $forms_table WHERE $where";
 
-	}
-
-	public static function get_forms_id_name_map() {
-		global $wpdb;
-
-		$query = "SELECT id, name FROM {$wpdb->prefix}ig_forms WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') ";
-		$forms = $wpdb->get_results( $query, ARRAY_A );
+		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		$id_name_map = array();
-		if ( count( $forms ) > 0 ) {
-			foreach ( $forms as $form ) {
-				$id_name_map[ $form['id'] ] = $form['name'];
+		if ( count( $results ) > 0 ) {
+			foreach ( $results as $result ) {
+				$id_name_map[ $result['id'] ] = $result['name'];
 			}
 		}
 
 		return $id_name_map;
 	}
 
-	public static function add_form( $data ) {
-		global $wpdb;
-		$insert = $wpdb->insert( IG_FORMS_TABLE, $data );
 
-		if ( $insert ) {
-			return $wpdb->insert_id;
-		}
-
-		return false;
+	/**
+	 * Add Form
+	 *
+	 * @param $data
+	 *
+	 * @return int
+	 *
+	 * @since 4.2.2
+	 */
+	public function add_form( $data ) {
+		return $this->insert( $data );
 	}
 
-	public static function get_form_by_id( $id ) {
+	/**
+	 * Get Form By ID
+	 *
+	 * @param $id
+	 *
+	 * @return array|mixed
+	 *
+	 * @since 4.0.0
+	 *
+	 * @modify 4.2.2
+	 */
+	public function get_form_by_id( $id ) {
 		global $wpdb;
 
+		if ( empty( $id ) ) {
+			return array();
+		}
 
-		$query = "SELECT * FROM " . IG_FORMS_TABLE . " WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND id = {$id}";
+		$where = $wpdb->prepare( "id = %d AND (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')", $id );
 
-		$form = $wpdb->get_results( $query, ARRAY_A );
-		if ( $form ) {
-			$form = array_shift( $form );
+		$forms = $this->get_by_conditions( $where );
+
+		$form = array();
+		if ( ! empty( $forms ) ) {
+			$form = array_shift( $forms );
 		}
 
 		return $form;
 
 	}
 
-	public static function get_form_by_af_id( $af_id ) {
+	/**
+	 * Get form based on advance form id
+	 *
+	 * @param $af_id
+	 *
+	 * @return array|mixed
+	 *
+	 * @since 4.0.0
+	 *
+	 * @modify 4.2.0
+	 */
+	public function get_form_by_af_id( $af_id ) {
 		global $wpdb;
 
-		$query = "SELECT * FROM " . IG_FORMS_TABLE . " WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND af_id = {$af_id}";
-		$form  = $wpdb->get_results( $query, ARRAY_A );
+		$where = $wpdb->prepare( "af_id = %d AND (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')", $af_id );
 
-		if ( $form ) {
-			$form = array_shift( $form );
+		$forms = $this->get_by_conditions( $where );
+
+		$form = array();
+		if ( ! empty( $forms ) ) {
+			$form = array_shift( $forms );
 		}
 
 		return $form;
 
 	}
 
-	public static function migrate_advanced_forms() {
+	/**
+	 * Migrate advanced forms data
+	 *
+	 * @since 4.0.0
+	 *
+	 * @modify 4.2.2
+	 */
+	public function migrate_advanced_forms() {
 		global $wpdb;
 
 		$table           = sanitize_text_field( EMAIL_SUBSCRIBERS_ADVANCED_FORM );
@@ -102,6 +225,7 @@ class ES_DB_Forms {
 			$forms = $wpdb->get_results( $query, ARRAY_A );
 
 			if ( count( $forms ) > 0 ) {
+
 				$place_holders = $values = array();
 				foreach ( $forms as $form ) {
 
@@ -204,20 +328,27 @@ class ES_DB_Forms {
 
 				}
 
-				ES_DB_Forms::do_insert( $place_holders, $values );
+				$this->do_forms_insert( $place_holders, $values );
 			}
 		}
 	}
 
-	public static function count_forms() {
+	/**
+	 * Get total forms count
+	 *
+	 * @return string|null
+	 *
+	 * @since 4.0.0
+	 *
+	 * @modify 4.2.2
+	 */
+	public function count_forms() {
 
-		global $wpdb;
+		$where = "deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00'";
 
-		$query = "SELECT count(*) as total_forms FROM " . IG_FORMS_TABLE . " WHERE deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00'";
-		$forms = $wpdb->get_var( $query );
+		$lists = $this->count( $where );
 
-		return $forms;
-
+		return $lists;
 	}
 
 

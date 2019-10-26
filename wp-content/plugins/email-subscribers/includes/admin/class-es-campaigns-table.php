@@ -261,7 +261,7 @@ class ES_Campaigns_Table extends WP_List_Table {
 				$title = ! empty( $item['name'] ) ? $item['name'] : '';
 			}
 
-			$slug = ( in_array( $item['type'], array( 'post_notification', 'post_digets' ) ) ) ? esc_attr( 'es_notifications' ) : 'es_' . $item['type'];
+			$slug = ( in_array( $item['type'], array( 'post_notification', 'post_digest' ) ) ) ? esc_attr( 'es_notifications' ) : 'es_' . $item['type'];
 
 			$actions ['edit']  = sprintf( __( '<a href="?page=%s&action=%s&list=%s&_wpnonce=%s">Edit</a>', 'email-subscribers' ), $slug, 'edit', absint( $item['id'] ), $nonce );
 			$actions['delete'] = sprintf( __( '<a href="?page=%s&action=%s&list=%s&_wpnonce=%s" onclick="return checkDelete()">Delete</a>', 'email-subscribers' ), esc_attr( 'es_campaigns' ), 'delete', absint( $item['id'] ), $nonce );

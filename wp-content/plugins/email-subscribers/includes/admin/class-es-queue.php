@@ -127,7 +127,7 @@ if ( ! class_exists( 'ES_Queue' ) ) {
 							$list_id = $campaign['list_ids'];
 
 							// Do we have active subscribers?
-							$contacts       = ES_DB_Contacts::get_active_subscribers_by_list_id( $list_id );
+							$contacts       = ES()->contacts_db->get_active_contacts_by_list_id( $list_id );
 							$total_contacts = count( $contacts );
 
 							if ( $total_contacts > 0 ) {
@@ -199,7 +199,7 @@ if ( ! class_exists( 'ES_Queue' ) ) {
 
 			if ( $campaign_id ) {
 				$campaign  = ES()->campaigns_db->get_campaign_by_id( $campaign_id );
-				$campaigns = array( $campaign );
+				$campaigns  = array($campaign);
 			} else {
 				$campaigns = ES()->campaigns_db->get_active_campaigns( IG_CAMPAIGN_TYPE_SEQUENCE_MESSAGE );
 			}
@@ -525,7 +525,7 @@ if ( ! class_exists( 'ES_Queue' ) ) {
 				// We need unique ids
 				$contact_ids = array_unique( $contact_ids );
 
-				$contacts = ES_DB_Contacts::get_details_by_ids( $contact_ids );
+				$contacts = ES()->contacts_db->get_details_by_ids( $contact_ids );
 
 				foreach ( $campaigns_notifications as $campaign_id => $notifications ) {
 

@@ -1260,3 +1260,96 @@ div.es .last {
     width: 40%;
     padding: 0.7em;
 }
+
+/* Email Subscribers new css : Start*/
+.es_settings_field{
+    margin-bottom: 0.8em;
+}
+.es_settings_left_pan{
+    width: 75%;
+    display: inline-block;
+    float: left;
+}
+.es_settings_field input[type="text"], .es_settings_field input[type="email"]{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    height: auto;
+}
+.es_settings_field label{
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    line-height: 2.2;
+}
+.es_settings_right_pan{
+    /*padding: 1.5em;*/
+    /*background: #FFF;*/
+    /*border-left: 1px solid #e6e6e6;*/
+    /*border-top-left-radius: 5px;*/
+    /*border-bottom-left-radius: 5px;*/
+    width: 19%;
+    display: inline-block;
+    margin-left: 2em;
+    /*float: right;*/
+}
+.es_settings_field select{
+    height: 3em;
+    margin-bottom: 7px;
+    padding-right: 20px;
+    background-color: #FFF !important;
+    width: 100%;
+}
+.es_campaign_name_wrapper{
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #afafaf;
+}
+.es_campaign_name_wrapper .es_newsletter_name{
+    width: 80%;
+    /* margin-right: 1em; */
+    /* border: none !important; */
+    /* background-color: transparent !important; */
+    box-shadow: none !important;
+    color: #656565 !important;
+    font-size: 1.5em;
+    /* width: 100%; */
+    padding: 10px;
+    font-size: 16px;
+    height: auto;
+}
+.es_primary_btn{
+    font-size: 1.2em;
+    color: #FFFFFF;
+    border-color: #03a025 !important;
+    background: #03a025;
+    box-shadow: 0 1px 0 #03a025;
+    font-weight: bold;
+    height: 2.6em;
+    padding: 9px 18px;
+    /*font-size: 13px;*/
+    border-radius: 3px;
+    text-align: center;
+    border: solid 1px #dce1e5;
+    cursor: pointer;
+    /* line-height: 0.6em; */
+
+}
+.es_primary_btn:hover{
+    color: #03a025;
+    background: #FFF;
+}
+.es_secondary_btn{
+    padding: 9px 18px;
+    font-size: 13px;
+    border-radius: 3px;
+    text-align: center;
+    border: solid 1px #dce1e5;
+    cursor: pointer;
+    margin-top: 1em;
+}
+.es_secondary_btn:hover{
+    color: #000;
+    background: #FFF;
+}
+/* Email Subscribers new css : End*/

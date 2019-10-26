@@ -5,17 +5,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class ES_DB_Blocked_Emails {
-
-
+class ES_DB_Blocked_Emails extends ES_DB {
+	/**
+	 * @since 4.2.2
+	 * @var $table_name
+	 *
+	 */
 	public $table_name;
 
+	/**
+	 * @since 4.2.2
+	 * @var $version
+	 *
+	 */
 	public $version;
 
+	/**
+	 * @since 4.2.2
+	 * @var $primary_key
+	 *
+	 */
 	public $primary_key;
 
+	/**
+	 * ES_DB_Blocked_Emails constructor.
+	 *
+	 * @since 4.2.2
+	 */
 	public function __construct() {
+		global $wpdb;
 
+		parent::__construct();
+
+		$this->table_name = $wpdb->prefix . 'ig_blocked_emails';
+
+		$this->primary_key = 'id';
+
+		$this->version = '1.0';
 	}
 
 	/**
@@ -23,7 +49,7 @@ class ES_DB_Blocked_Emails {
 	 *
 	 * @since   2.1
 	 */
-	public static function get_columns() {
+	public function get_columns() {
 		return array(
 			'id'         => '%d',
 			'email'      => '%s',
@@ -37,35 +63,12 @@ class ES_DB_Blocked_Emails {
 	 *
 	 * @since   2.1
 	 */
-	public static function get_column_defaults() {
+	public function get_column_defaults() {
 		return array(
 			'email'      => null,
 			'ip'         => null,
 			'created_on' => ig_get_current_date_time(),
 		);
 	}
-
-
-	public static function insert( $data ) {
-		global $wpdb;
-
-		$column_formats  = self::get_columns();
-		$column_defaults = self::get_column_defaults();
-		$insert          = true;
-		$prepared_data   = ES_DB::prepare_data( $data, $column_formats, $column_defaults, $insert );
-
-		$campaigns_data = $prepared_data['data'];
-		$column_formats = $prepared_data['column_formats'];
-
-		if ( $insert ) {
-			$result = $wpdb->insert( IG_BLOCKED_EMAILS_TABLE, $campaigns_data, $column_formats );
-			if ( $result ) {
-				return $wpdb->insert_id;
-			}
-		}
-
-		return $result;
-	}
-
 
 }

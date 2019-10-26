@@ -46,9 +46,9 @@ class es_cls_dbquery {
 			'hash'       => $guid,
 			'created_at' => ig_get_current_date_time(),
 		);
-		$contact_id = ES_DB_Contacts::get_contact_id_by_email( $email );
+		$contact_id = ES()->contacts_db->get_contact_id_by_email( $email );
 		if ( ! $contact_id ) {
-			$contact_id = ES_DB_Contacts::add_subscriber( $sub_data );
+			$contact_id = ES()->contacts_db->insert( $sub_data );
 		}
 
 		if ( $contact_id ) {

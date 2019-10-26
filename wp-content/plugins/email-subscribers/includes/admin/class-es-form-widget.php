@@ -26,23 +26,26 @@ class ES_Form_Widget extends WP_Widget {
 		$form_data = array();
 		if ( ! empty( $form_id ) ) {
 
-			$form = ES_DB_Forms::get_form_by_id( $form_id );
+			$form = ES()->forms_db->get_form_by_id( $form_id );
 
 			$form_data = ES_Forms_Table::get_form_data_from_body( $form );
 		}
 
 
-		$data                  = array();
-		$data['form_id']       = 0;
-		$data['list']          = '';
-		$data['name_visible']  = ( ! empty( $form_data['name_visible'] ) && 'yes' === $form_data['name_visible'] ) ? 'yes' : '';
-		$data['name_required'] = ( ! empty( $form_data['name_required'] ) && 'yes' === $form_data['name_required'] ) ? 'yes' : '';
-		$data['list_visible']  = ( ! empty( $form_data['list_visible'] ) && 'yes' === $form_data['list_visible'] ) ? 'yes' : '';
-		$data['lists']         = ( ! empty( $form_data['lists'] ) ) ? $form_data['lists'] : array();
-		$data['desc']          = ( ! empty( $form_data['desc'] ) ) ? $form_data['desc'] : '';
-		$data['name_label']    = ( ! empty( $form_data['name_label'] ) ) ? $form_data['name_label'] : '';
-		$data['email_label']   = ( ! empty( $form_data['email_label'] ) ) ? $form_data['email_label'] : '';
-		$data['button_label']  = ( ! empty( $form_data['button_label'] ) ) ? $form_data['button_label'] : '';
+		$data                       = array();
+		$data['form_id']            = 0;
+		$data['list']               = '';
+		$data['name_visible']       = ( ! empty( $form_data['name_visible'] ) && 'yes' === $form_data['name_visible'] ) ? 'yes' : '';
+		$data['name_required']      = ( ! empty( $form_data['name_required'] ) && 'yes' === $form_data['name_required'] ) ? 'yes' : '';
+		$data['list_visible']       = ( ! empty( $form_data['list_visible'] ) && 'yes' === $form_data['list_visible'] ) ? 'yes' : '';
+		$data['lists']              = ( ! empty( $form_data['lists'] ) ) ? $form_data['lists'] : array();
+		$data['desc']               = ( ! empty( $form_data['desc'] ) ) ? $form_data['desc'] : '';
+		$data['name_label']         = ( ! empty( $form_data['name_label'] ) ) ? $form_data['name_label'] : '';
+		$data['name_place_holder']  = ( ! empty( $form_data['name_place_holder'] ) ) ? $form_data['name_place_holder'] : '';
+		$data['email_label']        = ( ! empty( $form_data['email_label'] ) ) ? $form_data['email_label'] : '';
+		$data['email_place_holder'] = ( ! empty( $form_data['email_place_holder'] ) ) ? $form_data['email_place_holder'] : '';
+		$data['button_label']       = ( ! empty( $form_data['button_label'] ) ) ? $form_data['button_label'] : '';
+		$data['form_version']       = ( ! empty( $form_data['form_version'] ) ) ? $form_data['form_version'] : '';
 
 		ES_Shortcode::render_form( $data );
 

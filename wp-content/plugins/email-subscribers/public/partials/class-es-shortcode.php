@@ -51,7 +51,13 @@ class ES_Shortcode {
 		return ob_get_clean();
 	}
 
-
+	/**
+	 * Render Subscription form using ES 4.0+ Shortcode
+	 *
+	 * @param $atts
+	 *
+	 * @return false|string
+	 */
 	public static function render_es_form( $atts ) {
 		ob_start();
 
@@ -62,7 +68,7 @@ class ES_Shortcode {
 		$id = $atts['id'];
 
 		if ( ! empty( $id ) ) {
-			$form = ES_DB_Forms::get_form_by_id( $id );
+			$form = ES()->forms_db->get_form_by_id( $id );
 
 			if ( $form ) {
 				$form_data = ES_Forms_Table::get_form_data_from_body( $form );
@@ -72,10 +78,9 @@ class ES_Shortcode {
 		}
 
 		return ob_get_clean();
-
 	}
 
-	// Hanadle Email Subscribers Group Selector Shortcode
+	// Handle Email Subscribers Group Selector Shortcode
 	// Backward Compatibility
 	public static function render_es_advanced_form( $atts ) {
 		ob_start();
@@ -87,7 +92,7 @@ class ES_Shortcode {
 		$af_id = $atts['id'];
 
 		if ( ! empty( $af_id ) ) {
-			$form = ES_DB_Forms::get_form_by_af_id( $af_id );
+			$form = ES()->forms_db->get_form_by_af_id( $af_id );
 			if ( $form ) {
 				$form_data = ES_Forms_Table::get_form_data_from_body( $form );
 
@@ -117,18 +122,37 @@ class ES_Shortcode {
 			$active_plugins = array_merge( $active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
 		}
 
-		$show_name         = ! empty( $data['name_visible'] ) ? strtolower( $data['name_visible'] ) : false;
-		$required_name     = ! empty( $data['name_required'] ) ? $data['name_required'] : false;
-		$name_place_holder = ! empty( $data['name_label'] ) ? $data['name_label'] : '';
-		$email_label       = ! empty( $data['email_label'] ) ? $data['email_label'] : '';
-		$button_label      = ! empty( $data['button_label'] ) ? $data['button_label'] : __( 'Subscribe', 'email-subscribers' );
-		$show_list         = ! empty( $data['list_visible'] ) ? $data['list_visible'] : false;
-		$list_ids          = ! empty( $data['lists'] ) ? $data['lists'] : array();
-		$form_id           = ! empty( $data['form_id'] ) ? $data['form_id'] : 0;
-		$list              = ! empty( $data['list'] ) ? $data['list'] : 0;
-		$desc              = ! empty( $data['desc'] ) ? $data['desc'] : '';
-		//replace total contact 
-		$total_contacts = ES_DB_Contacts::count_active_subscribers_by_list_id();
+		$show_name          = ! empty( $data['name_visible'] ) ? strtolower( $data['name_visible'] ) : false;
+		$required_name      = ! empty( $data['name_required'] ) ? $data['name_required'] : false;
+		$name_label         = ! empty( $data['name_label'] ) ? $data['name_label'] : '';
+		$name_place_holder  = ! empty( $data['name_place_holder'] ) ? $data['name_place_holder'] : '';
+		$email_label        = ! empty( $data['email_label'] ) ? $data['email_label'] : '';
+		$email_place_holder = ! empty( $data['email_place_holder'] ) ? $data['email_place_holder'] : '';
+		$button_label       = ! empty( $data['button_label'] ) ? $data['button_label'] : __( 'Subscribe', 'email-subscribers' );
+		$show_list          = ! empty( $data['list_visible'] ) ? $data['list_visible'] : false;
+		$list_ids           = ! empty( $data['lists'] ) ? $data['lists'] : array();
+		$form_id            = ! empty( $data['form_id'] ) ? $data['form_id'] : 0;
+		$list               = ! empty( $data['list'] ) ? $data['list'] : 0;
+		$desc               = ! empty( $data['desc'] ) ? $data['desc'] : '';
+		$form_version       = ! empty( $data['form_version'] ) ? $data['form_version'] : '0.1';
+
+		/**
+		 * We did not have $email_label, $name_label in
+		 * ES < 4.2.2
+		 *
+		 * Since ES 4.2.2, we are adding form_version in form settings.
+		 *
+		 * If we don't find Form Version in settings, we are setting as 0.1
+		 *
+		 * So, if form_version is 0.1 then set default label
+		 */
+		if ( $form_version == '0.1' ) {
+			$email_label = __( 'Email', 'email-subscribers' );
+			$name_label  = __( 'Name', 'email-subscribers' );
+		}
+
+		//replace total contact
+		$total_contacts = ES()->contacts_db->count_active_contacts_by_list_id();
 		$desc           = str_replace( "{{TOTAL-CONTACTS}}", $total_contacts, $desc );
 
 		$current_page     = get_the_ID();
@@ -138,12 +162,17 @@ class ES_Shortcode {
 		$hp_style  = "position:absolute;top:-99999px;" . ( is_rtl() ? 'right' : 'left' ) . ":-99999px;z-index:-99;";
 		$nonce     = wp_create_nonce( 'es-subscribe' );
 
+
 		// Name
-		$name_html = '';
+		$name_html = $required = '';
 		if ( ! empty( $show_name ) && 'no' !== $show_name ) {
-			$name_label = ( 'yes' === $required_name ) ? __( 'Name', 'email-subscribers' ) . '*' : __( 'Name', 'email-subscribers' );
-			$required   = ( 'yes' === $required_name ) ? 'required' : '';
-			$name_html  = '<div class="es-field-wrap"><label>' . $name_label . '<br/><input type="text" name="name" placeholder="' . $name_place_holder . '" value="" ' . $required . '/></label></div>';
+			if ( 'yes' === $required_name ) {
+				$required = 'required';
+				if ( ! empty( $name_label ) ) {
+					$name_label .= '*';
+				}
+			}
+			$name_html = '<div class="es-field-wrap"><label>' . $name_label . '<br/><input type="text" name="name" placeholder="' . $name_place_holder . '" value="" ' . $required . '/></label></div>';
 		}
 
 		// Lists
@@ -171,7 +200,12 @@ class ES_Shortcode {
 		// Form html
 		$form_html = '<input type="hidden" name="form_id" value="' . $form_id . '" />';
 
-		$email_html = '<div class="es-field-wrap"><label>' . __( 'Email', 'email-subscribers' ) . '*' . '<br/><input class="es_required_field es_txt_email" type="email" name="email" value="" placeholder="' . $email_label . '" required/></label></div>';
+		$email_html = '<div class="es-field-wrap"><label>';
+		if ( ! empty( $email_label ) ) {
+			$email_html .= $email_label . '*' . '<br/>';
+		}
+		$email_html .= '<input class="es_required_field es_txt_email" type="email" name="email" value="" placeholder="' . $email_place_holder . '" required/></label></div>';
+
 		?>
 
         <div class="emaillist">
@@ -208,12 +242,12 @@ class ES_Shortcode {
 	}
 
 	public static function prepare_lists_checkboxes( $lists, $list_ids = array(), $columns = 3, $selected_lists = array(), $contact_id = 0, $name = "lists[]" ) {
-		$lists_html = '<div><p><b>' . __('Select List(s)', 'email-subscribers') .'*</b></p><table class="ig-es-form-list-selection"><tr>';
+		$lists_html = '<div><p><b>' . __( 'Select List(s)', 'email-subscribers' ) . '*</b></p><table class="ig-es-form-list-selection"><tr>';
 		$i          = 0;
 
-		if(!empty($contact_id)) {
+		if ( ! empty( $contact_id ) ) {
 			$list_contact_status_map = ES_DB_Lists_Contacts::get_list_contact_status_map( $contact_id );
-        }
+		}
 
 		foreach ( $lists as $list_id => $list_name ) {
 			if ( $i != 0 && ( $i % $columns ) === 0 ) {
@@ -223,11 +257,11 @@ class ES_Shortcode {
 			if ( in_array( $list_id, $list_ids ) ) {
 				if ( in_array( $list_id, $selected_lists ) ) {
 					if ( ! empty( $contact_id ) ) {
-						$status_span             = '<span class="es_list_contact_status ' . $list_contact_status_map[ $list_id ] . '" title="' . ucwords( $list_contact_status_map[ $list_id ] ) . '">';
+						$status_span = '<span class="es_list_contact_status ' . $list_contact_status_map[ $list_id ] . '" title="' . ucwords( $list_contact_status_map[ $list_id ] ) . '">';
 					}
-					$lists_html .= '<td>' . $status_span . '<label><input type="checkbox" name="'. $name .'" checked="checked" value="' . $list_id . '" />' . $list_name . '</label></td>';
+					$lists_html .= '<td>' . $status_span . '<label><input type="checkbox" name="' . $name . '" checked="checked" value="' . $list_id . '" />' . $list_name . '</label></td>';
 				} else {
-					$lists_html .= '<td><label><input type="checkbox" name="'. $name .'" value="' . $list_id . '" />' . $list_name . '</label></td>';
+					$lists_html .= '<td><label><input type="checkbox" name="' . $name . '" value="' . $list_id . '" />' . $list_name . '</label></td>';
 				}
 				$i ++;
 			}

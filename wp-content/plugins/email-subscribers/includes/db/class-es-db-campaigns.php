@@ -179,7 +179,7 @@ class ES_DB_Campaigns extends ES_DB {
 	 * @modify 4.2.1
 	 */
 	public function get_campaign_type_by_id( $id ) {
-		return $this->get_by( 'type', $id );
+		return $this->get_column( 'type', $id );
 	}
 
 	/**
@@ -499,7 +499,12 @@ class ES_DB_Campaigns extends ES_DB {
 
 		$campaigns = $this->get_by_conditions( $where );
 
-		return $campaigns;
+		$campaign = array();
+		if ( ! empty( $campaigns ) ) {
+			$campaign = array_shift( $campaigns );
+		}
+
+		return $campaign;
 	}
 
 	/**
@@ -562,13 +567,11 @@ class ES_DB_Campaigns extends ES_DB {
 
 		$update = false;
 		if ( ! empty( $campaign_id ) && ! empty( $meta_data ) ) {
-			$campaigns = $this->get_campaign_by_id( $campaign_id );
+			$campaign = $this->get_campaign_by_id( $campaign_id );
 
-			if ( ! empty( $campaigns ) && count( $campaigns ) == 1 ) {
+			if ( ! empty( $campaign ) ) {
 
-				$campaign = $campaigns[0];
-
-				if ( $campaign && isset( $campaign['meta'] ) ) {
+				if ( isset( $campaign['meta'] ) ) {
 					$meta = maybe_unserialize( $campaign['meta'] );
 
 					foreach ( $meta_data as $meta_key => $meta_value ) {

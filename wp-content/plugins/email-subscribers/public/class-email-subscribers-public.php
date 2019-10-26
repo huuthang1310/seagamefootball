@@ -143,11 +143,11 @@ class Email_Subscribers_Public {
 		if ( ! empty( $hash ) ) {
 			$data = ig_es_decode_request_data( $hash );
 
-			$db_id       = ! empty( $data['contact_id'] ) ? $data['contact_id'] : 0;
+			$db_id       = ! empty( $data['contact_id'] ) ? (int) $data['contact_id'] : 0;
 			$email       = ! empty( $data['email'] ) ? $data['email'] : '';
 			$guid        = ! empty( $data['guid'] ) ? $data['guid'] : '';
-			$message_id  = ! empty( $data['message_id'] ) ? $data['message_id'] : 0;
-			$campaign_id = ! empty( $data['campaign_id'] ) ? $data['campaign_id'] : 0;
+			$message_id  = ! empty( $data['message_id'] ) ? (int) $data['message_id'] : 0;
+			$campaign_id = ! empty( $data['campaign_id'] ) ? (int) $data['campaign_id'] : 0;
 		} else {
 			$db_id      = ig_es_get_request_data( 'db' );
 			$email      = ig_es_get_request_data( 'email' );
@@ -161,9 +161,9 @@ class Email_Subscribers_Public {
 		if ( ! empty( $option ) ) {
 			if ( ( 'optin' === $option || 'unsubscribe' === $option ) && ! empty( $db_id ) ) {
 				//check if contact exist with id and email
-				$contacts = ES_DB_Contacts::is_contact_exists( $db_id, $email );
+				$is_contact_exists = ES()->contacts_db->is_contact_exists( $db_id, $email );
 
-				if ( ! empty( $contacts ) && count( $contacts ) > 0 ) {
+				if ( $is_contact_exists ) {
 					$ids                       = array( $db_id );
 					$status                    = $subject = $content = '';
 					$unsubscribed              = 0;
@@ -172,10 +172,10 @@ class Email_Subscribers_Public {
 					if ( $is_status_update_required ) {
 						if ( $option === 'optin' ) {
 							$message = get_option( 'ig_es_subscription_success_message' );
-							ES_DB_Contacts::edit_subscriber_status_global( $ids, $unsubscribed );
+							ES()->contacts_db->edit_contact_global_status( $ids, $unsubscribed );
 							ES_DB_Lists_Contacts::edit_subscriber_status( $ids, $status );
 							//send welcome email
-							$contact = ES_DB_Contacts::get_subscribers_email_name_map( array( $email ) );
+							$contact = ES()->contacts_db->get_contacts_email_name_map( array( $email ) );
 							$data    = array(
 								'name'       => ! empty( $contact[ $email ] ) ? $contact[ $email ]['name'] : '',
 								'first_name' => ! empty( $contact[ $email ] ) ? $contact[ $email ]['first_name'] : '',
@@ -211,23 +211,32 @@ class Email_Subscribers_Public {
 
 							if ( in_array( 'email-subscribers-premium/email-subscribers-premium.php', $active_plugins ) && empty( $submitted ) && empty( $unsubscribe_lists ) && ! $list_selected ) {
 								do_action( 'ig_es_update_subscriber', $db_id );
-							} else {
-								if ( empty( $unsubscribe_lists ) ) {
-									$unsubscribe_lists = ES_DB_Lists_Contacts::get_list_ids_by_contact( $db_id, 'subscribed' );
-								}
-
-								//update list status
-								ES_DB_Contacts::edit_list_contact_status( array( $db_id ), $unsubscribe_lists, 'unsubscribed' );
-								//check if all list have same status
-								$list_ids = ES_DB_Lists_Contacts::get_list_ids_by_contact( $db_id, 'subscribed' );
-								if ( count( $list_ids ) == 0 ) {
-									//update global
-									ES_DB_Contacts::edit_subscriber_status_global( array( $db_id ), 1 );
-
-								}
-
-								do_action( 'ig_es_contact_unsubscribe', $db_id, $message_id, $campaign_id, $unsubscribe_lists );
 							}
+
+							if ( empty( $unsubscribe_lists ) ) {
+								// We don't get any lists to unsubscribe. Which means we have to
+								// ask contact for confirmation about unsubscription
+								// If we haven't received confirmation about unsubscription,
+								// Show confirmation message
+								$confirm_unsubscription = ig_es_get_request_data( 'confirm_unsubscription' );
+								if ( empty( $submitted ) && ! $confirm_unsubscription ) {
+									do_action( 'ig_es_confirm_unsubscription' );
+								}
+
+								$unsubscribe_lists = ES_DB_Lists_Contacts::get_list_ids_by_contact( $db_id, 'subscribed' );
+							}
+
+							//update list status
+							ES()->contacts_db->edit_list_contact_status( array( $db_id ), $unsubscribe_lists, 'unsubscribed' );
+							//check if all list have same status
+							$list_ids = ES_DB_Lists_Contacts::get_list_ids_by_contact( $db_id, 'subscribed' );
+							if ( count( $list_ids ) == 0 ) {
+								//update global
+								ES()->contacts_db->edit_contact_global_status( array( $db_id ), 1 );
+
+							}
+
+							do_action( 'ig_es_contact_unsubscribe', $db_id, $message_id, $campaign_id, $unsubscribe_lists );
 
 						}
 
@@ -250,9 +259,32 @@ class Email_Subscribers_Public {
 				if ( ! empty( $guid ) && ! empty( $email ) ) {
 					ES_DB_Sending_Queue::update_viewed_status( $guid, $email );
 
-					// Track Message Open
-					do_action( 'ig_es_message_open', $db_id, $message_id, $campaign_id );
+					if ( $campaign_id > 0 && $db_id > 0 ) {
+						do_action( 'ig_es_message_open', $db_id, $message_id, $campaign_id );
+					}
+
 				}
+			} elseif ( 'click' === $option ) {
+
+				if ( ! empty( $data['link_hash'] ) ) {
+					$hash = $data['link_hash'];
+					$link = ES()->links_db->get_by_hash( $hash );
+
+					if ( ! empty( $link ) ) {
+						$campaign_id = ! empty( $data['campaign_id'] ) ? $data['campaign_id'] : 0;
+						$message_id  = ! empty( $data['message_id'] ) ? $data['message_id'] : 0;
+						$contact_id  = ! empty( $data['contact_id'] ) ? $data['contact_id'] : 0;
+						$link_id     = ! empty( $link['id'] ) ? $link['id'] : 0;
+
+						// Track Link Click
+						do_action( 'ig_es_message_click', $link_id, $contact_id, $message_id, $campaign_id );
+
+						// Now, redirect to target
+						wp_redirect( $link['link'] );
+						exit;
+					}
+				}
+
 			}
 
 		}
@@ -272,9 +304,9 @@ class Email_Subscribers_Public {
 
 		$contact_data = wp_parse_args( $contact_data, $default_data );
 
-		$contact = ES_DB_Contacts::is_subscriber_exist_in_list( $email, $list_id );
+		$contact = ES()->contacts_db->is_contact_exist_in_list( $email, $list_id );
 		if ( empty( $contact['contact_id'] ) ) {
-			$contact_id = ES_DB_Contacts::add_subscriber( $contact_data );
+			$contact_id = ES()->contacts_db->insert( $contact_data );
 		} else {
 			$contact_id = $contact['contact_id'];
 		}
@@ -298,6 +330,93 @@ class Email_Subscribers_Public {
 			$result = ES_DB_Lists_Contacts::add_lists_contacts( $list_contact_data );
 		}
 
+	}
+
+
+	/**
+	 * Allow user to select the list from which they want to unsubscribe
+	 *
+	 * @since 4.2
+	 */
+	function confirm_unsubscription() {
+		global $wp;
+		$get    = ig_es_get_request_data();
+		$action = home_url( add_query_arg( $get, $wp->request ) );
+		$action = add_query_arg( 'confirm_unsubscription', 1, $action );
+
+		?>
+
+        <style type="text/css">
+            .ig_es_form_wrapper {
+                width: 30%;
+                margin: 0 auto;
+                border: 2px #e8e3e3 solid;
+                padding: 0.9em;
+                border-radius: 5px;
+            }
+
+            .ig_es_form_heading {
+                font-size: 1.3em;
+                line-height: 1.5em;
+                margin-bottom: 0.5em;
+            }
+
+            .ig_es_list_checkbox {
+                margin-right: 0.5em;
+            }
+
+            .ig_es_submit {
+                color: #FFFFFF !important;
+                border-color: #03a025 !important;
+                background: #03a025 !important;
+                box-shadow: 0 1px 0 #03a025;
+                font-weight: bold;
+                height: 2.4em;
+                line-height: 1em;
+                cursor: pointer;
+                border-width: 1px;
+                border-style: solid;
+                -webkit-appearance: none;
+                border-radius: 3px;
+                white-space: nowrap;
+                box-sizing: border-box;
+                font-size: 1em;
+                padding: 0 2em;
+                margin-top: 1em;
+            }
+
+            .confirmation-no : {
+                border-color: #FF0000 !important;
+                background: #FF0000 !important;
+                box-shadow: 0 1px 0 #FF0000;
+            }
+
+            .ig_es_submit:hover {
+                color: #FFF !important;
+                background: #0AAB2E !important;
+                border-color: #0AAB2E !important;
+            }
+
+            .ig_es_form_wrapper hr {
+                display: block;
+                height: 1px;
+                border: 0;
+                border-top: 1px solid #ccc;
+                margin: 1em 0;
+                padding: 0;
+            }
+
+        </style>
+
+        <div class="ig_es_form_wrapper">
+            <form action="<?php echo $action; ?>" method="post" id="">
+                <div class="ig_es_form_heading"><?php _e( 'Are you sure you want to unsubscribe?', 'email-subscribers' ); ?></div>
+                <input type="hidden" name="submitted" value="submitted">
+                <input class="ig_es_submit" type="submit" name="unsubscribe" value="Yes">
+            </form>
+        </div>
+		<?php
+		die();
 	}
 
 }

@@ -32,11 +32,14 @@ class ES_DB_Lists extends ES_DB {
 	public function __construct() {
 		global $wpdb;
 
+		parent::__construct();
+
 		$this->table_name = $wpdb->prefix . 'ig_lists';
 
 		$this->primary_key = 'id';
 
 		$this->version = '1.0';
+
 
 	}
 

@@ -34,8 +34,6 @@ class ES_DB_Actions extends ES_DB {
 
 		$this->table_name = $wpdb->prefix . 'ig_actions';
 
-		$this->primary_key = 'id';
-
 		$this->version = '1.0';
 
 	}
@@ -49,12 +47,15 @@ class ES_DB_Actions extends ES_DB {
 	 */
 	public function get_columns() {
 		return array(
-			'id'         => '%d',
-			'slug'       => '%s',
-			'name'       => '%s',
-			'created_at' => '%s',
-			'updated_at' => '%s',
-			'deleted_at' => '%s'
+			'contact_id'  => '%d',
+			'message_id'  => '%d',
+			'campaign_id' => '%d',
+			'type'        => '%d',
+			'count'       => '%d',
+			'link_id'     => '%d',
+			'list_id'     => '%d',
+			'created_at'  => '%d',
+			'updated_at'  => '%d'
 		);
 	}
 
@@ -65,15 +66,53 @@ class ES_DB_Actions extends ES_DB {
 	 */
 	public function get_column_defaults() {
 		return array(
-			'slug'       => null,
-			'name'       => null,
-			'created_at' => ig_get_current_date_time(),
-			'updated_at' => null,
-			'deleted_at' => null
+			'contact_id'  => null,
+			'message_id'  => null,
+			'campaign_id' => null,
+			'type'        => 0,
+			'count'       => 0,
+			'link_id'     => 0,
+			'list_id'     => 0,
+			'created_at'  => ig_es_get_current_gmt_timestamp(),
+			'updated_at'  => ig_es_get_current_gmt_timestamp()
 		);
 	}
 
+	/**
+	 * Track action
+	 *
+	 * @param $args
+	 * @param bool $explicit
+	 *
+	 * @return bool
+	 *
+	 * @since 4.2.4
+	 */
+	public function add( $args, $explicit = true ) {
 
+		global $wpdb;
 
+		$ig_actions_table = IG_ACTIONS_TABLE;
 
+		$args_keys     = array_keys( $args );
+		$args_keys_str = $this->array_to_str( $args_keys );
+
+		$sql = "INSERT INTO $ig_actions_table ($args_keys_str)";
+
+		$args_values = array_values( $args );
+
+		$args_values_str = $this->array_to_str( $args_values, "', '" );
+
+		$sql .= " VALUES ('{$args_values_str}') ON DUPLICATE KEY UPDATE";
+
+		$sql .= ( $explicit ) ? $wpdb->prepare( " created_at = created_at, count = count+1, updated_at = %d", ig_es_get_current_gmt_timestamp() ) : ' count = values(count)';
+
+		$result = $wpdb->query( $sql );
+
+		if ( false !== $result ) {
+			return true;
+		}
+
+		return false;
+	}
 }

@@ -18,16 +18,22 @@ class ES_Tools {
 	// class instance
 	static $instance;
 
-	// class constructor
 	public function __construct() {
-		add_action( 'wp_ajax_es_send_test_email', array( $this, 'es_send_test_email_callback' ) );
+
+		// Allow only to send test email to user who have Settings & Campaigns permission
+		$accessible_sub_menus = ES_Common::ig_es_get_accessible_sub_menus();
+		if ( in_array( 'settings', $accessible_sub_menus ) || in_array( 'campaigns', $accessible_sub_menus ) ) {
+			add_action( 'wp_ajax_es_send_test_email', array( $this, 'es_send_test_email_callback' ) );
+		}
 	}
 
 	public static function es_send_test_email_callback() {
-	    $email = sanitize_email(ig_es_get_request_data('es_test_email'));
+
+		$email = sanitize_email( ig_es_get_request_data( 'es_test_email' ) );
 
 		$email_response = '';
 		$response       = array();
+
 		if ( ! empty( $email ) ) {
 			$subject  = 'Email Subscribers: ' . sprintf( esc_html__( 'Test email to %s', 'email-subscribers' ), $email );
 			$content  = self::get_email_message();

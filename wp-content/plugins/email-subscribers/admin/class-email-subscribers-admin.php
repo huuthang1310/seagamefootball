@@ -166,33 +166,51 @@ class Email_Subscribers_Admin {
 	}
 
 	public function email_subscribers_admin_menu() {
-		// This adds the main menu page
-		add_menu_page( __( 'Email Subscribers', 'email-subscribers' ), __( 'Email Subscribers', 'email-subscribers' ), 'edit_posts', 'es_dashboard', array( $this, 'es_dashboard_callback' ), 'dashicons-email', 30 );
 
-		// Submenu
-		add_submenu_page( 'es_dashboard', __( 'Dashboard', 'email-subscribers' ), __( 'Dashboard', 'email-subscribers' ), 'edit_posts', 'es_dashboard', array( $this, 'es_dashboard_callback' ) );
+		$accessible_sub_menus = ES_Common::ig_es_get_accessible_sub_menus();
 
-		// Add Campaigns Submenu
-		$hook = add_submenu_page( 'es_dashboard', __( 'Campaigns', 'email-subscribers' ), __( 'Campaigns', 'email-subscribers' ), 'edit_posts', 'es_campaigns', array( $this, 'render_campaigns' ) );
-		add_action( "load-$hook", array( 'ES_Campaigns_Table', 'screen_options' ) );
+		if ( count( $accessible_sub_menus ) > 0 ) {
+			// This adds the main menu page
+			add_menu_page( __( 'Email Subscribers', 'email-subscribers' ), __( 'Email Subscribers', 'email-subscribers' ), 'edit_posts', 'es_dashboard', array( $this, 'es_dashboard_callback' ), 'dashicons-email', 30 );
 
-		// Add Forms Submenu
-		$hook = add_submenu_page( 'es_dashboard', __( 'Forms', 'email-subscribers' ), __( 'Forms', 'email-subscribers' ), 'edit_posts', 'es_forms', array( $this, 'render_forms' ) );
-		add_action( "load-$hook", array( 'ES_Forms_Table', 'screen_options' ) );
+			// Submenu
+			add_submenu_page( 'es_dashboard', __( 'Dashboard', 'email-subscribers' ), __( 'Dashboard', 'email-subscribers' ), 'edit_posts', 'es_dashboard', array( $this, 'es_dashboard_callback' ) );
+		}
 
-		// Add Contacts Submenu
-		$hook = add_submenu_page( 'es_dashboard', __( 'Audience', 'email-subscribers' ), __( 'Audience', 'email-subscribers' ), 'edit_posts', 'es_subscribers', array( $this, 'render_contacts' ) );
-		add_action( "load-$hook", array( 'ES_Contacts_Table', 'screen_options' ) );
+		if ( in_array( 'campaigns', $accessible_sub_menus ) ) {
+			// Add Campaigns Submenu
+			$hook = add_submenu_page( 'es_dashboard', __( 'Campaigns', 'email-subscribers' ), __( 'Campaigns', 'email-subscribers' ), 'edit_posts', 'es_campaigns', array( $this, 'render_campaigns' ) );
+			add_action( "load-$hook", array( 'ES_Campaigns_Table', 'screen_options' ) );
 
-		// Add Lists Submenu
-		$hook = add_submenu_page( 'es_dashboard', __( 'Lists', 'email-subscribers' ), '<span id="ig-es-lists">' . __( 'Lists', 'email-subscribers' ) . '</span>', 'edit_posts', 'es_lists', array( $this, 'render_lists' ) );
-		add_action( "load-$hook", array( 'ES_Lists_Table', 'screen_options' ) );
+			add_submenu_page( 'es_dashboard', __( 'Post Notifications', 'email-subscribers' ), '<span id="ig-es-post-notifications">' . __( 'Post Notifications', 'email-subscribers' ) . '</span>', 'edit_posts', 'es_notifications', array( $this, 'load_post_notifications' ) );
+			add_submenu_page( 'es_dashboard', __( 'Broadcast', 'email-subscribers' ), '<span id="ig-es-broadcast">' . __( 'Broadcast', 'email-subscribers' ) . '</span>', 'edit_posts', 'es_newsletters', array( $this, 'load_newsletters' ) );
+			add_submenu_page( null, __( 'Template Preview', 'email-subscribers' ), __( 'Template Preview', 'email-subscribers' ), 'edit_posts', 'es_template_preview', array( $this, 'load_preview' ) );
+		}
 
-		add_submenu_page( 'es_dashboard', __( 'Post Notifications', 'email-subscribers' ), '<span id="ig-es-post-notifications">' . __( 'Post Notifications', 'email-subscribers' ) . '</span>', 'edit_posts', 'es_notifications', array( $this, 'load_post_notifications' ) );
-		add_submenu_page( 'es_dashboard', __( 'Broadcast', 'email-subscribers' ), '<span id="ig-es-broadcast">' . __( 'Broadcast', 'email-subscribers' ) . '</span>', 'edit_posts', 'es_newsletters', array( $this, 'load_newsletters' ) );
-		add_submenu_page( 'es_dashboard', __( 'Reports', 'email-subscribers' ), __( 'Reports', 'email-subscribers' ), 'edit_posts', 'es_reports', array( $this, 'load_reports' ) );
-		add_submenu_page( 'es_dashboard', __( 'Settings', 'email-subscribers' ), __( 'Settings', 'email-subscribers' ), 'edit_posts', 'es_settings', array( $this, 'load_settings' ) );
-		add_submenu_page( null, __( 'Template Preview', 'email-subscribers' ), __( 'Template Preview', 'email-subscribers' ), 'edit_posts', 'es_template_preview', array( $this, 'load_preview' ) );
+		if ( in_array( 'forms', $accessible_sub_menus ) ) {
+			// Add Forms Submenu
+			$hook = add_submenu_page( 'es_dashboard', __( 'Forms', 'email-subscribers' ), __( 'Forms', 'email-subscribers' ), 'edit_posts', 'es_forms', array( $this, 'render_forms' ) );
+			add_action( "load-$hook", array( 'ES_Forms_Table', 'screen_options' ) );
+		}
+
+		if ( in_array( 'audience', $accessible_sub_menus ) ) {
+			// Add Contacts Submenu
+			$hook = add_submenu_page( 'es_dashboard', __( 'Audience', 'email-subscribers' ), __( 'Audience', 'email-subscribers' ), 'edit_posts', 'es_subscribers', array( $this, 'render_contacts' ) );
+			add_action( "load-$hook", array( 'ES_Contacts_Table', 'screen_options' ) );
+
+			// Add Lists Submenu
+			$hook = add_submenu_page( 'es_dashboard', __( 'Lists', 'email-subscribers' ), '<span id="ig-es-lists">' . __( 'Lists', 'email-subscribers' ) . '</span>', 'edit_posts', 'es_lists', array( $this, 'render_lists' ) );
+			add_action( "load-$hook", array( 'ES_Lists_Table', 'screen_options' ) );
+		}
+
+		if ( in_array( 'reports', $accessible_sub_menus ) ) {
+			add_submenu_page( 'es_dashboard', __( 'Reports', 'email-subscribers' ), __( 'Reports', 'email-subscribers' ), 'edit_posts', 'es_reports', array( $this, 'load_reports' ) );
+		}
+
+		if ( in_array( 'settings', $accessible_sub_menus ) ) {
+			add_submenu_page( 'es_dashboard', __( 'Settings', 'email-subscribers' ), __( 'Settings', 'email-subscribers' ), 'manage_options', 'es_settings', array( $this, 'load_settings' ) );
+		}
+
 	}
 
 	public function plugins_loaded() {
@@ -281,8 +299,8 @@ class Email_Subscribers_Admin {
 	 * @since 4.2.1
 	 */
 	public function render_forms() {
-		$campaigns = new ES_Forms_Table();
-		$campaigns->render();
+		$forms = new ES_Forms_Table();
+		$forms->render();
 	}
 
 	/**
@@ -291,8 +309,8 @@ class Email_Subscribers_Admin {
 	 * @since 4.2.1
 	 */
 	public function render_lists() {
-		$campaigns = new ES_Lists_Table();
-		$campaigns->render();
+		$lists = new ES_Lists_Table();
+		$lists->render();
 	}
 
 	public function load_post_notifications() {
@@ -421,7 +439,7 @@ class Email_Subscribers_Admin {
 		$star_rating_dismiss = get_option( 'ig_es_dismiss_star_notice', 'no' );
 		$star_rating_done    = get_option( 'ig_es_star_notice_done', 'no' );
 		// Show if - more than 2 post notifications or Newsletters sent OR more than 10 subscribers
-		$total_contacts   = ES_DB_Contacts::count_active_subscribers_by_list_id();
+		$total_contacts   = ES()->contacts_db->count_active_contacts_by_list_id();
 		$total_email_sent = ES_DB_Mailing_Queue::get_notifications_count();
 
 		if ( ( $total_contacts >= 10 || $total_email_sent > 2 ) && 'yes' !== $star_rating_dismiss && 'yes' !== $star_rating_done ) {
@@ -453,7 +471,7 @@ class Email_Subscribers_Admin {
 					'hash'         => ES_Common::generate_guid(),
 					'created_at'   => ig_get_current_date_time()
 				);
-				$contact_id = ES_DB_Contacts::add_subscriber( $data );
+				$contact_id = ES()->contacts_db->insert( $data );
 				if ( $contact_id ) {
 					$data = array(
 						'list_id'       => array( $list_id ),
@@ -489,7 +507,13 @@ class Email_Subscribers_Admin {
 		$option_name = ig_es_get_request_data( 'option_name' );
 
 		if ( $es_skip == '1' && ! empty( $option_name ) ) {
-			update_option( 'ig_es_ob_skip_' . $option_name, 'yes' );
+			/**
+			 * If user logged in then only save option.
+			 */
+			$can_access_settings = ES_Common::ig_es_can_access('settings');
+			if ( $can_access_settings ) {
+				update_option( 'ig_es_ob_skip_' . $option_name, 'yes' );
+			}
 			$referer = wp_get_referer();
 			wp_safe_redirect( $referer );
 			exit();
@@ -508,6 +532,26 @@ class Email_Subscribers_Admin {
 		$total_count = ES_DB_Lists_Contacts::get_total_count_by_list( $list_id, $status );
 
 		die( json_encode( array( 'total' => $total_count ) ) );
+	}
+
+	public function get_template_content(){
+		global $ig_es_tracker;
+
+		$template_id = (int) ig_es_get_request_data( 'template_id', 0 );
+		if ( $template_id == 0 ) {
+			return 0;
+		}
+		$post_temp_arr = get_post( $template_id );
+		$result['subject'] = ! empty( $post_temp_arr->post_title ) ? $post_temp_arr->post_title : '';
+		$result['body'] = ! empty( $post_temp_arr->post_content ) ? $post_temp_arr->post_content : '';
+		//get meta data of template
+		$active_plugins = $ig_es_tracker::get_active_plugins();
+		if ( in_array( 'email-subscribers-premium/email-subscribers-premium.php', $active_plugins ) ) {
+			$result['inline_css'] = get_post_meta( $template_id, 'es_custom_css', true );
+			$result['es_utm_campaign'] = get_post_meta( $template_id, 'es_utm_campaign', true );
+		}
+
+		die( json_encode( $result ) );
 	}
 
 	/**

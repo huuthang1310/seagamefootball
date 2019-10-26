@@ -39,6 +39,19 @@ Table OF Contents
     display: inline-block;
 }
 
+.aing {
+    height: 230px;
+}
+
+.navigation {
+    text-align: center;
+}
+
+.wp-paginate.wpp-modern-grey a,
+.wp-paginate.wpp-modern-grey .current {
+    padding: 9px 18px !important;
+}
+
 .group-ranking td.team,
 .group-ranking th.team a {
     width: 45%;

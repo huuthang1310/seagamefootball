@@ -18,7 +18,9 @@ class Export_Subscribers {
 		$report = ig_es_get_request_data( 'report' );
 		$status = ig_es_get_request_data( 'status' );
 
-		if ( $report && $status ) {
+		$can_access = ES_Common::ig_es_can_access( 'audience' );
+
+		if ( $report && $status && $can_access ) {
 
 			$status = trim( $status );
 
@@ -62,7 +64,7 @@ class Export_Subscribers {
 	}
 
 	public function plugin_menu() {
-		add_submenu_page( null, 'Export Contacts', __( 'Export Contacts', 'email-subscribers' ), get_option( 'es_roles_subscriber', true ), 'es_export_subscribers', array( $this, 'export_subscribers_page' ) );
+		add_submenu_page( null, 'Export Contacts', __( 'Export Contacts', 'email-subscribers' ), 'edit_posts', 'es_export_subscribers', array( $this, 'export_subscribers_page' ) );
 	}
 
 	public function prepare_header_footer_row() {
@@ -101,6 +103,7 @@ class Export_Subscribers {
 			if ( $i % 2 === 0 ) {
 				$class = 'alternate';
 			}
+
 			$url = "admin.php?page=download_report&report=users&status={$key}";
 
 			?>
