@@ -47,12 +47,12 @@ get_header();
 					<h1 class="page-title" style="text-align: center;"><?php esc_html_e( 'Truy cập của bạn có thể bị lỗi hoặc không tìm thấy nội dung.', 'seagamefootball' ); ?></h1>
 					<div class="page-content">
 					<div class="s1">
-						<div style="width: 50%;margin: 50px auto;">
-							<div class="img">
+						<div style="width: 100%;">
+							<div class="img" style="text-align: center;">
 								<img src="https://cdn.24h.com.vn//images/404img_092018.png" alt="">
 							</div>
 							<div class="inner">
-								<div class="head">
+								<div class="head" style="text-align: center;">
 								<a href="<?php echo get_site_url() ?>" class="backBtn">Quay lại trang chủ</a>
 								</div>
 							</div>
