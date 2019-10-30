@@ -1,48 +1,53 @@
-<!-- Menu -->
-<header id="header">
-    <!-- Top Header -->
+<!-- Slider -->
 
-    <!-- /Top Header -->
-
-    <!-- Center Header -->
-    <div id="center-header">
-        <div class="container">
-            <div class="header-logo">
-                <a href="#" class="logo"><img data-src="image/images1.png" alt=""></a>
-
-            </div>
-            <div class="header-ads">
-                <img class="center-block ad" src="image/fffff.gif" alt="">
-            </div>
+<div id="owl-carousel-1" class="owl-carousel owl-theme center-owl-nav">
+    <article class="article thumb-article">
+        <div class="article-img">
+            <img style="height: 505px" data-src="image/28-300x200.jpg" alt="">
         </div>
-    </div>
-    <!-- /Center Header -->
-
-    <!-- Nav Header -->
-    <div id="nav-header">
-        <div class="container">
-            <nav id="main-nav">
-                <div class="nav-logo">
-                    <a href="#" class="logo"><img data-src="image/fffff.gif" alt=""></a>
-                </div>
-                <ul class="main-nav nav navbar-nav">
-                    <li class=""><a href="">Trang Chủ</a></li>
-                    <li><a href="news">Tin Tức</a></li>
-                    <li><a href="tournament">Lịch Thi Đấu</a></li>
-                    <li><a href="tournament/teams">Đội bóng</a></li>
-                    <li><a href="tournament/groups">Xếp Hạng</a></li>
-                    <li><a href="tournament/stadiums">Sân vận động</a></li>
-                    <li><a href="video">Video</a></li>
-                </ul>
-            </nav>
-            <div class="button-nav">
-                <button class="search-collapse-btn"><i class="fa fa-search"></i></button>
-                <button class="nav-collapse-btn"><i class="fa fa-bars"></i></button>
-                <div class="search-form">
-                   
-                </div>
-            </div>
+        <div class="article-body">
+            <ul class="article-info">
+                <li class="article-category"><a href="#">Tin Tức</a></li>
+                <li class="article-type"><i class="fa fa-file-text"></i></li>
+            </ul>
+            <h2 class="article-title"><a href="">“U22 Việt Nam nếu thêm Quang Hải, Văn Hậu, Đình Trọng sẽ đủ khả năng vô địch SEA Games 30”</a></h2>
+            <ul class="article-meta">
+                <li><i class="fa fa-clock-o"></i>  October 16th, 2019  </li>
+                <li><i class="fa fa-comments"></i>0</li>
+            </ul>
         </div>
-    </div>
-    <!-- /Nav Header -->
-</header>
+    </article>
+    <article class="article thumb-article">
+        <div class="article-img">
+            <img style="height: 505px" data-src="image/34.jpg" alt="">
+        </div>
+        <div class="article-body">
+            <ul class="article-info">
+                <li class="article-category"><a href="#">Tin Tức</a></li>
+                <li class="article-type"><i class="fa fa-file-text"></i></li>
+            </ul>
+            <h2 class="article-title"><a href="">“U22 Việt Nam nếu thêm Quang Hải, Văn Hậu, Đình Trọng sẽ đủ khả năng vô địch SEA Games 30”</a></h2>
+            <ul class="article-meta">
+                <li><i class="fa fa-clock-o"></i>  October 16th, 2019  </li>
+                <li><i class="fa fa-comments"></i>0</li>
+            </ul>
+        </div>
+    </article>
+    <!-- /ARTICLE -->
+    <article class="article thumb-article">
+        <div class="article-img">
+            <img style="height: 505px" data-src="image/38.jpg" alt="">
+        </div>
+        <div class="article-body">
+            <ul class="article-info">
+                <li class="article-category"><a href="#">Tin Tức</a></li>
+                <li class="article-type"><i class="fa fa-file-text"></i></li>
+            </ul>
+            <h2 class="article-title"><a href="">“U22 Việt Nam nếu thêm Quang Hải, Văn Hậu, Đình Trọng sẽ đủ khả năng vô địch SEA Games 30”</a></h2>
+            <ul class="article-meta">
+                <li><i class="fa fa-clock-o"></i>  October 16th, 2019  </li>
+                <li><i class="fa fa-comments"></i>0</li>
+            </ul>
+        </div>
+    </article>
+</div>
