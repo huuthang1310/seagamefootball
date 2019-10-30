@@ -632,7 +632,6 @@ textarea.input {
 .section {
     padding-top: 30px;
     padding-bottom: 30px;
-    background: black;
 }
 
 .section-title {
@@ -1395,7 +1394,7 @@ textarea.input {
 }
 
 #footer a:hover {
-    color: #EF233C ;
+    color: #EF233C;
 }
 
 
@@ -1415,7 +1414,7 @@ textarea.input {
 .footer-widget .widget-title .title {
     font-size: 15px;
     text-transform: uppercase;
-    color: #07090c;
+    color: #FFF;
     margin-top: 10px;
 }
 
