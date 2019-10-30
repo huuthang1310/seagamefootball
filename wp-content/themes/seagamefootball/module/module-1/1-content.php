@@ -39,7 +39,7 @@
                 <button class="search-collapse-btn"><i class="fa fa-search"></i></button>
                 <button class="nav-collapse-btn"><i class="fa fa-bars"></i></button>
                 <div class="search-form">
-                   
+
                 </div>
             </div>
         </div>
