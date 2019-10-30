@@ -1,102 +1,116 @@
-<!-- Bong Da The Gioi -->
-<div class="container">
+<div class="section">
+    <!-- CONTAINER -->
+    <div class="container">
+        <!-- ROW -->
+        <div class="row">
+            <!-- Main Column -->
+            <div class="col-md-12">
+                <!-- section title -->
+                <div class="section-title">
+                    <h2 class="title">Video Tổng Hợp</h2>
+                    <div id="nav-carousel-2" class="custom-owl-nav pull-right"></div>
+                </div>
+                <!-- /section title -->
 
-<div class="row">
-<div class="col-md-8">
-<div class="col-md-6 col-sm-6">
-    <!-- section title -->
-    <div class="section-title">
-        <h2 class="title">Bóng Đá Thế Giới</h2>
+                <!-- owl carousel 2 -->
+                <div id="owl-carousel-2" class="owl-carousel owl-theme">
+                    <article class="article thumb-article" style="min-height: 210px;
+    max-height: 210px;">
+                        <div class="article-img">
+                            <img data-src="image/img-lg-1.jpg" alt="Test img">
+                        </div>
+                        <div class="article-body">
+                            <ul class="article-info">
+                                <li class="article-category"><a href="#">Video</a></li>
+                                <li class="article-type"><i class="fa fa-video-camera"></i></li>
+                            </ul>
+                            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</a></h3>
+                            <ul class="article-meta">
+                                <li><i class="fa fa-clock-o"></i>10/10/2010</li>
+                                <li><i class="fa fa-comments"></i> 30</li>
+                            </ul>
+                        </div>
+                    </article>
+                    
+                   <article class="article thumb-article" style="min-height: 210px;
+    max-height: 210px;">
+                        <div class="article-img">
+                            <img data-src="image/img-md-1.jpg" alt="Test img">
+                        </div>
+                        <div class="article-body">
+                            <ul class="article-info">
+                                <li class="article-category"><a href="#">Video</a></li>
+                                <li class="article-type"><i class="fa fa-video-camera"></i></li>
+                            </ul>
+                            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</a></h3>
+                            <ul class="article-meta">
+                                <li><i class="fa fa-clock-o"></i>10/10/2010</li>
+                                <li><i class="fa fa-comments"></i> 30</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="article thumb-article" style="min-height: 210px;
+    max-height: 210px;">
+                        <div class="article-img">
+                            <img data-src="image/img-lg-3.jpg" alt="Test img">
+                        </div>
+                        <div class="article-body">
+                            <ul class="article-info">
+                                <li class="article-category"><a href="#">Video</a></li>
+                                <li class="article-type"><i class="fa fa-video-camera"></i></li>
+                            </ul>
+                            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</a></h3>
+                            <ul class="article-meta">
+                                <li><i class="fa fa-clock-o"></i>10/10/2010</li>
+                                <li><i class="fa fa-comments"></i> 30</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="article thumb-article" style="min-height: 210px;
+    max-height: 210px;">
+                        <div class="article-img">
+                            <img data-src="image/img-md-1.jpg" alt="Test img">
+                        </div>
+                        <div class="article-body">
+                            <ul class="article-info">
+                                <li class="article-category"><a href="#">Video</a></li>
+                                <li class="article-type"><i class="fa fa-video-camera"></i></li>
+                            </ul>
+                            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</a></h3>
+                            <ul class="article-meta">
+                                <li><i class="fa fa-clock-o"></i>10/10/2010</li>
+                                <li><i class="fa fa-comments"></i> 30</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- /ARTICLE -->
+                </div>
+                <!-- /owl carousel 2 -->
+            </div>
+            <!-- /Main Column -->
+        </div>
+        <!-- /ROW -->
     </div>
-   
-    <article class="article">
-        <div class="article-img aing">
-            <a href="#">
-                <img class="img-responsive" data-src="image/img-md-1.jpg" alt="Just a test image">
-            </a>
-            <ul class="article-info">
-                <li class="article-type"><i class="fa fa-camera"></i></li>
-            </ul>
-        </div>
-        <div class="article-body">
-            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita sit adipisci error. Error esse, cupiditate, quisquam blanditiis saepe modi explicabo eveniet delectus cum quasi aut aliquid fugiat quas? Quo, veritatis!</a>
-            </h3>
-
-
-        </div>
-    </article>
-   
-    <!-- /ARTICLE -->
-
-   
-    <article class="article widget-article">
-        <div class="article-img">
-            <a href="#">
-                <img class="img-responsive" data-src="image/img-md-1.jpg" alt="Test img">
-
-            </a>
-        </div>
-        <div class="article-body">
-            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati, velit non necessitatibus officiis quis modi quibusdam quidem eaque adipisci atque, assumenda dicta consequatur exercitationem sequi illo eum, dolore corporis quo!</a>
-            </h3>
-
-            <br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cupiditate fugiat ducimus numquam, laborum tenetur quidem debitis quam recusandae laudantium! In ullam, vel labore odio necessitatibus nemo. Nobis, quia enim!</p>
-            <span class="small"><a href="#"><b>Xem thêm</b></a><i class="text-muted"></i></span>
-        </div>
-    </article>
-    <article class="article widget-article">
-        <div class="article-img">
-            <a href="#">
-                <img class="img-responsive" data-src="image/img-md-1.jpg" alt="Test img">
-
-            </a>
-        </div>
-        <div class="article-body">
-            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati, velit non necessitatibus officiis quis modi quibusdam quidem eaque adipisci atque, assumenda dicta consequatur exercitationem sequi illo eum, dolore corporis quo!</a>
-            </h3>
-
-            <br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cupiditate fugiat ducimus numquam, laborum tenetur quidem debitis quam recusandae laudantium! In ullam, vel labore odio necessitatibus nemo. Nobis, quia enim!</p>
-            <span class="small"><a href="#"><b>Xem thêm</b></a><i class="text-muted"></i></span>
-        </div>
-    </article>
-    <article class="article widget-article">
-        <div class="article-img">
-            <a href="#">
-                <img class="img-responsive" data-src="image/img-md-1.jpg" alt="Test img">
-
-            </a>
-        </div>
-        <div class="article-body">
-            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati, velit non necessitatibus officiis quis modi quibusdam quidem eaque adipisci atque, assumenda dicta consequatur exercitationem sequi illo eum, dolore corporis quo!</a>
-            </h3>
-
-            <br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cupiditate fugiat ducimus numquam, laborum tenetur quidem debitis quam recusandae laudantium! In ullam, vel labore odio necessitatibus nemo. Nobis, quia enim!</p>
-            <span class="small"><a href="#"><b>Xem thêm</b></a><i class="text-muted"></i></span>
-        </div>
-    </article>
-    <article class="article widget-article">
-        <div class="article-img">
-            <a href="#">
-                <img class="img-responsive" data-src="image/img-md-1.jpg" alt="Test img">
-
-            </a>
-        </div>
-        <div class="article-body">
-            <h3 class="article-title"><a href="#">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati, velit non necessitatibus officiis quis modi quibusdam quidem eaque adipisci atque, assumenda dicta consequatur exercitationem sequi illo eum, dolore corporis quo!</a>
-            </h3>
-
-            <br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cupiditate fugiat ducimus numquam, laborum tenetur quidem debitis quam recusandae laudantium! In ullam, vel labore odio necessitatibus nemo. Nobis, quia enim!</p>
-            <span class="small"><a href="#"><b>Xem thêm</b></a><i class="text-muted"></i></span>
-        </div>
-    </article>
-   
-
-</div>
-</div>
-</div>
-</div></div>
+    <!-- /CONTAINER -->
 </div>
