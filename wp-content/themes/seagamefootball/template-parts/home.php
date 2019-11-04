@@ -2,7 +2,7 @@
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('<?php echo get_site_url();?>/wp-content/themes/seagamefootball/sw.js').then(function(registration) {
+    navigator.serviceWorker.register('<?php echo get_site_url();?>/sw.js').then(function(registration) {
       // Registration was successful
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
     }, function(err) {
