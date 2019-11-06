@@ -28,13 +28,8 @@
                     <a href="#" class="logo"><img data-src="<?php echo $Url ?>/img/fffff.gif" alt=""></a>
                 </div>
                 <ul class="main-nav nav navbar-nav">
-                    <li class=""><a href="<?php echo get_site_url() ?>">Trang Chủ</a></li>
-                    <li><a href="<?php echo get_site_url() ?>/news">Tin Tức</a></li>
-                    <li><a href="<?php echo get_site_url() ?>/tournament">Lịch Thi Đấu</a></li>
-                    <li><a href="<?php echo get_site_url() ?>/tournament/teams">Đội bóng</a></li>
-                    <li><a href="<?php echo get_site_url() ?>/tournament/groups">Xếp Hạng</a></li>
-                    <li><a href="<?php echo get_site_url() ?>/tournament/stadiums">Sân vận động</a></li>
-                    <li><a href="<?php echo get_site_url() ?>/video">Video</a></li>
+                <?php wp_nav_menu( array( 'li' => '%3$s' ) ); ?>
+                  
                 </ul>
             </nav>
             <div class="button-nav">
